@@ -1,0 +1,67 @@
+name: Validate Skill
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skills/**'
+
+jobs:
+  validate:
+    name: Validate SKILL.md
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Check branch naming convention
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if [[ ! "$BRANCH" =~ ^skill/ ]]; then
+            echo "❌ Branch name must start with 'skill/' — got: $BRANCH"
+            exit 1
+          fi
+          echo "✅ Branch name OK: $BRANCH"
+
+      - name: Find changed SKILL.md files
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '^skills/.*SKILL\.md$' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No SKILL.md files changed — skipping validation"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changed skills:"
+            echo "$CHANGED"
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            echo "$CHANGED" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate SKILL.md files
+        if: steps.changed.outputs.has_changes == 'true'
+        run: |
+          python3 scripts/validate_skill.py ${{ steps.changed.outputs.files }}
+
+      - name: Check one skill per PR
+        if: steps.changed.outputs.has_changes == 'true'
+        run: |
+          COUNT=$(echo "${{ steps.changed.outputs.files }}" | wc -l)
+          FOLDERS=$(echo "${{ steps.changed.outputs.files }}" | xargs -I{} dirname {} | sort -u | wc -l)
+          if [ "$FOLDERS" -gt "1" ]; then
+            echo "❌ This PR modifies $FOLDERS skill folders. Please submit one skill per PR."
+            exit 1
+          fi
+          echo "✅ Single skill PR — OK"

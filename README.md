@@ -1,74 +1,94 @@
 # Zyniverse Skills Registry
 
-> Production-grade Claude skills built by the Zysk & Zyni teams.
+> Production-grade Claude skills built by the Zysk & Zyni teams. Public and installable by anyone.
+
+[![Skills Registry](https://img.shields.io/badge/skills-zyniverse--hq-2D1B69?style=flat)](https://zyniverse-hq.github.io/skills-registry/website/)
+
+## Install
+
+Use the `skills` CLI to install from this registry into Claude Code, Cursor, Codex, or any compatible agent:
+
+```bash
+# Install all skills
+npx skills add zyniverse-hq/skills-registry
+
+# Install a specific skill
+npx skills add zyniverse-hq/skills-registry --skill deployshield
+
+# Install to Claude Code (global)
+npx skills add zyniverse-hq/skills-registry -g -a claude-code -y
+
+# Install to Claude Code (project-level)
+npx skills add zyniverse-hq/skills-registry -a claude-code
+```
+
+Or reference individual skills in your `CLAUDE.md`:
+
+```
+> Use skill: github:zyniverse-hq/skills-registry/skills/deployshield
+```
+
+## Browse the registry
+
+**→ [zyniverse-hq.github.io/skills-registry/website](https://zyniverse-hq.github.io/skills-registry/website/)**
+
+Search, filter by category, and copy install snippets for any skill.
+
+## Skills
+
+> The registry is open for contributions. Skills appear here as they're merged via PR — see [CONTRIBUTING.md](CONTRIBUTING.md) to add yours.
+
+| # | Skill | Author | Group | Category |
+|---|-------|--------|-------|----------|
+| _(awaiting first skill PR)_ | | | | |
+
+## Contributing
+
+All contributions go through **GitHub Pull Requests** — no manual submissions.
+
+```bash
+# Quick start
+git clone https://github.com/zyniverse-hq/skills-registry.git
+cd skills-registry
+git checkout -b skill/your-skill-name
+cp -r skills/_template skills/your-skill-name
+# edit skills/your-skill-name/SKILL.md
+git add skills/your-skill-name/
+git commit -m "feat(skill): add your-skill-name"
+git push origin skill/your-skill-name
+# then open a PR on GitHub
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full standard, field reference, and PR rules.
 
 ## Structure
 
 ```
 skills-registry/
-├── index.json          # Machine-readable skill manifest
-├── skills/             # One folder per skill
-│   └── skill-name/
+├── README.md
+├── CONTRIBUTING.md          ← Contribution guide + SKILL.md standard
+├── index.json               ← Machine-readable manifest
+├── scripts/
+│   └── validate_skill.py    ← Local validator
+├── skills/
+│   ├── _template/           ← Copy this to start a new skill
+│   │   └── SKILL.md
+│   └── <skill-name>/
 │       └── SKILL.md
-└── website/            # Registry UI
-    └── index.html
+└── website/
+    └── index.html           ← Registry UI
 ```
 
-## Usage
+## CI
 
-Reference any skill in your `CLAUDE.md`:
+Every PR that touches `skills/**` is validated automatically:
 
-```yaml
-- name: deployshield
-  source: github:zyniverse-hq/skills-registry/skills/deployshield
-```
-
-## Sprint 1 — 22 Skills
-
-| # | Skill | Author | Group | Category |
-|---|-------|--------|-------|----------|
-| 1 | The Skill That Ships (10-min Blog Machine) | Suman Pai | Opus | Business & Sales Automation |
-| 2 | Safe Push Workflow | Ananth Raj L | Haiku | Pre-Deployment & Release Safety |
-| 3 | Playwright Test Generation & Scenario Planning | Deepikaa Naganathan | Haiku | QA & Testing Automation |
-| 4 | Automated QA Test Plans from Merged PRs | Rajashekhar V | Haiku | QA & Testing Automation |
-| 5 | EDD — Evaluation Driven Development | Sharath S Rao | Sonnet | Engineering Practice & Decision Support |
-| 6 | Debug Debrief — Bug Fixes into Engineering Learning | Ruthvika B | Opus | Engineering Practice & Decision Support |
-| 7 | Tech Mentor — AI Research for Architecture Decisions | Vishnu B V | Opus | Engineering Practice & Decision Support |
-| 8 | DeployShield — Pre-Deployment Risk Auditor | Akash R | Sonnet | Pre-Deployment & Release Safety |
-| 9 | Expo Build & SDK Upgrade Checker | OM Chavan | Haiku | Pre-Deployment & Release Safety |
-| 10 | PRD to QA Test Suite & GitHub Bug Raiser | Preethika Kulal | Haiku | QA & Testing Automation |
-| 11 | Enterprise QA Test Case Generator | Ajay Kumar R | Sonnet | QA & Testing Automation |
-| 12 | Razorpay Payment Gateway Integration | Tazeen Soudagar | Sonnet | Frontend & Backend Integration |
-| 13 | Cloud Infra Planner to Ready-to-Apply | Nagendra K V | Opus | Infrastructure, Ops & Security |
-| 14 | Test Case Review Skill | Rachayya | Sonnet | QA & Testing Automation |
-| 15 | Automated Security Audit — Full-Stack Vulnerability Assessment | Jagadish Nayak | Haiku | Infrastructure, Ops & Security |
-| 16 | Upwork Proposal Automation | Kruthi M N | Opus | Business & Sales Automation |
-| 17 | Investor/Accelerator Form Filler + Pitch Deck Creator | T S Sarang | Opus | Business & Sales Automation |
-| 18 | UI Consistency Guard | Ruthu Bahubali Jain | Opus | Frontend & Backend Integration |
-| 19 | IntegrateKit — Frontend to Backend Wiring | Vishak Gowda | Sonnet | Frontend & Backend Integration |
-| 20 | Daily Status Report Generator | Shilpa V P | Haiku | Business & Sales Automation |
-| 21 | WordPress Maintenance Conductor | Stalin Marbhenn S | Sonnet | Pre-Deployment & Release Safety |
-| 22 | Edge Case Discovery | Shreyas Bilugali | Haiku | QA & Testing Automation |
-
-### Breakdown by category
-
-| Category | Skills |
-|----------|--------|
-| QA & Testing Automation | 6 |
-| Pre-Deployment & Release Safety | 4 |
-| Business & Sales Automation | 4 |
-| Engineering Practice & Decision Support | 3 |
-| Frontend & Backend Integration | 3 |
-| Infrastructure, Ops & Security | 2 |
-
-### Breakdown by group
-
-| Group | Skills |
-|-------|--------|
-| Haiku | 8 |
-| Opus | 7 |
-| Sonnet | 7 |
+- ✅ Branch name follows `skill/<name>` convention
+- ✅ SKILL.md has required `name` and `description` fields
+- ✅ Frontmatter passes schema validation
+- ✅ Required content sections are present
+- ✅ One skill per PR
 
 ---
 
-Built by [Zyni Innovations Pvt. Ltd.](https://zyniverse.ai) · Bengaluru
+Built by [Zyni Innovations Pvt. Ltd.](https://zyniverse.in) · Bengaluru
