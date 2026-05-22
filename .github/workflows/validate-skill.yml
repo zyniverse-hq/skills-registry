@@ -6,6 +6,9 @@ on:
     paths:
       - 'skills/**'
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     name: Validate SKILL.md
