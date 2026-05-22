@@ -2,14 +2,15 @@
 # Maps file path patterns to labels. Only include high-signal mappings.
 # Syntax: https://github.com/actions/labeler#create-configuration
 
-"type: docs":
+"type: skill":
   - changed-files:
       - any-glob-to-any-file:
-          - "docs/**"
-          - "*.md"
+          - "skills/**"
 
-"type: chore":
+"type: registry":
   - changed-files:
       - any-glob-to-any-file:
+          - "index.json"
+          - "website/**"
+          - "scripts/**"
           - ".github/**"
-          - "*.json"
