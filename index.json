@@ -1,0 +1,43 @@
+{
+  "registry": "zyniverse-hq/skills-registry",
+  "version": "0.1.0",
+  "sprint": 1,
+  "updated": "2026-05-22",
+  "categories": [
+    { "slug": "qa-testing",          "label": "QA & Testing Automation",            "icon": "🧪" },
+    { "slug": "pre-deploy-safety",   "label": "Pre-Deployment & Release Safety",    "icon": "🛡️" },
+    { "slug": "business-sales",      "label": "Business & Sales Automation",        "icon": "💼" },
+    { "slug": "engineering-practice","label": "Engineering Practice & Decision Support","icon": "🛠️" },
+    { "slug": "frontend-integration","label": "Frontend & Backend Integration",     "icon": "🔌" },
+    { "slug": "infra-security",      "label": "Infrastructure, Ops & Security",     "icon": "🔐" }
+  ],
+  "groups": [
+    { "slug": "opus",   "label": "Opus",   "icon": "🟣" },
+    { "slug": "sonnet", "label": "Sonnet", "icon": "🟢" },
+    { "slug": "haiku",  "label": "Haiku",  "icon": "🟡" }
+  ],
+  "skills": [
+    { "slug": "the-skill-that-ships",        "name": "The Skill That Ships (10-min Blog Machine)",              "icon": "✍️", "category": "business-sales",        "group": "opus",   "author": "Suman Pai",            "version": "1.0.0", "tags": ["blog", "content", "automation"],          "description": "", "sourceUrl": "#" },
+    { "slug": "safe-push-workflow",          "name": "Safe Push Workflow",                                      "icon": "🛡️", "category": "pre-deploy-safety",     "group": "haiku",  "author": "Ananth Raj L",         "version": "1.0.0", "tags": ["git", "push", "safety"],                  "description": "", "sourceUrl": "#" },
+    { "slug": "playwright-test-generation",  "name": "Playwright Test Generation & Scenario Planning",          "icon": "🎭", "category": "qa-testing",            "group": "haiku",  "author": "Deepikaa Naganathan",  "version": "1.0.0", "tags": ["playwright", "e2e", "scenarios"],         "description": "", "sourceUrl": "#" },
+    { "slug": "qa-handoff",                  "name": "Automated QA Test Plans from Merged PRs",                  "icon": "📋", "category": "qa-testing",            "group": "haiku",  "author": "Rajashekhar V",        "version": "1.0.0", "tags": ["qa", "test-plan", "pr"],                  "description": "", "sourceUrl": "#" },
+    { "slug": "edd",                         "name": "EDD — Evaluation Driven Development",                     "icon": "🧭", "category": "engineering-practice",  "group": "sonnet", "author": "Sharath S Rao",        "version": "1.0.0", "tags": ["evals", "framework", "discipline"],       "description": "", "sourceUrl": "#" },
+    { "slug": "debug-debrief",               "name": "Debug Debrief — Bug Fixes into Engineering Learning",     "icon": "🐛", "category": "engineering-practice",  "group": "opus",   "author": "Ruthvika B",           "version": "1.0.0", "tags": ["debug", "postmortem", "learning"],        "description": "", "sourceUrl": "#" },
+    { "slug": "tech-mentor",                 "name": "Tech Mentor — AI Research for Architecture Decisions",    "icon": "🧠", "category": "engineering-practice",  "group": "opus",   "author": "Vishnu B V",           "version": "1.0.0", "tags": ["architecture", "research", "decisions"],  "description": "", "sourceUrl": "#" },
+    { "slug": "deployshield",                "name": "DeployShield — Pre-Deployment Risk Auditor",              "icon": "🚦", "category": "pre-deploy-safety",     "group": "sonnet", "author": "Akash R",              "version": "1.0.0", "tags": ["risk", "audit", "deploy"],                "description": "", "sourceUrl": "#" },
+    { "slug": "expo-build-sdk-checker",      "name": "Expo Build & SDK Upgrade Checker",                        "icon": "📱", "category": "pre-deploy-safety",     "group": "haiku",  "author": "OM Chavan",            "version": "1.0.0", "tags": ["expo", "react-native", "sdk"],            "description": "", "sourceUrl": "#" },
+    { "slug": "prd-to-qa-suite",             "name": "PRD to QA Test Suite & GitHub Bug Raiser",                "icon": "📝", "category": "qa-testing",            "group": "haiku",  "author": "Preethika Kulal",      "version": "1.0.0", "tags": ["prd", "test-suite", "github"],            "description": "", "sourceUrl": "#" },
+    { "slug": "enterprise-qa-test-generator","name": "Enterprise QA Test Case Generator",                       "icon": "🏢", "category": "qa-testing",            "group": "sonnet", "author": "Ajay Kumar R",         "version": "1.0.0", "tags": ["qa", "enterprise", "test-cases"],         "description": "", "sourceUrl": "#" },
+    { "slug": "razorpay-integration",        "name": "Razorpay Payment Gateway Integration",                    "icon": "💳", "category": "frontend-integration",  "group": "sonnet", "author": "Tazeen Soudagar",      "version": "1.0.0", "tags": ["razorpay", "payments", "integration"],    "description": "", "sourceUrl": "#" },
+    { "slug": "cloud-infra-planner",         "name": "Cloud Infra Planner to Ready-to-Apply",                   "icon": "☁️", "category": "infra-security",        "group": "opus",   "author": "Nagendra K V",         "version": "1.0.0", "tags": ["cloud", "infra", "iac"],                  "description": "", "sourceUrl": "#" },
+    { "slug": "test-case-review-skill",      "name": "Test Case Review Skill",                                  "icon": "🔍", "category": "qa-testing",            "group": "sonnet", "author": "Rachayya",             "version": "1.0.0", "tags": ["qa", "review", "test-cases"],             "description": "", "sourceUrl": "#" },
+    { "slug": "automated-security-audit",    "name": "Automated Security Audit — Full-Stack Vulnerability Assessment", "icon": "🔐", "category": "infra-security",  "group": "haiku",  "author": "Jagadish Nayak",       "version": "1.0.0", "tags": ["security", "audit", "vulnerability"],     "description": "", "sourceUrl": "#" },
+    { "slug": "upwork-proposal-automation",  "name": "Upwork Proposal Automation",                              "icon": "💼", "category": "business-sales",        "group": "opus",   "author": "Kruthi M N",           "version": "1.0.0", "tags": ["upwork", "proposals", "sales"],           "description": "", "sourceUrl": "#" },
+    { "slug": "investor-form-filler",        "name": "Investor/Accelerator Form Filler + Pitch Deck Creator",   "icon": "📈", "category": "business-sales",        "group": "opus",   "author": "T S Sarang",           "version": "1.0.0", "tags": ["fundraise", "investor", "pitch-deck"],    "description": "", "sourceUrl": "#" },
+    { "slug": "ui-consistency-guard",        "name": "UI Consistency Guard",                                    "icon": "🎨", "category": "frontend-integration",  "group": "opus",   "author": "Ruthu Bahubali Jain",  "version": "1.0.0", "tags": ["ui", "consistency", "design-system"],     "description": "", "sourceUrl": "#" },
+    { "slug": "integratekit",                "name": "IntegrateKit — Frontend to Backend Wiring",               "icon": "🔌", "category": "frontend-integration",  "group": "sonnet", "author": "Vishak Gowda",         "version": "1.0.0", "tags": ["graphql", "react", "integration"],        "description": "", "sourceUrl": "#" },
+    { "slug": "daily-status-report",         "name": "Daily Status Report Generator",                           "icon": "📊", "category": "business-sales",        "group": "haiku",  "author": "Shilpa V P",           "version": "1.0.0", "tags": ["status", "reporting", "daily"],           "description": "", "sourceUrl": "#" },
+    { "slug": "wordpress-maintenance-conductor","name": "WordPress Maintenance Conductor",                      "icon": "🎼", "category": "pre-deploy-safety",     "group": "sonnet", "author": "Stalin Marbhenn S",    "version": "1.0.0", "tags": ["wordpress", "maintenance", "workflow"],   "description": "", "sourceUrl": "#" },
+    { "slug": "edge-case-discovery",         "name": "Edge Case Discovery",                                     "icon": "🧪", "category": "qa-testing",            "group": "haiku",  "author": "Shreyas Bilugali",     "version": "1.0.0", "tags": ["edge-cases", "review", "qa"],             "description": "", "sourceUrl": "#" }
+  ]
+}
