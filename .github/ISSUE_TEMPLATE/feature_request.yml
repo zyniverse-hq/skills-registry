@@ -1,0 +1,51 @@
+name: "✨ Feature Request"
+description: Suggest a new feature or enhancement
+title: "[FEAT]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement! Please fill in as much detail as possible.
+        Check if a similar request already exists before submitting.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What pain point are you experiencing?
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or workarounds?
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      description: Is this a brand-new feature or an improvement to something existing?
+      options:
+        - "Enhancement — improvement to an existing feature"
+        - "New Feature — functionality the app doesn't have today"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Mockups, screenshots, diagrams, or links that illustrate the idea.
+—

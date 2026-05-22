@@ -1,0 +1,57 @@
+name: "🛠️ Task / Tech Debt"
+description: Internal work — refactor, cleanup, performance improvement, or tech debt
+title: "[TASK]: "
+labels: ["tech-debt"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For internal tracking of refactors, cleanups, performance work, and other non-user-facing improvements.
+        This template defaults to `tech-debt`. Triage may re-label as appropriate.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What is the current state and what is wrong with it?
+      placeholder: "Currently, [X] works like [Y] which causes [Z]..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed Change
+      description: What should we do about it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-now
+    attributes:
+      label: Why Now?
+      description: Why is this worth prioritizing? What is the cost of NOT doing it?
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which cross-cutting concern does this primarily address?
+      options:
+        - Performance
+        - Security
+        - Developer Experience
+        - Code Quality / Maintainability
+        - Testing
+        - Documentation
+        - Infrastructure / Build
+        - Other
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know this is done?
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
