@@ -16,6 +16,7 @@ sprint: 1
 tested_with: claude-opus-4-7
 ---
 
+<!-- ci: sample edit to exercise regenerate-index workflow -->
 # Daily Status Report
 
 > Generate the end-of-day client status report by scanning today's git activity and interviewing the user to classify and refine each item.
