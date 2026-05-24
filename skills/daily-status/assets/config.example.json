@@ -1,0 +1,9 @@
+{
+  "project_name": "Acme Portal",
+  "signature": "Jane Doe",
+  "default_hours": 8,
+  "repo_paths": [
+    "/absolute/path/to/repo-one",
+    "/absolute/path/to/repo-two"
+  ]
+}

@@ -1,0 +1,18 @@
+Time Spent: <hours>
+
+Today's Activities:
+
+Project: <PROJECT_NAME>
+
+Done
+<bullets>
+Done (but not tested on staging)
+<bullets>
+In Progress
+<bullets>
+
+Need Discussion
+<bullets>
+
+Regards,
+<SIGNATURE>
