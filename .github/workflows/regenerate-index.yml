@@ -19,17 +19,18 @@ jobs:
   regenerate:
     name: Rebuild skills[] from SKILL.md frontmatter
     runs-on: ubuntu-latest
-    # Guard against bot-commit loops: skip if the push itself came from
-    # this workflow's bot identity.
-    if: github.actor != 'github-actions[bot]'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # Use the default GITHUB_TOKEN so the follow-up push is attributed
-          # to github-actions[bot], which the `if:` above will then skip.
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Fine-grained PAT (Contents: write) scoped to this repo.
+          # Used because GITHUB_TOKEN runs as github-actions[bot], which
+          # the main-branch ruleset blocks. The PAT inherits its owner's
+          # bypass permission, so the push succeeds.
+          # Loop safety: the `paths: skills/**/SKILL.md` trigger filter
+          # excludes index.json, so the bot's commit doesn't re-trigger.
+          token: ${{ secrets.REGEN_INDEX_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
