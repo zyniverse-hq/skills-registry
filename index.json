@@ -51,5 +51,26 @@
       "icon": "🟡"
     }
   ],
-  "skills": []
+  "skills": [
+    {
+      "slug": "daily-status",
+      "name": "daily-status",
+      "description": "Generate the end-of-day client status report by scanning today's git commits, uncommitted changes, and GitHub PRs, then interviewing the user to classify each item. Use whenever the user asks for their daily status, EOD report, or client update — or types /daily-status.",
+      "version": "1.2.0",
+      "author": "Shilpa VP",
+      "email": "shilpa@zysk.tech",
+      "category": "comms",
+      "group": "opus",
+      "tags": [
+        "daily-status",
+        "eod-report",
+        "git",
+        "github",
+        "reporting"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-opus-4-7",
+      "icon": "💬"
+    }
+  ]
 }
