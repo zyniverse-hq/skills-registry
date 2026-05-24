@@ -3,18 +3,53 @@
   "version": "0.1.0",
   "updated": "2026-05-22",
   "categories": [
-    { "slug": "qa-testing",          "label": "QA & Testing Automation",            "icon": "🧪" },
-    { "slug": "pre-deploy-safety",   "label": "Pre-Deployment & Release Safety",    "icon": "🛡️" },
-    { "slug": "business-sales",      "label": "Business & Sales Automation",        "icon": "💼" },
-    { "slug": "engineering-practice","label": "Engineering Practice & Decision Support","icon": "🛠️" },
-    { "slug": "frontend-integration","label": "Frontend & Backend Integration",     "icon": "🔌" },
-    { "slug": "infra-security",      "label": "Infrastructure, Ops & Security",     "icon": "🔐" }
+    {
+      "slug": "qa-testing",
+      "label": "QA & Testing Automation",
+      "icon": "🧪"
+    },
+    {
+      "slug": "pre-deploy-safety",
+      "label": "Pre-Deployment & Release Safety",
+      "icon": "🛡️"
+    },
+    {
+      "slug": "business-sales",
+      "label": "Business & Sales Automation",
+      "icon": "💼"
+    },
+    {
+      "slug": "engineering-practice",
+      "label": "Engineering Practice & Decision Support",
+      "icon": "🛠️"
+    },
+    {
+      "slug": "frontend-integration",
+      "label": "Frontend & Backend Integration",
+      "icon": "🔌"
+    },
+    {
+      "slug": "infra-security",
+      "label": "Infrastructure, Ops & Security",
+      "icon": "🔐"
+    }
   ],
   "groups": [
-    { "slug": "opus",   "label": "Opus",   "icon": "🟣" },
-    { "slug": "sonnet", "label": "Sonnet", "icon": "🟢" },
-    { "slug": "haiku",  "label": "Haiku",  "icon": "🟡" }
+    {
+      "slug": "opus",
+      "label": "Opus",
+      "icon": "🟣"
+    },
+    {
+      "slug": "sonnet",
+      "label": "Sonnet",
+      "icon": "🟢"
+    },
+    {
+      "slug": "haiku",
+      "label": "Haiku",
+      "icon": "🟡"
+    }
   ],
-  "skills": [
-  ]
+  "skills": []
 }
