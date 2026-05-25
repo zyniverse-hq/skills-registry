@@ -53,6 +53,26 @@
   ],
   "skills": [
     {
+      "slug": "auto-merge",
+      "name": "auto-merge",
+      "description": "One-shot drain of an auto-ship PR queue. Re-checks each PR's CI + merge state + review decision, squash-merges what's MERGEABLE + APPROVED + clean of unaddressed comments, and reports per-entry verdict. No scheduler.",
+      "version": "1.0.0",
+      "author": "Varun U",
+      "email": "varun@zysk.tech",
+      "category": "engineering-practice",
+      "group": "opus",
+      "tags": [
+        "github-pr",
+        "merge",
+        "automation",
+        "workflow",
+        "queue"
+      ],
+      "product": "tms",
+      "tested_with": "claude-opus-4-7",
+      "icon": "🛠️"
+    },
+    {
       "slug": "auto-ship",
       "name": "auto-ship",
       "description": "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open.",
