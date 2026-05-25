@@ -2,6 +2,8 @@
 name: instagram-carousel
 description: Generates a self-contained, swipeable HTML Instagram carousel with export-ready 1080x1350px slides, deriving brand colors, typography, and slide layout.
 version: 1.0.0
+author: Arijit Saha
+email: arijit.saha@zysk.tech
 category: comms
 tags:
   - instagram
