@@ -2,6 +2,8 @@
 name: resume-hiring-manager
 description: Runs a realistic mock interview as the hiring manager for the user's target role, asking hard technical and behavioural questions, scoring answers, and giving a hireability score.
 version: 1.0.0
+author: Arijit Saha
+email: arijit.saha@zysk.tech
 category: business-sales
 tags:
   - resume
