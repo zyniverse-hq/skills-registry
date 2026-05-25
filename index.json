@@ -173,6 +173,20 @@
       "icon": "🛠️"
     },
     {
+      "slug": "deploy-shield",
+      "name": "deploy-shield",
+      "description": "Audits a codebase branch or diff for production risks, deployment safety, and engineering hygiene before a release. Use when a developer wants to know if code is safe to deploy, assess blast radius, check rollback safety, audit dependencies, or get a pre-release risk report — even if they don't use the word \"deployment\".",
+      "version": "0.1.0",
+      "author": "",
+      "email": "",
+      "category": "",
+      "group": "opus",
+      "tags": [],
+      "product": "",
+      "tested_with": "",
+      "icon": "🧩"
+    },
+    {
       "slug": "handle-review",
       "name": "handle-review",
       "description": "Triages PR review comments (human or bot), classifies each as valid/invalid/needs-human, fixes what's valid in one batch, replies with evidence for the rest, and pushes once.",
