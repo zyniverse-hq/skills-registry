@@ -1,0 +1,137 @@
+{
+  "skill_name": "razorpay-integration",
+  "evals": [
+    {
+      "id": 0,
+      "name": "laravel-course-platform",
+      "prompt": "I'm building a Laravel 11 + React app for selling online courses. Users pay once to unlock a course. I've got Sanctum auth set up already. I want to integrate Razorpay so users can checkout from the React frontend and the course gets unlocked after payment goes through.",
+      "expected_output": "Should analyze the Laravel+React+Sanctum stack, ask clarifying business questions, present a 3-phase plan with payment flow diagram, mention signature verification and environment variables, and NOT start writing code without approval.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "A1",
+          "name": "no-premature-code",
+          "description": "Does not write implementation code before getting explicit user approval"
+        },
+        {
+          "id": "A2",
+          "name": "stack-detection",
+          "description": "Correctly identifies Laravel 11, React, and Sanctum from the prompt"
+        },
+        {
+          "id": "A3",
+          "name": "payment-flow-diagram",
+          "description": "Presents a visual payment flow diagram (ASCII or structured)"
+        },
+        {
+          "id": "A4",
+          "name": "signature-verification",
+          "description": "Mentions HMAC-SHA256 signature verification for payment security"
+        },
+        {
+          "id": "A5",
+          "name": "env-vars-for-keys",
+          "description": "Advises using environment variables for Razorpay keys, not hardcoding"
+        },
+        {
+          "id": "A6",
+          "name": "webhook-coverage",
+          "description": "Covers webhook handling as part of the integration plan"
+        },
+        {
+          "id": "A7",
+          "name": "approval-gate",
+          "description": "Explicitly asks for user approval or states it will wait before implementing"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "nextjs-ecommerce-checkout",
+      "prompt": "My Next.js 14 app uses the App Router and Postgres. It's an e-commerce site for handmade jewelry. Cart and auth are done. I just need to plug in Razorpay for checkout — what's the plan?",
+      "expected_output": "Should detect Next.js App Router pattern, ask about order flow specifics, present a structured implementation plan using API routes/Server Actions, mention webhook setup, and gate implementation behind user approval.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "A1",
+          "name": "no-premature-code",
+          "description": "Does not write implementation code before getting explicit user approval"
+        },
+        {
+          "id": "A2",
+          "name": "stack-detection",
+          "description": "Correctly identifies Next.js 14 App Router and Postgres"
+        },
+        {
+          "id": "A3",
+          "name": "payment-flow-diagram",
+          "description": "Presents a visual payment flow diagram (ASCII or structured)"
+        },
+        {
+          "id": "A4",
+          "name": "signature-verification",
+          "description": "Mentions HMAC-SHA256 signature verification for payment security"
+        },
+        {
+          "id": "A5",
+          "name": "env-vars-for-keys",
+          "description": "Advises using environment variables for Razorpay keys, not hardcoding"
+        },
+        {
+          "id": "A6",
+          "name": "webhook-coverage",
+          "description": "Covers webhook handling as part of the integration plan"
+        },
+        {
+          "id": "A7",
+          "name": "approval-gate",
+          "description": "Explicitly asks for user approval or states it will wait before implementing"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "express-subscription-saas",
+      "prompt": "I have a Node.js Express REST API. Users subscribe to monthly plans — ₹499/month basic and ₹999/month pro. I need Razorpay integrated with webhook support so the subscription activates automatically right after payment. Currently no payment setup at all.",
+      "expected_output": "Should handle subscription-specific flow (not just one-time), ask about plan activation logic, mention recurring payment / subscription API considerations, cover webhook event handling for payment.captured, and present a plan before implementing.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "A1",
+          "name": "no-premature-code",
+          "description": "Does not write implementation code before getting explicit user approval"
+        },
+        {
+          "id": "A2",
+          "name": "stack-detection",
+          "description": "Correctly identifies Node.js Express and subscription-based billing context"
+        },
+        {
+          "id": "A3",
+          "name": "payment-flow-diagram",
+          "description": "Presents a visual payment flow diagram (ASCII or structured)"
+        },
+        {
+          "id": "A4",
+          "name": "signature-verification",
+          "description": "Mentions HMAC-SHA256 signature verification for payment security"
+        },
+        {
+          "id": "A5",
+          "name": "env-vars-for-keys",
+          "description": "Advises using environment variables for Razorpay keys, not hardcoding"
+        },
+        {
+          "id": "A6",
+          "name": "webhook-coverage",
+          "description": "Covers webhook handling and subscription activation via payment.captured event"
+        },
+        {
+          "id": "A7",
+          "name": "approval-gate",
+          "description": "Explicitly asks for user approval or states it will wait before implementing"
+        }
+      ]
+    }
+  ]
+}
