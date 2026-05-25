@@ -153,6 +153,25 @@
       "icon": "🧪"
     },
     {
+      "slug": "safe-push-workflow",
+      "name": "safe-push-workflow",
+      "description": "Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes.",
+      "version": "1.0.0",
+      "author": "Ananth Raj L",
+      "email": "ananth@zysk.tech",
+      "category": "pre-deploy-safety",
+      "group": "sonnet",
+      "tags": [
+        "git",
+        "push-safety",
+        "conflict-detection",
+        "pull-request"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🛡️"
+    },
+    {
       "slug": "ship-issue",
       "name": "ship-issue",
       "description": "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline.",
