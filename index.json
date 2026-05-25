@@ -221,6 +221,26 @@
       "icon": "🛠️"
     },
     {
+      "slug": "investor-deck-builder",
+      "name": "investor-deck-builder",
+      "description": "Generate a tailored, branded investor pitch deck PDF for a specific investor or program, with audience-selected slides and content driven entirely from a single facts file — no numbers hardcoded.",
+      "version": "1.0.0",
+      "author": "Sarang T S",
+      "email": "sarang@testmyskills.ai",
+      "category": "business-sales",
+      "group": "opus",
+      "tags": [
+        "pitch-deck",
+        "fundraising",
+        "investor-relations",
+        "pdf-generation",
+        "reportlab"
+      ],
+      "product": "zyniverse",
+      "tested_with": "claude-opus-4-7",
+      "icon": "💼"
+    },
+    {
       "slug": "investor-form-filler",
       "name": "investor-form-filler",
       "description": "Fill investor application forms (VC, accelerator, grant) from a single facts file, tuned per investor type, with sensitive financials kept behind an explicit gate.",
