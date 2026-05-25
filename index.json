@@ -113,6 +113,26 @@
       "icon": "🛠️"
     },
     {
+      "slug": "cloud-infra-planner",
+      "name": "cloud-infra-planner",
+      "description": "Plan cloud infrastructure, size servers, recommend hosting, and estimate costs for any tech stack or cloud provider, then produce ready-to-use Terraform + Ansible, an architecture diagram, and a client report. Use whenever a user asks to \"plan infra for\", \"what servers do we need\", \"estimate cloud costs\", \"plan deployment for\", \"DigitalOcean / AWS sizing\", \"infra for Laravel / Next.js / Node / NestJS\", \"terraform for\", \"provision servers\", or any variation — even if they never say \"infrastructure\" or \"cloud\" but are asking how to host, provision, or run a project in production.\n",
+      "version": "1.0.0",
+      "author": "Nagendra K V",
+      "email": "nagendra.kv@zysk.tech",
+      "category": "infra-security",
+      "group": "opus",
+      "tags": [
+        "infrastructure",
+        "terraform",
+        "ansible",
+        "cost-estimation",
+        "deployment"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-opus-4-7",
+      "icon": "🔐"
+    },
+    {
       "slug": "daily-status",
       "name": "daily-status",
       "description": "Generate the end-of-day client status report by scanning today's git commits, uncommitted changes, and GitHub PRs, then interviewing the user to classify each item. Use whenever the user asks for their daily status, EOD report, or client update — or types /daily-status.",
