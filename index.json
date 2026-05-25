@@ -153,6 +153,26 @@
       "icon": "🧪"
     },
     {
+      "slug": "razorpay-integration",
+      "name": "razorpay-integration",
+      "description": "Integrate Razorpay payment gateway end-to-end. Activate when users mention Razorpay, payment gateway, checkout, order creation, payment verification, webhook handling, or switching to live keys.",
+      "version": "1.0.0",
+      "author": "Tazeen Soudagar",
+      "email": "tazeen.soudagar@zysk.tech",
+      "category": "engineering-practice",
+      "group": "sonnet",
+      "tags": [
+        "razorpay",
+        "payment-gateway",
+        "payments",
+        "checkout",
+        "webhooks"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🛠️"
+    },
+    {
       "slug": "safe-push-workflow",
       "name": "safe-push-workflow",
       "description": "Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes.",
