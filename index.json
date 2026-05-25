@@ -73,6 +73,26 @@
       "icon": "💬"
     },
     {
+      "slug": "decision-brief",
+      "name": "decision-brief",
+      "description": "Produces a lightweight decision record (lighter than an ADR) before implementing ambiguous work — scoping features, evaluating design options, or deciding an approach before writing code.",
+      "version": "1.0.0",
+      "author": "Varun U",
+      "email": "varun@zysk.tech",
+      "category": "engineering-practice",
+      "group": "opus",
+      "tags": [
+        "decision-record",
+        "scoping",
+        "planning",
+        "adr",
+        "github-issues"
+      ],
+      "product": "tms",
+      "tested_with": "claude-opus-4-7",
+      "icon": "🛠️"
+    },
+    {
       "slug": "qa-handoff",
       "name": "qa-handoff",
       "description": "Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to \"Ready for QA\" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — \"QA handoff\", \"notify QA about this PR\", \"send QA test plan\", \"tell QA to test PR",
