@@ -2,6 +2,8 @@
 name: img-prompt-gen
 description: Structures a raw image idea into a clean, field-based prompt optimized for GPT Image 2, adding only safe recommendations without changing the user's intent.
 version: 1.0.0
+author: Arijit Saha
+email: arijit.saha@zysk.tech
 category: ai-agents
 tags:
   - prompt-engineering
