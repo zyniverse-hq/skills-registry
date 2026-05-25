@@ -221,6 +221,26 @@
       "icon": "🛠️"
     },
     {
+      "slug": "investor-form-filler",
+      "name": "investor-form-filler",
+      "description": "Fill investor application forms (VC, accelerator, grant) from a single facts file, tuned per investor type, with sensitive financials kept behind an explicit gate.",
+      "version": "1.0.0",
+      "author": "Sarang T S",
+      "email": "sarang@testmyskills.ai",
+      "category": "business-sales",
+      "group": "opus",
+      "tags": [
+        "investor-forms",
+        "fundraising",
+        "applications",
+        "sales-automation",
+        "pre-seed"
+      ],
+      "product": "zyniverse",
+      "tested_with": "claude-opus-4-7",
+      "icon": "💼"
+    },
+    {
       "slug": "qa-handoff",
       "name": "qa-handoff",
       "description": "Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to \"Ready for QA\" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — \"QA handoff\", \"notify QA about this PR\", \"send QA test plan\", \"tell QA to test PR",
