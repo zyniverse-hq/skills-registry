@@ -2,6 +2,8 @@
 name: resume-recruiter
 description: Acts as a senior recruiter to surface the top keywords for a target role, flag which are missing from the resume, name trending skills, and list buzzwords to cut.
 version: 1.0.0
+author: Arijit Saha
+email: arijit.saha@zysk.tech
 category: business-sales
 tags:
   - resume
