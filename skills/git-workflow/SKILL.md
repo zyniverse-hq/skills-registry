@@ -2,6 +2,8 @@
 name: git-workflow
 description: Applies this user's git conventions for branches, commits, merges, pull requests, force-pushes, and release tags whenever Claude runs any git command.
 version: 1.0.0
+author: Arijit Saha
+email: arijit.saha@zysk.tech
 category: engineering-practice
 tags:
   - git
