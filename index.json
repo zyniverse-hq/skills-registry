@@ -133,6 +133,26 @@
       "icon": "🧪"
     },
     {
+      "slug": "ship-issue",
+      "name": "ship-issue",
+      "description": "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline.",
+      "version": "1.0.0",
+      "author": "Varun U",
+      "email": "varun@zysk.tech",
+      "category": "engineering-practice",
+      "group": "opus",
+      "tags": [
+        "github-issues",
+        "workflow",
+        "pr-creation",
+        "code-review",
+        "tdd"
+      ],
+      "product": "tms",
+      "tested_with": "claude-opus-4-7",
+      "icon": "🛠️"
+    },
+    {
       "slug": "tech-mentor",
       "name": "tech-mentor",
       "description": "Researches industry patterns for engineering decisions. Use when evaluating architecture choices, comparing approaches, or understanding what companies do before building something.",
