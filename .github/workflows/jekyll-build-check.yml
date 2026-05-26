@@ -1,0 +1,30 @@
+name: Jekyll Build Check
+
+# Pre-merge sanity check for the GitHub Pages build. Catches Liquid /
+# Jekyll errors on the PR instead of after merge, when pages-build-deployment
+# would otherwise fail silently on main.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.md'
+      - '_config.yml'
+      - '.github/workflows/jekyll-build-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Dry-run Jekyll build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
