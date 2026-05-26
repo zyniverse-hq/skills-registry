@@ -201,6 +201,26 @@
       "icon": "🧩"
     },
     {
+      "slug": "expo-build-and-sdk-upgrade-checker",
+      "name": "expo-build-and-sdk-upgrade-checker",
+      "description": "Analyzes Expo Managed Workflow projects for build failures, dependency mismatches, EAS configuration problems, and SDK upgrade risks — generates a prioritized health report with exact fix commands.",
+      "version": "1.0.0",
+      "author": "Om Chavan",
+      "email": "om.chavan@zysk.tech",
+      "category": "pre-deploy-safety",
+      "group": "sonnet",
+      "tags": [
+        "expo",
+        "react-native",
+        "eas-build",
+        "sdk-upgrade",
+        "dependency-health"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🛡️"
+    },
+    {
       "slug": "handle-review",
       "name": "handle-review",
       "description": "Triages PR review comments (human or bot), classifies each as valid/invalid/needs-human, fixes what's valid in one batch, replies with evidence for the rest, and pushes once.",
