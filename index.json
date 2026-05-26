@@ -359,6 +359,25 @@
       "icon": "💼"
     },
     {
+      "slug": "playwright-test-generation",
+      "name": "playwright-test-generation",
+      "description": "Generate structured Playwright E2E tests by exploring the live UI first, then producing helpers, spec files, and a summary report.",
+      "version": "1.0.1",
+      "author": "Deepikaa Naganathan",
+      "email": "deepikaa.n@zysk.tech",
+      "category": "qa-testing",
+      "group": "sonnet",
+      "tags": [
+        "playwright",
+        "e2e-testing",
+        "test-generation",
+        "automation"
+      ],
+      "product": "zysk | tms | zyni",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🧪"
+    },
+    {
       "slug": "qa-handoff",
       "name": "qa-handoff",
       "description": "Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to \"Ready for QA\" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — \"QA handoff\", \"notify QA about this PR\", \"send QA test plan\", \"tell QA to test PR",
