@@ -261,6 +261,25 @@
       "icon": "🛠️"
     },
     {
+      "slug": "img-prompt-gen",
+      "name": "img-prompt-gen",
+      "description": "Structures a raw image idea into a clean, field-based prompt optimized for GPT Image 2, adding only safe recommendations without changing the user's intent.",
+      "version": "1.0.0",
+      "author": "Arijit Saha",
+      "email": "arijit.saha@zysk.tech",
+      "category": "ai-agents",
+      "group": "sonnet",
+      "tags": [
+        "prompt-engineering",
+        "image-generation",
+        "gpt-image-2",
+        "creative"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🤖"
+    },
+    {
       "slug": "investor-deck-builder",
       "name": "investor-deck-builder",
       "description": "Generate a tailored, branded investor pitch deck PDF for a specific investor or program, with audience-selected slides and content driven entirely from a single facts file — no numbers hardcoded.",
