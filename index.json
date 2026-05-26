@@ -593,6 +593,26 @@
       "product": "tms",
       "tested_with": "claude-opus-4-7",
       "icon": "🛠️"
+    },
+    {
+      "slug": "ui-consistency",
+      "name": "ui-consistency",
+      "description": "Use when asked for any frontend UI change — modals, forms, buttons, tables, layouts, colors, or spacing. Runs pattern inspection before writing code; never skip for small changes.",
+      "version": "1.0.0",
+      "author": "Ruthu Bahubali Jain",
+      "email": "ruthu.jain@zysk.tech",
+      "category": "engineering-practice",
+      "group": "sonnet",
+      "tags": [
+        "frontend",
+        "ui",
+        "css",
+        "components",
+        "consistency"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🛠️"
     }
   ]
 }
