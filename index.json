@@ -517,6 +517,26 @@
       "icon": "🛠️"
     },
     {
+      "slug": "test-case-reviewer",
+      "name": "test-case-reviewer",
+      "description": "This skill should be used when the user asks to \"review test cases\", \"review existing test cases against feature specs\", \"check test case quality\", \"validate test case coverage\", \"review test cases against requirements\", \"check for missing test scenarios\", \"review test case format\", \"verify test case completeness\", \"check automation readiness\", or needs quality review, coverage analysis, spec traceability, or format validation of any test case suite. Supports reviewing against one or more feature specification or requirement files.",
+      "version": "1.0.0",
+      "author": "Rachayya Choukimath",
+      "email": "rachayya.choukimath@zysk.tech",
+      "category": "qa-testing",
+      "group": "sonnet",
+      "tags": [
+        "test-case-review",
+        "coverage-analysis",
+        "qa-automation",
+        "spec-traceability",
+        "excel-report"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🧪"
+    },
+    {
       "slug": "triage-issues",
       "name": "triage-issues",
       "description": "Promotes Backlog issues to Todo on a GitHub Projects v2 board — derives Priority/Area/Module from labels + title heuristics, flags missing labels and suspected duplicates, requires user approval before mutations.",
