@@ -280,6 +280,26 @@
       "icon": "🤖"
     },
     {
+      "slug": "instagram-carousel",
+      "name": "instagram-carousel",
+      "description": "Generates a self-contained, swipeable HTML Instagram carousel with export-ready 1080x1350px slides, deriving brand colors, typography, and slide layout.",
+      "version": "1.0.0",
+      "author": "Arijit Saha",
+      "email": "arijit.saha@zysk.tech",
+      "category": "comms",
+      "group": "sonnet",
+      "tags": [
+        "instagram",
+        "carousel",
+        "social-media",
+        "marketing",
+        "design"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "💬"
+    },
+    {
       "slug": "investor-deck-builder",
       "name": "investor-deck-builder",
       "description": "Generate a tailored, branded investor pitch deck PDF for a specific investor or program, with audience-selected slides and content driven entirely from a single facts file — no numbers hardcoded.",
