@@ -556,6 +556,25 @@
       "icon": "🧪"
     },
     {
+      "slug": "test-scenario-planning",
+      "name": "test-scenario-planning",
+      "description": "Plan high-level test scenarios that describe user behaviors and business rules before writing test code.",
+      "version": "1.0.1",
+      "author": "Deepikaa Naganathan",
+      "email": "deepikaa.n@zysk.tech",
+      "category": "qa-testing",
+      "group": "sonnet",
+      "tags": [
+        "scenario-planning",
+        "test-strategy",
+        "qa",
+        "requirements"
+      ],
+      "product": "zysk | tms | zyni",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🧪"
+    },
+    {
       "slug": "triage-issues",
       "name": "triage-issues",
       "description": "Promotes Backlog issues to Todo on a GitHub Projects v2 board — derives Priority/Area/Module from labels + title heuristics, flags missing labels and suspected duplicates, requires user approval before mutations.",
