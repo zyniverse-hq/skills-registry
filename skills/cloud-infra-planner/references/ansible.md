@@ -39,6 +39,7 @@ Swap the runtime role per stack: `nodejs/` (PM2), `python/` (gunicorn + systemd)
 
 ---
 
+{% raw %}
 ## Templates
 
 ### `ansible.cfg`
@@ -277,6 +278,7 @@ rm -f "$FILE" "$FILE.gpg"
   (`backup_remote`, `backup_bucket`, key/secret, `backup_gpg_passphrase`).
 - Apply the GFS **retention** via the bucket's lifecycle rule (set in Terraform), not the script.
 - Add a documented **restore command** to the README and run a quarterly restore drill.
+{% endraw %}
 
 ---
 
