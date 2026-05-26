@@ -300,6 +300,25 @@
       "icon": "💬"
     },
     {
+      "slug": "integratekit",
+      "name": "integratekit",
+      "description": "Use this skill to find and wire up backend GraphQL APIs into frontend components. Scans for unwired actions, discovers matching APIs, and integrates after confirmation.",
+      "version": "1.0.0",
+      "author": "Vishak Gowda",
+      "email": "vishak@zysk.tech",
+      "category": "frontend-integration",
+      "group": "sonnet",
+      "tags": [
+        "graphql",
+        "apollo",
+        "api-integration",
+        "frontend"
+      ],
+      "product": "zyniverse",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🔌"
+    },
+    {
       "slug": "investor-deck-builder",
       "name": "investor-deck-builder",
       "description": "Generate a tailored, branded investor pitch deck PDF for a specific investor or program, with audience-selected slides and content driven entirely from a single facts file — no numbers hardcoded.",
