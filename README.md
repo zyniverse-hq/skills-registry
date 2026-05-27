@@ -1,6 +1,6 @@
 # Zyniverse Skills Registry
 
-> Production-grade Claude skills built by the Zysk & Zyni teams. Public and installable by anyone.
+> Production-grade Claude skills built by the Zysk & Zyni teams. Public and installable by anyone
 
 [![Skills Registry](https://img.shields.io/badge/skills-zyniverse--hq-2D1B69?style=flat)](https://zyniverse-hq.github.io/skills-registry/website/)
 
