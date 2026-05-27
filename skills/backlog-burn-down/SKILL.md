@@ -1,7 +1,7 @@
 ---
 name: backlog-burn-down
-description: "Scans the Todo column of a GitHub Projects v2 board, stale-checks each issue, classifies into quick-fix / clear-scope / ambiguous tracks, bundles by mental model, and presents a batch plan for the user to pick from."
-version: 1.0.0
+description: "Scans the Todo column of a GitHub Projects v2 board, stale-checks each issue, classifies into quick-fix / clear-scope / ambiguous tracks, bundles by mental model, and presents a batch plan for the user to pick from. Works with any GitHub org, repo, and project — auto-detects context from the current git repo."
+version: 1.1.0
 author: Varun U
 email: varun@zysk.tech
 category: engineering-practice
@@ -11,8 +11,6 @@ tags:
   - planning
   - triage
   - workflow
-product: tms
-sprint: 4
 tested_with: claude-opus-4-7
 user-invocable: true
 ---
@@ -55,15 +53,41 @@ Every issue is a *proposed* answer — challenge the question before implementin
 
 **MANDATORY.** TaskCreate one todo per remaining step (1–5). Mark `in_progress`/`completed`. Anti-skip discipline — same as `/ship-issue`, `/auto-ship`, etc.
 
-### Step 1 — Fetch unassigned Todo items
+### Step 1 — Resolve project context
 
-Paginate with `after: <endCursor>` until `hasNextPage: false`. The board has 200+ items; `first: 100` silently misses the rest.
+Before fetching issues, resolve the org, repo, and project number from the current environment. Do this once and use the resolved values in all subsequent steps.
+
+**Resolve org and repo** from the current git remote:
+
+```bash
+gh repo view --json owner,name --jq '"\(.owner.login)/\(.name)"'
+```
+
+This gives `<ORG>/<REPO>`. If it fails (not inside a git repo with a GitHub remote), ask the user: "Which GitHub repo should I scan? (e.g. `myorg/myrepo`)"
+
+**Resolve project number** — list the org's projects and let the user pick:
+
+```bash
+gh project list --owner <ORG> --format json --jq '.projects[] | "#\(.number) \(.title)"'
+```
+
+If the user already stated a project number in their message (e.g. "burn down project 5"), use that directly without asking. If there's only one project, use it automatically. Otherwise ask: "Which project number should I scan?" and show the list.
+
+**Resolve the current GitHub login** (for `@me` filtering):
+
+```bash
+gh api user --jq '.login'
+```
+
+Store `ORG`, `REPO`, `PROJECT_NUMBER`, and `MY_LOGIN` — use them in every command below.
+
+**Fetch unassigned Todo items** — paginate with `after: <endCursor>` until `hasNextPage: false`. Project boards commonly exceed 100 items; `first: 100` without pagination silently misses the rest.
 
 ```bash
 gh api graphql -f query='
-query($cursor: String) {
-  organization(login: "zyni-ai") {
-    projectV2(number: 18) {
+query($org: String!, $num: Int!, $cursor: String) {
+  organization(login: $org) {
+    projectV2(number: $num) {
       items(first: 100, after: $cursor) {
         pageInfo { hasNextPage endCursor }
         nodes {
@@ -87,16 +111,16 @@ query($cursor: String) {
       }
     }
   }
-}' -f cursor=""
+}' -f org="<ORG>" -F num=<PROJECT_NUMBER> -f cursor=""
 ```
 
 Filter client-side to:
 
 - Project Status = `Todo`
 - Issue state = `OPEN`
-- Assignees: empty OR includes `@me` (don't take teammates' work)
+- Assignees: empty OR includes `<MY_LOGIN>` (don't take teammates' work)
 
-Sort by Priority (`priority: critical` → `high` → `medium` → `low`), then `updatedAt` ascending within priority. Resolve `@me` to a GitHub login once via `gh api user --jq '.login'`.
+Sort by Priority (`priority: critical` → `high` → `medium` → `low`), then `updatedAt` ascending within priority.
 
 ### Step 2 — Per-issue first-principles + stale-check
 
@@ -123,7 +147,7 @@ Dispositions:
 Stale-close command:
 
 ```bash
-gh issue close <N> --repo zyni-ai/tms-app \
+gh issue close <N> --repo <ORG>/<REPO> \
   --comment "Closing as stale — the referenced code no longer exists on origin/dev."
 ```
 
@@ -183,12 +207,13 @@ CLOSED THIS RUN (stale)
 
 | User says | Next step |
 |---|---|
-| "ship all" / "go" / "lgtm" | Run `/auto-ship N1 N2 N3 ...` for the Ready-to-ship set |
-| "ship only Bundle A" / "just #2779" | Run `/auto-ship` for the named subset |
-| "skip #N" / "everything except #N" | Run `/auto-ship` for the rest |
-| "ship Bundle A as a quick-fix bundle" | Hand off the bundle list to `/ship-issue` quick-fix track (one PR for the bundle) |
-| "decision-brief on #2725 first" | Run `/decision-brief` on the named issue, then re-invoke this skill |
-| "no" / "cancel" / "looks fine for now" | Exit without action |
+| "ship all" / "go" / "lgtm" | If `/auto-ship` is available, run `/auto-ship N1 N2 N3 ...`. If not, print issue numbers in a copy-friendly list and suggest running `/ship-issue N` per issue. |
+| "ship only Bundle A" / "just #2779" | Same fallback logic — `/auto-ship` for the named subset if available, otherwise `/ship-issue` per issue. |
+| "skip #N" / "everything except #N" | Same fallback logic for the remaining subset. |
+| "ship Bundle A as a quick-fix bundle" | Hand off the bundle list to `/ship-issue` quick-fix track (one PR for the bundle). |
+| "decision-brief on #2725 first" | Run `/decision-brief` on the named issue, then re-invoke this skill. |
+| "no" / "cancel" / "looks fine for now" | Exit without action. |
+| Anything else / unclear | Ask: "Did you want to ship, defer, or cancel? I can also explain or re-check any issue." |
 
 ## Output
 
@@ -221,5 +246,6 @@ This skill hands off to `/auto-ship` (or `/ship-issue` directly), which own the 
 
 ## Notes
 
-- TMS-flavored: the GraphQL query targets `organization(login: "zyni-ai")` and `projectV2(number: 18)`, the stale-close command targets `zyni-ai/tms-app`. Swap these for your org / project / repo.
+- Works with any GitHub org, repo, and project — context is resolved automatically from the current git remote at Step 1. No config needed.
+- If the repo has no GitHub remote or you're outside a git directory, the skill will ask for `org/repo` and project number explicitly.
 - Pairs with `/triage-issues` (Backlog → Todo), `/auto-ship` (autonomous drain), `/ship-issue` (single-issue execution). Standalone if you only want the batch-plan view.
