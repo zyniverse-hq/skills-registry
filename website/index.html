@@ -240,8 +240,13 @@
 
   .card-name {
     font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
-    color: var(--ink); margin-bottom: 6px; letter-spacing: -0.3px;
+    color: var(--ink); margin-bottom: 4px; letter-spacing: -0.3px;
   }
+  .card-author {
+    font-size: 12px; color: var(--muted); margin-bottom: 10px;
+    font-weight: 400; display: flex; align-items: center; gap: 4px;
+  }
+  .card-author strong { color: var(--indigo); font-weight: 500; }
   .card-desc {
     font-size: 13px; color: var(--muted); line-height: 1.55;
     margin-bottom: 16px; font-weight: 300; display: -webkit-box;
@@ -298,6 +303,13 @@
     letter-spacing: -0.5px; margin-bottom: 8px;
   }
   .modal-desc { font-size: 15px; color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
+  .modal-author {
+    font-size: 13px; color: var(--muted); margin-bottom: 14px;
+    font-family: 'DM Mono', monospace;
+  }
+  .modal-author strong { color: var(--indigo); font-weight: 500; font-family: 'DM Sans', sans-serif; }
+  .modal-author a { color: var(--indigo-light); text-decoration: none; }
+  .modal-author a:hover { text-decoration: underline; }
   .modal-section-title {
     font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
     letter-spacing: 0.5px; color: var(--muted); text-transform: uppercase;
@@ -433,6 +445,7 @@
     <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
     <div class="modal-icon" id="mIcon"></div>
     <h2 id="mName"></h2>
+    <p class="modal-author" id="mAuthor"></p>
     <p class="modal-desc" id="mDesc"></p>
     <div class="modal-section-title">Tags</div>
     <div class="modal-tags" id="mTags"></div>
@@ -587,7 +600,8 @@ function renderGrid() {
         <div class="card-meta"><span class="card-version">v${s.version}</span></div>
       </div>
       <div class="card-name">${escapeHtml(s.name)}</div>
-      <div class="card-desc">${escapeHtml(s.description || (s.author ? `By ${s.author}` : ''))}</div>
+      ${s.author ? `<div class="card-author">by <strong>${escapeHtml(s.author)}</strong></div>` : ''}
+      <div class="card-desc">${escapeHtml(s.description || '')}</div>
       <div class="card-footer">
         <div class="card-tags">${(s.tags || []).slice(0, 2).map(t => `<span class="card-tag">${escapeHtml(t)}</span>`).join('')}</div>
         <button class="card-install" data-slug="${s.slug}">📋 Copy</button>
@@ -642,6 +656,14 @@ function openModal(slug) {
   document.getElementById('mIcon').textContent = s.icon;
   document.getElementById('mIcon').style.background = iconBg(s.category);
   document.getElementById('mName').textContent = s.name;
+  const authorEl = document.getElementById('mAuthor');
+  if (s.author) {
+    const emailPart = s.email ? ` · <a href="mailto:${escapeHtml(s.email)}">${escapeHtml(s.email)}</a>` : '';
+    authorEl.innerHTML = `by <strong>${escapeHtml(s.author)}</strong>${emailPart}`;
+    authorEl.style.display = '';
+  } else {
+    authorEl.style.display = 'none';
+  }
   document.getElementById('mDesc').textContent = s.description || '';
   document.getElementById('mSlug').textContent = s.slug;
   document.getElementById('mSlugPath').textContent = s.slug;
