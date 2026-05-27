@@ -276,6 +276,26 @@
       "icon": "🛠️"
     },
     {
+      "slug": "hr-resume-screener",
+      "name": "hr-resume-screener",
+      "description": "Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict with requirement match, strengths, gaps, salary check, and an Excel-ready summary row.",
+      "version": "1.0.0",
+      "author": "Deepak Padmanabha",
+      "email": "deepak@zysk.tech",
+      "category": "business-sales",
+      "group": "sonnet",
+      "tags": [
+        "hr",
+        "resume",
+        "screening",
+        "jd-matching",
+        "recruitment"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "💼"
+    },
+    {
       "slug": "img-prompt-gen",
       "name": "img-prompt-gen",
       "description": "Structures a raw image idea into a clean, field-based prompt optimized for GPT Image 2, adding only safe recommendations without changing the user's intent.",
