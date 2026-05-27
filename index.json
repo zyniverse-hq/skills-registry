@@ -551,6 +551,26 @@
       "icon": "🛠️"
     },
     {
+      "slug": "test-case-generator",
+      "name": "test-case-generator",
+      "description": "Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps.",
+      "version": "1.0.0",
+      "author": "Ajay R",
+      "email": "ajay.r@zysk.tech",
+      "category": "qa-testing",
+      "group": "sonnet",
+      "tags": [
+        "test-case-generation",
+        "qa-coverage",
+        "manual-testing",
+        "api-testing",
+        "security-testing"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🧪"
+    },
+    {
       "slug": "test-case-reviewer",
       "name": "test-case-reviewer",
       "description": "This skill should be used when the user asks to \"review test cases\", \"review existing test cases against feature specs\", \"check test case quality\", \"validate test case coverage\", \"review test cases against requirements\", \"check for missing test scenarios\", \"review test case format\", \"verify test case completeness\", \"check automation readiness\", or needs quality review, coverage analysis, spec traceability, or format validation of any test case suite. Supports reviewing against one or more feature specification or requirement files.",
