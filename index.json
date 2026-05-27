@@ -32,6 +32,16 @@
       "slug": "infra-security",
       "label": "Infrastructure, Ops & Security",
       "icon": "🔐"
+    },
+    {
+      "slug": "comms",
+      "label": "Communications & Content",
+      "icon": "💬"
+    },
+    {
+      "slug": "ai-agents",
+      "label": "AI Agents & Prompts",
+      "icon": "🤖"
     }
   ],
   "groups": [
@@ -179,7 +189,7 @@
       "version": "0.1.0",
       "author": "",
       "email": "",
-      "category": "",
+      "category": "pre-deploy-safety",
       "group": "opus",
       "tags": [],
       "product": "",
@@ -193,7 +203,7 @@
       "version": "0.1.0",
       "author": "",
       "email": "",
-      "category": "",
+      "category": "engineering-practice",
       "group": "opus",
       "tags": [],
       "product": "",
