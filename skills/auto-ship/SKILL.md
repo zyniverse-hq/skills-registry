@@ -1,7 +1,7 @@
 ---
 name: auto-ship
-description: "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open."
-version: 1.0.0
+description: "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open. Includes project config block and preflight checks so it works for any team."
+version: 2.0.0
 author: Varun U
 email: varun@zysk.tech
 category: engineering-practice
@@ -32,6 +32,26 @@ user-invocable: true
 
 **REQUIRED BASE SKILL:** `ship-issue`
 
+---
+
+## Project Configuration — set these before first use
+
+Read this block once at the start of every run and substitute the values into every command in this skill that contains a `<PLACEHOLDER>`. Do not hardcode these values inside queries or commands — always read from here.
+
+| Placeholder | What it is | Example |
+|-------------|-----------|---------|
+| `<ORG>` | Your GitHub organization login | `my-company` |
+| `<PROJECT_NUMBER>` | Your GitHub Projects v2 board number (from the URL: `github.com/orgs/<ORG>/projects/<NUMBER>`) | `18` |
+| `<OWNER>` | Repository owner — same as `<ORG>` for org repos, your username for personal repos | `my-company` |
+| `<REPO_NAME>` | Repository name only (no owner prefix) | `my-app` |
+| `<REPO>` | Full `owner/name` format — used in `gh` CLI flags | `my-company/my-app` |
+| `<QUEUE_SCRIPT>` | Absolute path to `queue-io.js` using forward slashes | `D:/Code/my-app/.claude/scripts/queue-io.js` |
+| `<QUEUE_FILE>` | Absolute path to `auto-ship-queue.json` using forward slashes | `D:/Code/my-app/.claude/auto-ship-queue.json` |
+
+**Windows users:** always use forward slashes in `<QUEUE_SCRIPT>` and `<QUEUE_FILE>` paths — backslashes break shell quoting inside node and the `.tmp` rename.
+
+---
+
 ## When to use
 
 - User asks to autonomously ship pre-scoped issues without checkpoints
@@ -47,6 +67,41 @@ user-invocable: true
 
 ## Steps
 
+### Step 0 — Preflight checks
+
+Run both checks before creating tasks or touching any issue. If either fails, stop immediately with the error shown — do not proceed to Step 1.
+
+#### 0a — Verify queue-io.js exists
+
+Check that the queue helper script exists at `<QUEUE_SCRIPT>`:
+
+```bash
+node "<QUEUE_SCRIPT>" --help
+```
+
+If the command errors or the file is not found, stop and output:
+
+```
+Preflight failed — queue helper not found at <QUEUE_SCRIPT>.
+
+This script is required to record opened PRs in the merge queue.
+Without it, /auto-merge will never see any PR this run opens —
+PRs will be open on GitHub but orphaned from the queue forever.
+
+To fix:
+  1. Confirm .claude/scripts/queue-io.js exists in your repo root.
+  2. If it does not exist, get it from your project setup docs or create it.
+  3. Update <QUEUE_SCRIPT> in the Project Configuration block to the correct path.
+
+Do not run /auto-ship until this check passes.
+```
+
+#### 0b — Confirm config placeholders are filled
+
+Check that `<ORG>`, `<PROJECT_NUMBER>`, `<OWNER>`, `<REPO_NAME>`, and `<REPO>` have been replaced with real values in the Project Configuration block above. If any still contain angle-bracket placeholders, stop and ask the user to fill them in before continuing.
+
+---
+
 ### Step 1 — Create tasks
 
 **MANDATORY.** TaskCreate for each step below. Mark `in_progress` before starting, `completed` when done.
@@ -57,13 +112,13 @@ user-invocable: true
 
 **If the user's invocation includes one or more issue numbers** (e.g., `/auto-ship 2780 2779 2768`): use exactly that list. Skip to 2b.
 
-**Otherwise (no args):** auto-pick from project #18's Todo column. Run a single GraphQL query for everything needed (current Status, labels, assignees, title, body, project item ID, last-update time):
+**Otherwise (no args):** auto-pick from the project board's Todo column. Run a single GraphQL query for everything needed (current Status, labels, assignees, title, body, project item ID, last-update time). Substitute `<ORG>` and `<PROJECT_NUMBER>` from the Project Configuration block:
 
 ```bash
 gh api graphql -f query='
 query {
-  organization(login: "zyni-ai") {
-    projectV2(number: 18) {
+  organization(login: "<ORG>") {
+    projectV2(number: <PROJECT_NUMBER>) {
       items(first: 200) {
         nodes {
           id
@@ -126,7 +181,7 @@ For each candidate (whether from explicit args or auto-pick), confirm the issue 
 If stale: close with a verification comment, skip.
 
 ```bash
-gh issue close <N> --repo zyni-ai/tms-app \
+gh issue close <N> --repo <REPO> \
   --comment "Closing as stale — the referenced code no longer exists on origin/dev."
 ```
 
@@ -170,7 +225,7 @@ This is a cheap optimization (no body parse) and means the human's "I cleared th
 When this run newly classifies an issue as ambiguous, **persist the verdict on the issue** before skipping:
 
 ```bash
-gh issue edit <N> --repo zyni-ai/tms-app --add-label "status: needs investigation"
+gh issue edit <N> --repo <REPO> --add-label "status: needs investigation"
 ```
 
 Then skip with this message:
@@ -196,7 +251,7 @@ Step 2 resolved the candidate list at one point in time. Between resolution and 
 ```bash
 gh api graphql -f query='
 {
-  repository(owner: "zyni-ai", name: "tms-app") {
+  repository(owner: "<OWNER>", name: "<REPO_NAME>") {
     issue(number: <N>) {
       assignees(first: 5) { nodes { login } }
       projectItems(first: 5) {
@@ -293,18 +348,18 @@ The entry schema:
 
 `status: "queued"` is the initial state for every entry — it signals the PR is open and `/auto-merge` has not yet evaluated it. `/auto-merge` re-checks live PR state on every invocation and transitions entries through `merged` / `ci-failed` / `awaiting-review` / `changes-requested` / `needs-rebase-manual` / `rebased` / `abandoned` etc. based on what it finds at drain time. (`queued` is deliberately distinct from `awaiting-review`: the latter is `/auto-merge`'s verdict for `reviewDecision == REVIEW_REQUIRED`, the former just means "not yet evaluated".)
 
-`repo` is included so `/auto-merge` can query each PR without hardcoding `--repo`. Defaults to `zyni-ai/tms-app` for this project.
+`repo` is included so `/auto-merge` can query each PR without hardcoding `--repo`. Uses `<REPO>` from the Project Configuration block.
 
-Use the shared `.claude/scripts/queue-io.js` helper — it handles `.tmp` + rename for the write step (so a concurrent reader can never observe a torn JSON file), file-missing initialization, and required-field validation in one call. Calling it instead of inlining a `node -e` block keeps both `/auto-ship` and `/auto-merge` consistent on the queue contract:
+Use the shared `<QUEUE_SCRIPT>` helper — it handles `.tmp` + rename for the write step (so a concurrent reader can never observe a torn JSON file), file-missing initialization, and required-field validation in one call. Calling it instead of inlining a `node -e` block keeps both `/auto-ship` and `/auto-merge` consistent on the queue contract:
 
 ```bash
-node .claude/scripts/queue-io.js append \
-  "<absolute-queue-path>" \
+node "<QUEUE_SCRIPT>" append \
+  "<QUEUE_FILE>" \
   '{
     "issueNumbers": [<N>],
     "prNumber": <PR number>,
     "branch": "<branch name>",
-    "repo": "zyni-ai/tms-app",
+    "repo": "<REPO>",
     "track": "quick-fix",
     "status": "queued",
     "pushedAt": "<ISO 8601 timestamp>"
@@ -339,7 +394,7 @@ Either skipped section is omitted when its count is zero. The race-lost section 
 Surfacing skipped items every run prevents the "stuck forever" failure mode where the user labels-and-forgets. To audit at any time outside an `/auto-ship` run:
 
 ```bash
-gh issue list --repo zyni-ai/tms-app --label "status: needs investigation" --state open
+gh issue list --repo <REPO> --label "status: needs investigation" --state open
 ```
 
 Then exit.
@@ -364,12 +419,19 @@ This skill is not self-healing — a PR that exists on GitHub but is missing fro
 
 | Failure point | Symptom | Recovery |
 |---|---|---|
-| Worktree commit succeeded, `gh pr create` failed | Local branch has commits, no PR | Re-run `gh pr create` from the worktree; on success, manually run the Step 6 atomic-append snippet with the new PR number |
-| Step 6 queue append failed after `gh pr create` succeeded | PR exists on GitHub, no queue entry | Re-run the Step 6 `node .claude/scripts/queue-io.js append` command with the PR number from the failed run's `gh pr create` output. Without the entry, `/auto-merge` will never see this PR. |
+| Step 0 preflight failed — queue-io.js missing | Skill stopped before any work was done | No damage — create or locate `queue-io.js`, update `<QUEUE_SCRIPT>` in the config block, re-run `/auto-ship`. |
+| Step 0 preflight failed — config placeholders unfilled | Skill stopped before any work was done | Fill in all values in the Project Configuration block, then re-run `/auto-ship`. |
+| Worktree commit succeeded, `gh pr create` failed | Local branch has commits, no PR | Re-run `gh pr create` from the worktree; on success, manually run the Step 6 atomic-append snippet with the new PR number. |
+| Step 6 queue append failed after `gh pr create` succeeded | PR exists on GitHub, no queue entry | Re-run the Step 6 `node "<QUEUE_SCRIPT>" append` command with the PR number from the failed run's `gh pr create` output. Without the entry, `/auto-merge` will never see this PR. |
 
 ## Red flags
 
 Grouped by phase so you can scan quickly when reading mid-flight. Each entry is a "stop and reconsider" signal — if you catch yourself doing the left-hand thing, stop.
+
+### Preflight (Step 0)
+
+- Skipping Step 0 and going straight to Step 1 → stop, run preflight first — queue-io.js missing or unfilled config will cause silent failures deep in the run
+- Filling in placeholder values inside queries directly instead of updating the Project Configuration block → stop, put values in the config block only; the queries read from there
 
 ### Resolution & setup (Steps 1–2)
 
@@ -405,6 +467,7 @@ These apply across every phase whenever you produce user-facing output (plan wal
 
 ## Notes
 
-- Deeply coupled to TMS infrastructure: `organization(login: "zyni-ai")`, `projectV2(number: 18)`, `zyni-ai/tms-app` repo, `.claude/auto-ship-queue.json` file, `.claude/scripts/queue-io.js` helper. Swap all of these for your project's equivalents.
+- All org/project/repo values live in the **Project Configuration** block at the top — update that block once when adopting this skill for a new project. Every command in this skill reads from those placeholders; nothing else needs changing.
+- The preflight in Step 0 is the safety net for the two most common setup failures: missing `queue-io.js` and unfilled config. Both are caught before any work starts, not mid-run.
 - Pairs with `/ship-issue` (the per-issue executor), `/decision-brief` (the ambiguity-loop closer), `/auto-merge` (the queue drainer), and `/triage-issues` (the upstream Backlog → Todo gate).
 - The `status: needs investigation` label is the persistence mechanism for ambiguity verdicts — it's how a half-shipped batch's ambiguity skips survive across runs. Don't remove this without replacing the persistence mechanism.
