@@ -11,8 +11,6 @@ tags:
   - git
   - github
   - reporting
-product: zysk
-sprint: 1
 tested_with: claude-opus-4-7
 ---
 
@@ -45,19 +43,49 @@ ENV OVERRIDE = $DAILY_STATUS_CONFIG
 
 Expected shape (see `assets/config.example.json` for a working sample):
 
+**Single client:**
 ```json
 {
   "project_name": "",
   "signature": "",
   "default_hours": 8,
+  "product": "",
+  "sprint": 1,
   "repo_paths": []
+}
+```
+
+**Multiple clients:**
+```json
+{
+  "clients": [
+    {
+      "project_name": "Client A",
+      "signature": "Jane Doe",
+      "default_hours": 8,
+      "product": "Portal",
+      "sprint": 3,
+      "repo_paths": ["/path/to/client-a-repo"]
+    },
+    {
+      "project_name": "Client B",
+      "signature": "Jane Doe",
+      "default_hours": 8,
+      "product": "Store",
+      "sprint": 5,
+      "repo_paths": ["/path/to/client-b-repo"]
+    }
+  ]
 }
 ```
 
 **Before Step 1**, ensure the config exists and is populated:
 
-- If the file does not exist, or any of `project_name` / `signature` / `repo_paths` is empty, prompt the user one question at a time, then write the file. Use `default_hours: 8` if not provided.
-- Never hardcode a project name, signature, or repo path in this skill file — they belong in `config.local.json` only.
+- If the file does not exist, or any of `project_name` / `signature` / `repo_paths` is empty, prompt the user one question at a time, then write the file. Use `default_hours: 8` if not provided. Ask for `product` (enter once, never asked again) and `sprint` (enter once, checked each run).
+- If the config has a `clients` array with more than one entry, ask: *"Which project are you reporting for today?"* and list the client names. Use the selected client's values for the rest of the flow.
+- If the config has a `clients` array with only one entry, use it automatically without asking.
+- **Sprint check (every run):** After resolving the active client, ask: *"Still on sprint <N>? (press Enter to keep / type new number to update)"*. If the user enters a new number, update `sprint` in `config.local.json` before continuing. This is the only field that gets a confirmation prompt on every run — all others are set once and reused silently.
+- Never hardcode a project name, signature, product, sprint, or repo path in this skill file — they belong in `config.local.json` only.
 
 The bundled `scripts/collect_activity.py` loads the same file, so once it's populated the rest of the flow is automatic.
 
@@ -67,15 +95,18 @@ Follow these steps in order.
 
 ### Step 1 — Collect git activity
 
-Run the bundled collector:
+Run the bundled collector. Resolve the script's absolute path from the skill's own directory — do not use a relative path, since the user invokes this skill from their project repo, not the skill folder:
 
 ```bash
-python3 scripts/collect_activity.py --pretty
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+python3 "$SKILL_DIR/scripts/collect_activity.py" --pretty
 ```
 
 It reads the config, runs `git log` / `git status` / `git diff` / `git branch` per repo in parallel, calls `gh pr list` when `gh` is authenticated, filters noise commits and noise files (`.DS_Store` etc.), and emits one JSON document covering every configured repo.
 
 Why a script instead of inline bash: doing this in shell required ~5 commands per repo plus manual JSON stitching on every invocation. The script does it once, in parallel, with consistent filtering — so this skill stays focused on judgment (classify, summarize, interview) rather than orchestration.
+
+If the script exits with a non-zero code, print the last line of stderr as the error reason, then ask: *"The activity collector failed — do you want to enter today's work manually instead?"* If yes, skip directly to Step 4's manual entry flow. If no, exit and suggest the user check their `config.local.json` and re-run.
 
 If the script's `warnings` array reports `gh` unavailable, mention this to the user once and continue with git-only signals.
 
