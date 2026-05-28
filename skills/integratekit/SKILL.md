@@ -42,10 +42,13 @@ You are helping a frontend developer find and integrate backend GraphQL APIs. Th
 
 ## Repos
 
-- **Frontend src:** `C:\Users\VishakGowda\Projects\TRALEXHO\txo-latest\txo-events-app\src`
-- **Backend root:** `C:\Users\VishakGowda\Projects\TRALEXHO\masterdata-management-api-v2`
-- **Backend docs:** `C:\Users\VishakGowda\Projects\TRALEXHO\masterdata-management-api-v2\docs`
-- **Backend resolvers:** `C:\Users\VishakGowda\Projects\TRALEXHO\masterdata-management-api-v2\src\api\models`
+Resolve these once at the start. If the user hasn't provided the repo roots, ask for the
+frontend root and the backend root, then derive the rest. Use forward slashes in all paths.
+
+- **Frontend src:** `<frontend-root>/src`
+- **Backend root:** `<backend-root>`
+- **Backend docs:** `<backend-root>/docs`
+- **Backend resolvers:** `<backend-root>/src/api/models`
 
 ## Frontend Conventions (always follow, never ask)
 
@@ -127,7 +130,7 @@ Do NOT derive the feature name from component variable names, file names, or cod
 Normalize the extracted feature name: lowercase, replace spaces and hyphens with underscores.
 Example: `"order management"` → `order_management`
 
-Glob the docs folder: `C:\Users\VishakGowda\Projects\TRALEXHO\masterdata-management-api-v2\docs\*.md`
+Glob the docs folder: `<backend-root>/docs/*.md`
 
 Find the file whose name normalizes to the same value (case-insensitive, hyphens and underscores treated as equivalent):
 - `My-Feature.md` → `my_feature` ✓
@@ -140,14 +143,14 @@ If a match is found, read it to get operation names, purpose, and input/output s
 Docs can be outdated. Always verify against the Python source.
 
 Derive the module folder from the docs filename (same normalization):
-`My-Feature.md` → `my_feature` → `src\api\models\my_feature\`
+`My-Feature.md` → `my_feature` → `<backend-root>/src/api/models/my_feature/`
 
 List files in that folder and read the relevant `*_mutation.py` or `*_query.py` file.
 Get **exact** field names from the Python `@strawberry.input` class — Strawberry auto-converts `snake_case` → `camelCase` in GraphQL.
 
 **Enum resolution — always look up actual string values:**
 When a field's type is a `@strawberry.enum` class (e.g. `RecordStatus`, `RecordAccess`), do NOT use the Python member names as values. Instead:
-1. Grep `src\api\common\types\` for the enum class name to find its definition.
+1. Grep `<backend-root>/src/api/common/types/` for the enum class name to find its definition.
 2. Read the actual string values from the `member = "value"` pattern inside the class.
 3. Use those exact string values everywhere — in the Phase 2b report and in the Phase 3 component code.
 
@@ -157,7 +160,7 @@ Never assume enum values are uppercase. The member name (`DRAFT`, `PUBLISHED`) i
 
 ### If docs not found
 
-Skip Step 1. Go directly to Step 2 — normalize the feature name, glob `src\api\models\` for a matching folder, read the resolver files directly.
+Skip Step 1. Go directly to Step 2 — normalize the feature name, glob `<backend-root>/src/api/models/` for a matching folder, read the resolver files directly.
 
 If no match found in either place, tell the user: "No matching backend API found for this action. Point me to the specific resolver file if you know it."
 
@@ -249,208 +252,11 @@ Only proceed to Phase 3 for operations that passed (new or confirmed update). Sk
 
 ## Phase 3 — Wire Up
 
-After confirmation, make edits in this exact order:
-
-### 1. mutations.js — append new mutation
-```js
-export const OperationName = gql`
-mutation OperationName($input: InputType!) {
-  operationName(input: $input) {
-    success
-    error
-  }
-}
-`
-```
-
-### 2. queries.js — append new query (if lazy query or eager query)
-
-Select only the fields the component actually uses (check the component's state/useEffect/onCompleted logic). Do not select all fields from the Python type — only what is needed.
-
-```js
-export const OperationName = gql`
-query OperationName($param: Type!) {
-  operationName(param: $param) {
-    field1
-    field2
-  }
-}
-`
-```
-
-### 3. masterdatav2.service.ts
-
-Only for **mutations** and **eager queries** (not lazy queries — those are wired directly in the component in Step 4).
-
-**Step A** — Add the new name to the existing import line at the top of the file.
-
-**Step B** — Append the service method at the end of the class before the closing `}`:
-
-For a mutation:
-```ts
-async operationName(variables: { input: { field: string; field2: string } }) {
-    try {
-        const { data } = await this.__apolloClient.mutate({
-            mutation: OperationName,
-            variables,
-            fetchPolicy: "network-only",
-        });
-        return data?.operationName;
-    } catch (error) {
-        this.showSnackbar("Error <description>");
-        return null;
-    }
-}
-```
-
-For an eager query (service-layer fetch):
-```ts
-async operationName(variables: { param: string }) {
-    try {
-        const { data } = await this.__apolloClient.query({
-            query: OperationName,
-            variables,
-            fetchPolicy: "network-only",
-        });
-        return data?.operationName ?? null;
-    } catch (error) {
-        this.showSnackbar("Error fetching <description>");
-        return null;
-    }
-}
-```
-
-### 4. Component — wire up the service call and Apollo hooks
-
-Edit the component file to wire each action based on its type.
-
----
-
-#### For mutation and eager query actions — service method pattern
-
-**Step A** — Add `useMasterDataV2Service` to the imports (if not already present):
-```tsx
-import useMasterDataV2Service from "../../../hooks/useMasterDataV2";
-```
-
-**Step B** — Add the hook call inside the component function:
-```tsx
-const masterDataV2Service = useMasterDataV2Service();
-```
-
-**Step C** — Update each unwired mutation handler with an async service call. Keep the existing validation block unchanged. Match the input shape exactly to what was shown in Phase 2b.
-
-```tsx
-const handleSave = async () => {
-    // keep existing validation block unchanged
-    setSaveLoading(true);
-    try {
-        const result = await masterDataV2Service.operationName({
-            input: {
-                field1: value1,
-                field2: value2,
-            },
-        });
-        if (result) {
-            showSnackbar("Record saved as draft.");
-            handleReset();
-        }
-    } catch {
-        showSnackbar("Failed to save record.", "error");
-    } finally {
-        setSaveLoading(false);
-    }
-};
-```
-
-If loading state vars were stubbed as read-only (`const [x] = useState`), restore them to full `useState` with setter.
-
-**Success and error message rules:**
-- Call `showSnackbar(message, severity)` — severity is `"success"` (default), `"error"`, `"warning"`, or `"info"`
-- **Success messages**: past tense, action-specific. Examples: `"Record saved as draft."`, `"Record published successfully."`, `"Record deleted."`
-- **Error messages**: always use `"error"` severity. Keep brief. Examples: `"Failed to save record."`, `"Failed to publish record."`, `"Failed to delete record."`
-- **Validation messages** (before the API call): use `"error"` severity. Example: `"Please fill in all required fields."`
-- If the component already has a `showSnackbar` helper, use it. If not, use the MUI `Snackbar` + `Alert` pattern already present elsewhere in the component.
-- Always call `showSnackbar` inside the `try` (on success) and `catch` (on failure) — never after `finally`.
-- Do not show a success message if `result` is null or falsy — the service method already showed a snackbar for the error.
-
----
-
-#### For lazy query actions — useLazyQuery pattern
-
-**Step A** — Add `useLazyQuery` to the Apollo import (add alongside any existing Apollo imports, or add new import if not present):
-```tsx
-import { useLazyQuery } from "@apollo/client";
-```
-
-**Step B** — Add the query const import from queries.js:
-```tsx
-import { OperationName } from "../../../graphql/queries";
-```
-
-**Step C** — Add the `useLazyQuery` hook in the component body (near other hook declarations):
-```tsx
-const [runOperationName, { loading: nameCheckLoading }] = useLazyQuery(OperationName, {
-    fetchPolicy: "network-only",
-    onCompleted: (data) => {
-        // update relevant state from data?.operationName
-        // only show a message if the result warrants user feedback
-        // e.g. for availability checks: no snackbar — update inline state (isAvailable)
-        // e.g. for a background load: no snackbar — silently populate state
-    },
-    onError: () => {
-        // reset relevant state to null/false
-        // show a snackbar only if the failure is something the user needs to act on
-        // e.g. showSnackbar("Could not check availability. Try again.", "error")
-    },
-});
-```
-
-**Lazy query message rules:**
-- `onCompleted` — prefer updating inline UI state (e.g. `isAvailable`, a dropdown list) over showing a snackbar. Only show a snackbar if the result requires user attention (e.g. a warning that something is unavailable).
-- `onError` — always reset related state to a safe default. Show a snackbar with `"error"` severity if the failure blocks the user's next action.
-
-**Step D** — Update the stub handler to call the lazy query:
-```tsx
-const handleNameBlur = () => {
-    const trimmed = fieldValue.trim();
-    if (!trimmed || !orgId) return;
-    runOperationName({ variables: { param: trimmed, orgId } });
-};
-```
-
----
-
-#### For eager query actions — useQuery pattern
-
-**Step A** — Add `useQuery` to the Apollo import:
-```tsx
-import { useQuery } from "@apollo/client";
-```
-
-**Step B** — Add the query const import from queries.js:
-```tsx
-import { OperationName } from "../../../graphql/queries";
-```
-
-**Step C** — Add the `useQuery` hook in the component body. Use `skip` to prevent fetching until the required variables are available:
-```tsx
-const { data: operationData } = useQuery(OperationName, {
-    variables: { id: Number(selectedId), orgId },
-    skip: !selectedId || !orgId,
-    fetchPolicy: "network-only",
-});
-```
-
-**Step D** — Add a `useEffect` to consume the query result and update component state:
-```tsx
-useEffect(() => {
-    if (operationData?.operationName) {
-        const result = operationData.operationName;
-        // populate state from result
-    }
-}, [operationData]);
-```
+After confirmation, wire up each action. The full step-by-step edit patterns — `mutations.js`,
+`queries.js`, `masterdatav2.service.ts`, and the component wiring for the three action types
+(mutation, lazy query, eager query), plus the success/error message rules — live in
+`references/wiring-patterns.md`. **Read that file when you reach this phase**, then apply the
+edits in the exact order it specifies.
 
 ---
 
