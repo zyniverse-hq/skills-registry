@@ -1,6 +1,6 @@
 ---
 name: safe-push-workflow
-description: Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes.
+description: Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes. Use when the user asks to push code, push to qa/uat/main/staging, send a branch to remote, or create a PR.
 version: 1.0.0
 author: Ananth Raj L
 email: ananth@zysk.tech
@@ -13,6 +13,7 @@ tags:
 product: zysk
 sprint: 1
 tested_with: claude-sonnet-4-6
+allowed-tools: [Bash]
 ---
 
 # Safe Push Workflow
@@ -31,6 +32,9 @@ tested_with: claude-sonnet-4-6
 - [ ] Git repository with a configured remote
 - [ ] `gh` CLI installed (for PR creation in Step 8)
 - [ ] Feature branch with commits ready to push
+- [ ] A companion CLAUDE.md rule so pushes reliably invoke this skill — keyword matching alone
+      will not catch a bare "yes" confirmation. Add: "Before executing any git push, always
+      invoke the safe-push-workflow skill."
 
 ## Steps
 
