@@ -1,7 +1,7 @@
 ---
 name: backlog-burn-down
-description: "Scans the Todo column of a GitHub Projects v2 board, stale-checks each issue, classifies into quick-fix / clear-scope / ambiguous tracks, bundles by mental model, and presents a batch plan for the user to pick from. Works with any GitHub org, repo, and project — auto-detects context from the current git repo."
-version: 1.1.0
+description: "Project manager skill — scans the Todo column of a GitHub Projects v2 board, stale-checks each issue, classifies by track, and assigns issues to developers in priority order with a comment on each. Use whenever the PM wants to plan the sprint, assign backlog items to the team, or ask what the dev team should work on next."
+version: 1.2.0
 author: Varun U
 email: varun@zysk.tech
 category: engineering-practice
@@ -11,37 +11,42 @@ tags:
   - planning
   - triage
   - workflow
+  - team-management
 tested_with: claude-opus-4-7
 user-invocable: true
 ---
 
 # Backlog Burn-Down
 
-> Deliberate batch planning. Scan unassigned `Todo` issues, stale-check, classify, present a batch plan, and stop. The user picks what to ship; execution is `/ship-issue` per issue (or `/auto-ship <N1> <N2>` for the chosen subset).
+> PM planning tool. Scan unassigned `Todo` issues, stale-check, classify by track, present a batch plan, then walk the PM through assigning each issue to a developer — moving it to In Progress on the board and leaving a comment on each.
 
 ## When to use
 
-- The user asks "what should I work on?", "show me Todo", "let's burn down the backlog", "plan my day", "what's in flight?"
-- Before a focus block, to size up what's actually ready to ship
+- The PM asks "assign today's work to the team", "burn down the backlog", "what should the devs work on?", "plan the sprint", "let's assign the queue"
+- Before a sprint or focus block, to distribute ready issues across the team
+- When the PM wants a clear picture of what's in Todo and who should own what
 
 ### When NOT to use
 
-- You already know which issues to ship → `/auto-ship 1234 5678`
-- You want to ship everything in Todo without choosing → `/auto-ship`
-- You're handling a single specific issue → `/ship-issue N` directly
-- Triaging Backlog → Todo → `/triage-issues`'s job
+- Triaging `Backlog` → `Todo` — that's `/triage-issues`'s job
+- The PM already knows exactly which issue to assign and to whom — do it directly via `gh`
 
-### How this skill compares
+## Configuration
 
-| Skill | What it does | Stops for user input? |
-|---|---|---|
-| `/triage-issues` | Promote `Backlog` → `Todo` (set Priority/Area/Module from labels) | Yes — confirmation gate before mutations |
-| `/backlog-burn-down` | Scan `Todo`, classify, present a batch plan | **Yes — this skill is the deliberate review gate** |
-| `/auto-ship` (no args) | Drain `Todo` autonomously, ship everything eligible | No |
-| `/auto-ship N1 N2` | Ship a specific subset autonomously | No |
-| `/ship-issue N` | Execute one issue end-to-end (full track) | At track checkpoints |
+The skill reads team and project details from `~/.claude/skills/backlog-burn-down/config.local.json`. Copy `assets/config.example.json` to that path and fill in your team. This file is set once and reused on every run — it never needs to change unless the team or project changes.
 
-Use `/backlog-burn-down` when you want to *see and choose*. Use `/auto-ship` when you've already decided.
+```json
+{
+  "sprint": 4,
+  "team": [
+    { "name": "Alice",   "github": "alice-gh" },
+    { "name": "Bob",     "github": "bob-gh" },
+    { "name": "Charlie", "github": "charlie-gh" }
+  ]
+}
+```
+
+If the config file doesn't exist, the skill will ask for sprint number and team roster on first run and write the file. Org, repo, and project number are always resolved dynamically from the git remote (see Step 1) — they don't belong in config because they change per-repo.
 
 ## Operating principle
 
@@ -51,76 +56,27 @@ Every issue is a *proposed* answer — challenge the question before implementin
 
 ### Step 0 — Create tasks
 
-**MANDATORY.** TaskCreate one todo per remaining step (1–5). Mark `in_progress`/`completed`. Anti-skip discipline — same as `/ship-issue`, `/auto-ship`, etc.
+**MANDATORY.** TaskCreate one todo per remaining step (1–5). Mark `in_progress`/`completed`. Don't skip steps — each one feeds the next.
 
-### Step 1 — Resolve project context
+### Step 1 — Fetch unassigned Todo items
 
-Before fetching issues, resolve the org, repo, and project number from the current environment. Do this once and use the resolved values in all subsequent steps.
-
-**Resolve org and repo** from the current git remote:
+Run the bundled collector. Resolve its absolute path from the skill's own directory so it works regardless of which repo the PM invokes the skill from:
 
 ```bash
-gh repo view --json owner,name --jq '"\(.owner.login)/\(.name)"'
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+python3 "$SKILL_DIR/scripts/fetch_backlog.py" --pretty
 ```
 
-This gives `<ORG>/<REPO>`. If it fails (not inside a git repo with a GitHub remote), ask the user: "Which GitHub repo should I scan? (e.g. `myorg/myrepo`)"
+The script:
+- Auto-detects org and repo from the current git remote
+- Lists available projects and auto-selects if there is only one, otherwise prompts
+- Paginates until all items are fetched (boards commonly exceed 100 items)
+- Filters to: Status = `Todo`, state = `OPEN`, assignees empty or includes the current user
+- Sorts by priority (`critical` → `high` → `medium` → `low`), then `updatedAt` ascending
 
-**Resolve project number** — list the org's projects and let the user pick:
+If the script exits with a non-zero code, print the last line of stderr and ask: *"The backlog fetch failed — do you want to enter issues manually instead?"*
 
-```bash
-gh project list --owner <ORG> --format json --jq '.projects[] | "#\(.number) \(.title)"'
-```
-
-If the user already stated a project number in their message (e.g. "burn down project 5"), use that directly without asking. If there's only one project, use it automatically. Otherwise ask: "Which project number should I scan?" and show the list.
-
-**Resolve the current GitHub login** (for `@me` filtering):
-
-```bash
-gh api user --jq '.login'
-```
-
-Store `ORG`, `REPO`, `PROJECT_NUMBER`, and `MY_LOGIN` — use them in every command below.
-
-**Fetch unassigned Todo items** — paginate with `after: <endCursor>` until `hasNextPage: false`. Project boards commonly exceed 100 items; `first: 100` without pagination silently misses the rest.
-
-```bash
-gh api graphql -f query='
-query($org: String!, $num: Int!, $cursor: String) {
-  organization(login: $org) {
-    projectV2(number: $num) {
-      items(first: 100, after: $cursor) {
-        pageInfo { hasNextPage endCursor }
-        nodes {
-          id
-          fieldValues(first: 20) {
-            nodes {
-              ... on ProjectV2ItemFieldSingleSelectValue {
-                field { ... on ProjectV2SingleSelectField { name } }
-                name
-              }
-            }
-          }
-          content {
-            ... on Issue {
-              number title body url state updatedAt
-              assignees(first: 10) { nodes { login } }
-              labels(first: 20) { nodes { name } }
-            }
-          }
-        }
-      }
-    }
-  }
-}' -f org="<ORG>" -F num=<PROJECT_NUMBER> -f cursor=""
-```
-
-Filter client-side to:
-
-- Project Status = `Todo`
-- Issue state = `OPEN`
-- Assignees: empty OR includes `<MY_LOGIN>` (don't take teammates' work)
-
-Sort by Priority (`priority: critical` → `high` → `medium` → `low`), then `updatedAt` ascending within priority.
+The output JSON includes `org`, `repo`, `project_number`, `my_login`, and an `issues` array. Each issue carries `item_id`, `project_id`, and `field_meta` needed for Step 5's board mutations — keep this data in context through the end of the skill.
 
 ### Step 2 — Per-issue first-principles + stale-check
 
@@ -137,8 +93,8 @@ Dispositions:
 | Finding | Action |
 |---|---|
 | Stale (already fixed / file gone) | Close with verification comment, drop from batch |
-| Ambiguous body | Defer with note suggesting `/decision-brief` |
-| Carries `status: needs investigation` label | Defer (already flagged ambiguous by a prior `/auto-ship`) |
+| Ambiguous body | Defer with note — needs PM or tech lead to clarify before assigning |
+| Carries `status: needs investigation` label | Defer (already flagged ambiguous) |
 | Blocked dependency | Defer with note explaining the block |
 | Otherwise | Proceed to classify |
 
@@ -153,26 +109,23 @@ gh issue close <N> --repo <ORG>/<REPO> \
 
 ### Step 3 — Classify each surviving candidate
 
-| Track | When | Execution |
-|---|---|---|
-| **Quick-fix** | 1-2 line change, obvious, no design decisions | Shared worktree; can bundle same-theme issues |
-| **Clear-scope** | Explicit fix, 1-3 files, scope obvious | Dedicated worktree; one checkpoint |
-| **Ambiguous** | Unclear requirements, multiple design options | Defer from this batch — needs `/decision-brief` first |
+Read `references/classification.md` for full track definitions and stale-check dispositions. Summary:
+
+- **Quick-fix** — 1–2 line change, obvious fix, no design decisions needed
+- **Clear-scope** — explicit fix, up to 3 files, one clear outcome
+- **Ambiguous** — unclear requirements or multiple valid approaches → defer, do not assign
+
+When in doubt, defer. An ambiguously assigned issue wastes a dev's time.
 
 ### Step 4 — Bundle quick-fixes by mental model
 
-Bundle by **same mental model**, not same size. Two `aria-label` fixes bundle cleanly; an unrelated bug + refactor don't — they split reviewer attention.
+Read `references/classification.md` (Bundling Rules section) for full guidance. Summary:
 
-| Example pair | Bundle? | Why |
-|---|---|---|
-| Two missing `aria-label` attributes | Yes | Same a11y mental model |
-| Two `console.error` → `Sentry` swaps | Yes | Same observability mental model |
-| `aria-label` fix + wrong API URL | No | Unrelated domains |
-| Bug fix + scope-creep refactor | No | Different intents |
+Bundle quick-fixes that share the same **mental model** — issues a dev would naturally fix together in one focused session. Do not bundle by size alone. Unrelated domains, mixed bug-fix + refactor, or anything that would make a PR harder to review should ship as separate items.
 
-### Step 5 — Present batch plan and STOP
+### Step 5 — Present batch plan, assign to developers, and comment
 
-Print this exact shape (copy the headings, fill in the data):
+**5a — Print the batch plan:**
 
 ```
 BATCH PLAN — <date>
@@ -180,13 +133,13 @@ BATCH PLAN — <date>
 Scanned:         N Todo items
 Stale (closed):  N issues
 Deferred:        N issues (ambiguous / blocked)
-Ready to ship:   N issues
+Ready to assign: N issues
 
 QUICK-FIX BUNDLES
 -----------------
 Bundle A (2 issues, a11y mental model)
-  #2780  fix(adaptive-test): missing aria-label on submit button
-  #2784  fix(exam): missing aria-label on results panel
+  #2780  P2  fix(adaptive-test): missing aria-label on submit button
+  #2784  P2  fix(exam): missing aria-label on results panel
 
 CLEAR-SCOPE
 -----------
@@ -195,7 +148,7 @@ CLEAR-SCOPE
 
 DEFERRED
 --------
-  #2725  ambiguous — body asks "should features/skills/ grow?" — run /decision-brief
+  #2725  ambiguous — body needs clarification before assigning
   #2640  blocked — waits on backend session-refresh endpoint
 
 CLOSED THIS RUN (stale)
@@ -203,49 +156,89 @@ CLOSED THIS RUN (stale)
   #2501  closed — referenced helper deleted in #2489
 ```
 
-🛑 **Wait for user input.** Acceptable responses (match intent, not exact wording):
+**5b — Show the team roster and ask the PM to assign:**
 
-| User says | Next step |
-|---|---|
-| "ship all" / "go" / "lgtm" | If `/auto-ship` is available, run `/auto-ship N1 N2 N3 ...`. If not, print issue numbers in a copy-friendly list and suggest running `/ship-issue N` per issue. |
-| "ship only Bundle A" / "just #2779" | Same fallback logic — `/auto-ship` for the named subset if available, otherwise `/ship-issue` per issue. |
-| "skip #N" / "everything except #N" | Same fallback logic for the remaining subset. |
-| "ship Bundle A as a quick-fix bundle" | Hand off the bundle list to `/ship-issue` quick-fix track (one PR for the bundle). |
-| "decision-brief on #2725 first" | Run `/decision-brief` on the named issue, then re-invoke this skill. |
-| "no" / "cancel" / "looks fine for now" | Exit without action. |
-| Anything else / unclear | Ask: "Did you want to ship, defer, or cancel? I can also explain or re-check any issue." |
+Display the team roster from config (see Configuration section). Then walk through each ready-to-assign issue in priority order, one at a time:
+
+```
+TEAM ROSTER
+-----------
+1. @alice
+2. @bob
+3. @charlie
+
+[1/4] #2779 P1 — fix(proctoring): video upload 413 (clear-scope)
+Assign to (name or number, or 'skip'):
+```
+
+Wait for the PM's response before moving to the next issue. Accept names, numbers from the roster, or GitHub handles directly.
+
+**5c — Execute each assignment immediately after the PM confirms:**
+
+For each assigned issue:
+
+1. Move to In Progress on the board:
+```bash
+gh project item-edit --id <ITEM_ID> --project-id <PROJECT_ID> \
+  --field-id <STATUS_FIELD_ID> --single-select-option-id <IN_PROGRESS_OPTION_ID>
+```
+
+2. Set the assignee on the issue:
+```bash
+gh issue edit <N> --repo <ORG>/<REPO> --add-assignee <github-login>
+```
+
+3. Drop a comment on the issue:
+```
+Picked up for Sprint <N> — assigned to @<dev>.
+Track: <quick-fix | clear-scope> | ETA: <1–2 days | 3–5 days>
+```
+
+ETA defaults: quick-fix = 1–2 days, clear-scope = 3–5 days. Sprint number comes from config if set, otherwise ask the PM once at the start of Step 5b.
+
+**5d — Print an assignment summary when done:**
+
+```
+ASSIGNMENTS — <date>
+====================
+#2779 → @alice   (In Progress, clear-scope, ETA 3–5 days)
+#2780 → @bob     (In Progress, quick-fix, ETA 1–2 days)
+#2784 → @bob     (In Progress, quick-fix, ETA 1–2 days)
+#2772 → skipped
+```
 
 ## Output
 
-- **Format:** Single grouped batch-plan block printed at Step 5 (counts header, Quick-fix bundles, Clear-scope, Deferred, Closed-this-run).
-- **Location:** Printed to chat. No file written, no GitHub mutations except stale-closes from Step 2.
-- **Side effects:** Stale issues are auto-closed with a verification comment.
+- **Format:** Batch plan block + per-issue assignment prompts + assignment summary
+- **GitHub mutations:** Stale-closes (Step 2), status moves to In Progress, assignee set, comment dropped per issue
+- **No files written**
 
 ## Example
 
-**User says:** "What's in my queue today?"
+**User says:** "Assign today's work to the team"
 
-**Claude does:** Paginates project Todo items, filters to unassigned + open, stale-checks each via Grep + `git log -S`, classifies into quick-fix / clear-scope / ambiguous / deferred, bundles quick-fixes by mental model, presents the BATCH PLAN block.
+**Claude does:** Paginates project Todo items, stale-checks, classifies, presents the BATCH PLAN, shows the team roster, walks the PM through assigning each issue in priority order, moves each to In Progress, assigns the dev, and drops a comment.
 
-**Result:** A scannable plan the user can act on in one word ("ship all" / "skip #2725" / "decision-brief on #2725 first").
-
-## Worktree strategy
-
-This skill hands off to `/auto-ship` (or `/ship-issue` directly), which own the worktree convention. See `/auto-ship` Step 5 for the canonical setup — shared `.worktrees/quick-fixes` for bundles, dedicated `.worktrees/<branch-name>` for clear-scope work.
+**Result:** Every ready issue has an owner, is In Progress on the board, and has a comment the dev can read when they pick it up.
 
 ## Red flags
 
-- Skipping Step 0 (Create tasks) when invoked from another skill → step 0's todos coexist with the parent's task list
-- Using `first: 100` without pagination → silently misses 100+ items on the board; the boards in this org commonly exceed that count
-- Skipping stale-check on items that "look obvious" → the obvious ones include already-fixed bugs, redesigned-around problems, and stalled threads. Stale-check is the highest-leverage step in the skill.
-- Bundling unrelated mental models because the diffs are all small → splits reviewer attention; ship them as separate PRs even if quick-fix-tracked
-- Auto-shipping the batch after presenting the plan → no, this skill is the *deliberate alternative* to `/auto-ship`. Stop at Step 5 and wait. If the user wants no-checkpoint, they'd have invoked `/auto-ship` directly.
-- Including ambiguous-bodied items in a quick-fix bundle → they need `/decision-brief` first; bundling them risks `/ship-issue` failing mid-batch
-- Closing an issue as stale without the verification comment → leaves no audit trail for why it was closed; future reviewers can't tell "actually fixed" from "noise"
-- Treating Step 5's STOP as a checkpoint to skip when invoked from a parent skill → no. The whole point of this skill is the deliberate gate. If a parent wants to skip the gate, it should have called `/auto-ship` instead.
+- Skipping Step 0 (Create tasks) — each step feeds the next; skipping breaks the flow
+- Using `first: 100` without pagination — silently misses 100+ items; boards in active orgs commonly exceed that count
+- Skipping stale-check on items that "look obvious" — already-fixed bugs and redesigned-around problems hide here; stale-check is the highest-leverage step
+- Bundling unrelated mental models because the diffs are small — splits reviewer attention; keep bundles thematically tight
+- Assigning ambiguous or deferred issues — they need clarification first; assigning them puts a dev in a no-win situation
+- Closing an issue as stale without the verification comment — leaves no audit trail; future reviewers can't tell "actually fixed" from "accidentally closed"
+
+## Files in this skill
+
+- `SKILL.md` — this file
+- `scripts/fetch_backlog.py` — fetches and filters Todo issues from GitHub Projects v2, handles pagination and sorting
+- `references/classification.md` — track definitions, stale-check dispositions, bundling rules, ETA defaults
+- `assets/config.example.json` — copy to `~/.claude/skills/backlog-burn-down/config.local.json` and fill in sprint + team roster
 
 ## Notes
 
-- Works with any GitHub org, repo, and project — context is resolved automatically from the current git remote at Step 1. No config needed.
+- Works with any GitHub org, repo, and project — context is resolved automatically from the current git remote at Step 1.
 - If the repo has no GitHub remote or you're outside a git directory, the skill will ask for `org/repo` and project number explicitly.
-- Pairs with `/triage-issues` (Backlog → Todo), `/auto-ship` (autonomous drain), `/ship-issue` (single-issue execution). Standalone if you only want the batch-plan view.
+- Pairs with `/triage-issues` (Backlog → Todo promotion). Standalone if you only want the batch-plan + assignment flow.
