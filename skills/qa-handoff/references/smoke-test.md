@@ -13,10 +13,10 @@ Load this file when validating an edit to the skill. Run all four scenarios in o
 Then:
 
 ```
-/qa-handoff --qa Rochanay --set-default
+/qa-handoff --qa qa-tester --set-default
 ```
 
-**Expected:** prints "Saved default set to @Rochanay", does nothing else. Verify the file exists and contains `Rochanay`.
+**Expected:** prints "Saved default set to @qa-tester", does nothing else. Verify the file exists and contains `qa-tester`.
 
 ## Mode B — Single PR dry-run
 
