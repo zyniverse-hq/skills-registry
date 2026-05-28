@@ -1,7 +1,7 @@
 ---
 name: git-workflow
 description: Applies this user's git conventions for branches, commits, merges, pull requests, force-pushes, and release tags whenever Claude runs any git command.
-version: 1.0.0
+version: 2.0.0
 author: Arijit Saha
 email: arijit.saha@zysk.tech
 category: engineering-practice
@@ -31,6 +31,18 @@ tested_with: claude-sonnet-4-6
 
 ### Step 1: Name the branch
 
+**Always fetch before branching** — your local copy of the remote may be stale. Branching from old code causes merge conflicts later.
+
+```bash
+git fetch origin
+```
+
+Then create your branch off the freshly fetched remote:
+
+```bash
+git checkout -b <branch-name> origin/<base-branch>
+```
+
 Pattern: `type/short-description` (20 chars max including prefix).
 
 | Type | Prefix |
@@ -52,10 +64,11 @@ Keep the description part short and kebab-case. If it won't fit in 20 chars, abb
 
 Never merge locally. The flow is:
 1. Push source branch to remote
-2. Pull/update target branch from remote
-3. Merge happens on remote (via PR) or via `git fetch` + `git merge origin/main` - never `git checkout main && git merge feature`
+2. Merge happens on remote via PR only — never run `git merge` locally
 
-Prefer merge over rebase - preserves history and avoids rewriting shared commits.
+Do not run `git checkout main && git merge feature` or `git merge origin/main` locally. Both are local merges and both are wrong. The PR is the merge.
+
+Prefer merge over rebase — preserves history and avoids rewriting shared commits.
 
 ### Step 4: Open the pull request
 
