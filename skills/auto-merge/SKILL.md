@@ -1,7 +1,7 @@
 ---
 name: auto-merge
 description: "One-shot drain of an auto-ship PR queue. Re-checks each PR's CI + merge state + review decision, squash-merges what's MERGEABLE + APPROVED + clean of unaddressed comments, and reports per-entry verdict. No scheduler."
-version: 1.0.0
+version: 1.1.0
 author: Varun U
 email: varun@zysk.tech
 category: engineering-practice
@@ -11,9 +11,8 @@ tags:
   - automation
   - workflow
   - queue
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
+compatibility: Requires gh (GitHub CLI), git, node, and jq to be installed and available on PATH.
+tested_with: claude-sonnet-4-6
 user-invocable: true
 ---
 
@@ -32,18 +31,64 @@ user-invocable: true
 - To wait for CI — invoke after CI is green; this skill does not poll
 - To resolve conflicts — `BEHIND` / `CONFLICTING` PRs get a clean rebase attempt, but conflicts are reported and skipped
 
+## Prerequisites
+
+- [ ] `gh` (GitHub CLI) installed and authenticated — `gh auth status`
+- [ ] `git` installed
+- [ ] `node` installed — required to run `queue-io.js`
+- [ ] `jq` installed — required for GraphQL response parsing
+- [ ] `queue-io.js` copied to `.claude/scripts/queue-io.js` in your repo root (one-time setup — copy from `scripts/queue-io.js` bundled with this skill)
+- [ ] `.claude/auto-ship-queue.json` exists and has at least one entry (created by `/auto-ship`, or manually — see Step 1 for the schema)
+
 ## Steps
 
 ### Step 0 — Create tasks
 
 **MANDATORY.** TaskCreate one todo per remaining step (1–6). Mark `in_progress`/`completed`. **This is how step-skipping is prevented — do not collapse into a parent skill's task list if invoked from one.**
 
-### Step 1 — Load queue
+### Step 1 — Load config and queue
 
-Read `.claude/auto-ship-queue.json`. If the user provided an absolute path in the invocation prompt, use it exactly as passed. Otherwise resolve relative to the current repo root.
+**Config (optional):** Read `assets/config.json` inside the skill directory if it exists. Use `assets/config.example.json` as the template. Recognised fields:
+
+| Field | Default | Purpose |
+|---|---|---|
+| `queue_path` | `.claude/auto-ship-queue.json` | Where auto-ship writes the queue |
+| `base_branch` | resolved via `gh repo view --json defaultBranchRef` | Branch to rebase against |
+| `project_board.org` | — | GitHub org owning the Projects v2 board |
+| `project_board.number` | — | Project number (from the board URL) |
+| `project_board.done_status_field` | `Status` | Single-select field name |
+| `project_board.done_status_value` | `Done` | Option name to move items to |
+
+If `assets/config.json` is absent, apply defaults for `queue_path` and `base_branch`, and skip the project board move entirely (report "board move skipped — no config").
+
+**Queue:** Read the resolved `queue_path`. If the user provided an absolute path in the invocation prompt, use it exactly. Otherwise resolve relative to the current repo root.
 
 - File missing → "No queue file found at <path>. Nothing to drain." Exit cleanly.
 - File present, zero entries → "Queue is empty." Exit cleanly.
+
+Each entry in the queue file must have these fields:
+
+```json
+[
+  {
+    "prNumber": 101,
+    "repo": "your-org/your-repo",
+    "branch": "fix/login-bug",
+    "status": "pending",
+    "closingIssues": [45, 46]
+  }
+]
+```
+
+| Field | Required | Description |
+|---|---|---|
+| `prNumber` | Yes | GitHub PR number |
+| `repo` | Yes | Full repo slug (`org/repo`) — used in all `gh` commands |
+| `branch` | Yes | Branch name — used to locate the worktree for rebase |
+| `status` | Yes | Last-known status; always re-checked against live state before acting |
+| `closingIssues` | No | Issue numbers this PR closes; used for board moves and the Step 6 report |
+
+If you're using `/auto-ship`, it writes this file automatically. If you're populating it manually, use this schema.
 
 Do not filter by status at this step — every entry gets re-checked against live PR state, since a previous run's status is just the last-seen snapshot.
 
@@ -53,13 +98,14 @@ For each entry, gather everything needed for the verdict in a single `gh` query:
 
 ```bash
 gh pr view <prNumber> --repo "<entry.repo>" \
-  --json mergeStateStatus,reviewDecision,statusCheckRollup,state \
+  --json mergeStateStatus,reviewDecision,statusCheckRollup,state,closingIssuesReferences \
   -q '{
     state,
     mergeStateStatus,
     reviewDecision,
     ciFailing: ([.statusCheckRollup[]? | select(.conclusion == "FAILURE" or .conclusion == "CANCELLED")] | length) > 0,
-    ciRunning: ([.statusCheckRollup[]? | select(.status == "IN_PROGRESS" or .status == "QUEUED")] | length) > 0
+    ciRunning: ([.statusCheckRollup[]? | select(.status == "IN_PROGRESS" or .status == "QUEUED")] | length) > 0,
+    closingIssues: [.closingIssuesReferences[]?.number]
   }'
 ```
 
@@ -92,21 +138,81 @@ Two verdicts trigger writes; the rest are reporting-only — *except* the Done-b
 ```bash
 gh pr merge <prNumber> --squash --repo "<entry.repo>"
 ```
-On success: set `entry.status = "merged"` and run the Done-board move (graphql mutation per issue number — see your project board ops doc). On failure: set `entry.status = "merge-failed"` and capture the error in the report.
+On success: set `entry.status = "merged"` and run the Done-board move (see below). On failure: set `entry.status = "merge-failed"` and capture the error in the report.
 
-**`merged` (state was already MERGED before this run) → fire the Done-board move idempotently:**
+**Done-board move (fires on `merged` and externally-merged PRs):**
 
-Externally-merged PRs (merged via GitHub UI, another tool, or recovery from a prior Step 5 write failure) skip the squash merge — the PR is already merged. But still fire the same Done-board mutation per issue number. The mutation is idempotent (moving an already-Done item to Done is a no-op), so the cost is one extra graphql call per issue. The benefit is the board stays consistent regardless of how the merge happened — without this, issues whose PRs were merged outside the skill could stay stuck in In Review on the board indefinitely.
+If `project_board` is configured, resolve the project IDs once before the merge loop:
+
+```bash
+ORG=<project_board.org>
+PROJECT_NUM=<project_board.number>
+FIELD_NAME=<project_board.done_status_field>   # default: Status
+OPTION_NAME=<project_board.done_status_value>  # default: Done
+
+# Resolve project ID + field ID + option ID
+BOARD=$(gh api graphql -f query='
+query($org:String!,$num:Int!){
+  organization(login:$org){
+    projectV2(number:$num){
+      id
+      fields(first:20){
+        nodes{
+          ...on ProjectV2SingleSelectField{ id name options{ id name } }
+        }
+      }
+    }
+  }
+}' -f org="$ORG" -F num="$PROJECT_NUM")
+
+PROJECT_ID=$(echo "$BOARD" | jq -r '.data.organization.projectV2.id')
+FIELD_ID=$(echo "$BOARD" | jq -r --arg f "$FIELD_NAME" '.data.organization.projectV2.fields.nodes[]|select(.name==$f)|.id')
+OPTION_ID=$(echo "$BOARD" | jq -r --arg f "$FIELD_NAME" --arg o "$OPTION_NAME" '.data.organization.projectV2.fields.nodes[]|select(.name==$f)|.options[]|select(.name==$o)|.id')
+```
+
+Then for each linked issue number on the merged PR:
+
+```bash
+# Find the project item for this issue
+ITEM_ID=$(gh api graphql -f query='
+query($org:String!,$num:Int!,$issue:Int!){
+  organization(login:$org){
+    projectV2(number:$num){
+      items(first:100){
+        nodes{ id content{...on Issue{number}} }
+      }
+    }
+  }
+}' -f org="$ORG" -F num="$PROJECT_NUM" -F issue=<issueNumber> \
+  | jq -r --argjson n <issueNumber> '.data.organization.projectV2.items.nodes[]|select(.content.number==$n)|.id')
+
+# Move it to Done
+gh api graphql -f query='
+mutation($pid:ID!,$iid:ID!,$fid:ID!,$oid:String!){
+  updateProjectV2ItemFieldValue(input:{
+    projectId:$pid itemId:$iid fieldId:$fid
+    value:{singleSelectOptionId:$oid}
+  }){ projectV2Item{ id } }
+}' -f pid="$PROJECT_ID" -f iid="$ITEM_ID" -f fid="$FIELD_ID" -f oid="$OPTION_ID"
+```
+
+The mutation is idempotent — moving an already-Done item is a no-op. This ensures issues whose PRs were merged outside the skill don't stay stuck in "In Review" indefinitely.
+
+If `project_board` is **not configured**, skip all board mutations silently and note "board move skipped — no config" in the Step 6 report.
+
+**`merged` (state was already MERGED before this run):** Skip the squash merge but still fire the Done-board move idempotently, for the same reason above.
 
 **`needs-rebase` → clean rebase attempt:**
 
 Resolve the branch's worktree from `git worktree list --porcelain`. If no worktree is registered for the branch (auto-ship may have recycled the shared `.worktrees/quick-fixes` directory and released this branch), do **not** attempt to rebase from the main repo CWD — that would switch the main checkout to a different branch and risk destroying unrelated local state. Instead, set `entry.status = "needs-rebase-manual"` and tell the user to rebase manually.
 
-If the worktree exists:
+If the worktree exists, resolve the repo's default branch dynamically:
+
 ```bash
 WT=$(git worktree list --porcelain | awk -v b="refs/heads/<branch>" '/^worktree / {wt=$2} /^branch / {if ($2==b) print wt}')
-git -C "$WT" fetch origin dev
-git -C "$WT" rebase origin/dev
+DEFAULT_BRANCH=$(gh repo view --repo "<entry.repo>" --json defaultBranchRef -q '.defaultBranchRef.name')
+git -C "$WT" fetch origin "$DEFAULT_BRANCH"
+git -C "$WT" rebase "origin/$DEFAULT_BRANCH"
 ```
 - Rebase clean → `git -C "$WT" push --force-with-lease`; set `entry.status = "rebased"` (CI will re-run; the user invokes `/auto-merge` again later to retry).
 - Rebase conflict → `git -C "$WT" rebase --abort`; set `entry.status = "rebase-conflict"`; report the branch and tell the user to handle manually.
@@ -115,7 +221,18 @@ For all other verdicts, just update `entry.status` to the verdict name. No git o
 
 ### Step 5 — Update queue file (atomic write + prune)
 
-Use the shared `.claude/scripts/queue-io.js` helper. Pass the list of `(prNumber, status)` pairs this run determined; the script reads fresh, merges status changes, prunes only `merged` and `abandoned`, and writes atomically:
+Use `scripts/queue-io.js` (bundled with this skill). **One-time setup:** copy it to `.claude/scripts/queue-io.js` in your repo root.
+
+Before calling the script, check it exists:
+
+```bash
+if [ ! -f ".claude/scripts/queue-io.js" ]; then
+  echo "Setup required: copy scripts/queue-io.js from the auto-merge skill directory to .claude/scripts/queue-io.js in your repo root, then re-run /auto-merge."
+  exit 1
+fi
+```
+
+Then pass the list of `(prNumber, status)` pairs this run determined; the script reads fresh, merges status changes, prunes only `merged` and `abandoned`, and writes atomically:
 
 ```bash
 node .claude/scripts/queue-io.js update-and-prune \
@@ -144,7 +261,7 @@ Output a single grouped table. Lead with what's done (the win), then what needs 
 
 | Verdict | Bucket | Why |
 |---|---|---|
-| `merged` | Done | PR is on `dev` — whether merged this run or externally, user just wants "what's done" |
+| `merged` | Done | PR is merged — whether merged this run or externally, user just wants "what's done" |
 | `abandoned` | Done | PR is closed without merge — terminal, no follow-up needed |
 | `ci-failed` | Needs your attention | User must fix CI |
 | `changes-requested` | Needs your attention | User must address reviewer |
@@ -184,7 +301,7 @@ If nothing actionable happened, say so plainly: "Queue scanned, nothing mergeabl
 ## Output
 
 - **Format:** Single grouped report at Step 6 (Done / Needs your attention / Transient buckets) with per-PR verdict + link.
-- **Location:** Printed to chat; squash merges on GitHub; project board card moves to Done; atomic write to `.claude/auto-ship-queue.json`.
+- **Location:** Printed to chat; squash merges on GitHub; project board card moves to Done (if configured); atomic write to the configured queue path (default: `.claude/auto-ship-queue.json`).
 - **Side effects:** PR merges, board moves, queue file pruning (only `merged` and `abandoned` entries are removed).
 
 ## Example
@@ -193,7 +310,7 @@ If nothing actionable happened, say so plainly: "Queue scanned, nothing mergeabl
 
 **Claude does:** Reads `.claude/auto-ship-queue.json`, re-checks each PR's live state (state / mergeStateStatus / reviewDecision / CI), assigns a verdict per entry, squash-merges what's `mergeable`, attempts clean rebases for `needs-rebase`, atomically updates the queue file (prunes only terminal entries), reports per-bucket.
 
-**Result:** Approved-and-green PRs land on `dev` in one batch; everything else stays in the queue with a fresh verdict so the user knows why.
+**Result:** Approved-and-green PRs are merged in one batch; everything else stays in the queue with a fresh verdict so the user knows why.
 
 ## Recovery from partial-step failures
 
@@ -217,6 +334,13 @@ This skill is largely self-correcting because every invocation re-checks live PR
 
 ## Notes
 
-- Designed to be the second half of an `/auto-ship` → `/auto-merge` loop. Reads `.claude/auto-ship-queue.json` written by `/auto-ship`; depends on `.claude/scripts/queue-io.js` for atomic-write semantics. Project-board Done-move expects GitHub Projects v2 single-select Status field — swap field IDs for your project.
+- Designed to be the second half of an `/auto-ship` → `/auto-merge` loop. Reads the queue file written by `/auto-ship` (default: `.claude/auto-ship-queue.json`). Depends on `.claude/scripts/queue-io.js` — copy it from `scripts/queue-io.js` (bundled) into your repo's `.claude/scripts/` as a one-time setup step.
+- Project board move is optional and driven by `assets/config.json`. If the config is absent, all merges still happen — only the board move is skipped. See `assets/config.example.json` for the fields required.
 - The "no scheduler, user-invoked only" stance is deliberate. Earlier drafts polled CI in a background loop; that turned out to waste credits and confused the user about what was running when. This skill is now strictly one-shot — the user invokes it whenever they want a fresh drain.
 - Self-healing across invocations: every run re-checks live state, so a failed queue-write last run will be corrected the next time the skill runs.
+
+## Files in this skill
+
+- `SKILL.md` — this file
+- `scripts/queue-io.js` — atomic queue read-merge-prune-write helper (copy to `.claude/scripts/` in your repo)
+- `assets/config.example.json` — project board configuration template
