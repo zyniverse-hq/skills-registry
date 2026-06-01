@@ -1,7 +1,7 @@
 ---
 name: qa-handoff
-description: Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to "Ready for QA" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — "QA handoff", "notify QA about this PR", "send QA test plan", "tell QA to test PR #N".
-version: 1.0.0
+description: Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to "Ready for QA" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — "QA handoff", "notify QA about this PR", "send QA test plan", "tell QA to test PR #N", "create a test plan for this PR", "prepare testing instructions", "hand off to QA", "write QA checklist", "QA this PR", "file a QA issue", "PR is ready for testing".
+version: 1.1.0
 author: Rajashekhar V
 email: rajashekhar.v@zysk.tech
 category: qa-testing
@@ -37,10 +37,24 @@ After a PR merges to `dev`, generate a structured test plan inlined into a new G
 
 ## Supporting reference files (loaded only when needed)
 
+- **[references/setup.md](references/setup.md)** — first-time setup guide: install `gh`, fill configuration placeholders, set `.gitignore`, verify installation
 - **[references/variants.md](references/variants.md)** — the 10 test-plan variant templates (loaded in Step 4.5)
 - **[references/project-board.md](references/project-board.md)** — full GraphQL queries for Step 7d project operations
+- **[references/report-templates.md](references/report-templates.md)** — Step 8 batch report templates (Mode A/B/C + dry-run)
 - **[references/edge-cases.md](references/edge-cases.md)** — arg-parsing edge cases, partial-failure handling, future non-goals
 - **[references/smoke-test.md](references/smoke-test.md)** — first-run smoke test procedure for skill edits
+
+## First-time setup
+
+Before using this skill for the first time, read **[references/setup.md](references/setup.md)**. It covers:
+
+1. Installing and authenticating the GitHub CLI (`gh`)
+2. Replacing the `<your-org>`, `<your-repo>`, `<dev-url>`, `<prod-url>`, and project-board ID placeholders across all skill files
+3. Adding `**/.qa-assignee.local` to your project's `.gitignore` so the QA assignee config is never committed
+4. Setting the URL mapping table (Step 5) to match your project's folder structure
+5. Adding a link to your team's dev test accounts so QA knows which credentials to use
+
+**This is a one-time step.** After setup, the skill runs without further configuration.
 
 ## When to use
 
@@ -122,7 +136,11 @@ gh pr list --repo <your-org>/<your-repo> --base dev --state merged \
   --jq 'sort_by(.mergedAt) | reverse'
 ```
 
-**0.5b — Bulk-fetch existing QA issues** (one query, avoid N+1):
+> **Batch limit:** this fetches at most 30 PRs. If the result set is exactly 30 and the oldest entries look recent, warn the user: *"⚠ Fetched 30 PRs — older unhandled PRs may exist. Re-run with a higher `--limit` (e.g. `--limit 50`) if needed."* The user can then increase the limit manually or target specific PRs with Mode B.
+>
+> **Draft PRs:** automatically excluded — `--state merged` only returns fully merged PRs. A PR in draft state cannot be merged, so drafts never appear in this list.
+
+**0.5b — Bulk-fetch existing QA issues** (one query, avoid N+1 — always pass `--state all` or closed QA issues are invisible and sweeps file duplicates):
 
 ```bash
 gh issue list --repo <your-org>/<your-repo> \
@@ -138,6 +156,8 @@ Parse each title for the pattern `[QA] PR #(\d+):` and build a Set of "already h
 **0.5c — Filter the 30-PR list:** drop a PR if its number is in the "already handed off" Set OR if its ONLY labels are `type: docs` and/or `type: chore`. Sort newest-first by `mergedAt`.
 
 **0.5d — Empty result:** tell the user *"✅ All last-30 merged PRs already have QA issues (or are docs/chore-only). Nothing to do. To re-handoff a specific PR anyway, pass it explicitly: `/qa-handoff <PR-number>`."* Then exit cleanly.
+
+> If the result was exactly 30 PRs before filtering, also append: *"⚠ The 30-PR fetch limit was hit — older PRs were not checked. If you suspect missed handoffs, re-run with `--limit 50`."*
 
 ### Step 0.7 — Confirm batch (Mode A only)
 
@@ -234,7 +254,15 @@ QA people are not developers. Test plans must be **plain English**, **click-this
 
 **Variant template bodies** are in **[references/variants.md](references/variants.md)**. Load that file now, copy the chosen variant's template, and proceed to Step 4.6 to fill placeholders.
 
-For PRs hitting multiple categories, use the more user-visible variant and borrow sub-sections from others (e.g., a new feature that also touches auth → use Variant 2, add a "Permission checks" sub-section from Variant 6).
+For PRs hitting multiple categories, use the more user-visible variant and borrow sub-sections from others. Common multi-category combinations:
+
+| Combination | Primary variant | What to borrow |
+|---|---|---|
+| New feature + touches auth/permissions | **2 — New feature** | Add a "Permission checks" sub-section from Variant 6 (verify free vs premium users see the right state) |
+| Bug fix + UI change | **3 — Bug fix** | Add a "Visual check" row to the regression section from Variant 4 |
+| Refactor + server action or DB route | **1 — Mechanical refactor** | Add a "Correctness spot-check" sub-section from Variant 5 (data still correct after refactor) |
+| New feature + external integration | **2 — New feature** | Add the "When the third party is slow or fails" section from Variant 8 |
+| B2B feature + permission gate | **7 — Multi-tenant** | Add the "As a free user" sub-section from Variant 6 |
 
 ### Step 4.6 — Synthesize PR-specific content (MANDATORY before Step 5)
 
@@ -312,7 +340,7 @@ The `<<VARIANT-TEMPLATE>>` placeholder below gets replaced with the variant chos
 ```markdown
 # QA Handoff — PR #<N>: <title>
 
-**Merged:** <mergedAt> · **Author:** @<author> · **Risk:** <Low/Medium/High> · **Variant:** <N — variant name>
+**Merged:** <mergedAt — format as "16 May 2026", not ISO timestamp> · **Author:** @<author> · **Risk:** <Low/Medium/High> · **Variant:** <N — variant name>
 **Modules:** <bold-primary>, <others>
 
 ## What changed
@@ -323,6 +351,8 @@ The `<<VARIANT-TEMPLATE>>` placeholder below gets replaced with the variant chos
 
 ## Where to test
 **ALWAYS list the EXACT URLs to test — never leave it as "the affected page" or "the affected module".** Derive concrete URLs from the changed file paths:
+
+> **Project-specific:** the mapping table below reflects the TMS folder structure. If you are using this skill on a different project, update this table to match your routing conventions — see [references/setup.md](references/setup.md) Step 3.
 
 | File path pattern | Affected URL |
 |---|---|
@@ -353,6 +383,8 @@ In the "What to check" section, repeat each URL as a sub-heading and list the pe
 
 ## Pre-conditions
 <derived from labels + variant + the URLs identified above — must include the persona required to ACCESS each URL>
+
+**Test accounts:** dev environment login credentials are stored at <link-to-team-password-manager-or-wiki — update this once in references/setup.md Step 4 and it will propagate here>.
 
 <<VARIANT-TEMPLATE — content from references/variants.md with [bracketed placeholders] filled in via Step 4.6>>
 
@@ -425,7 +457,7 @@ Write to the same working file `docs/qa-handoffs/PR-<N>.md` (overwrite Step 5 ou
 **Body template:**
 
 ```markdown
-**Original PR:** #<N> · **Author:** @<author> · **Merged:** <mergedAt>
+**Original PR:** #<N> · **Author:** @<author> · **Merged:** <mergedAt — formatted as "16 May 2026">
 **Risk:** <Low/Medium/High> · **Variant:** <N — variant name>
 **Modules:** <bold-primary>, <others>
 
@@ -456,6 +488,13 @@ Two non-negotiable formatting rules:
 ### 7b. Dry-run guard
 
 If `--dry-run` was passed, **STOP HERE**: do NOT call `gh issue create`, do NOT touch project boards. Print the proposed issue title + the full body file path. The working file remains in place so the user can re-run without `--dry-run`.
+
+To clean up dry-run files after reviewing:
+```bash
+rm docs/qa-handoffs/PR-<N>.md          # single PR
+rm docs/qa-handoffs/*.md               # full batch
+```
+Step 8a runs this cleanup automatically when you drop `--dry-run` and file for real.
 
 ### 7c. File the issue (real run)
 
@@ -523,12 +562,24 @@ Each template includes the assignee-source annotation table and the conditional 
 - **Sweep mode requires explicit confirmation before filing** — blast radius (7+ issues) is too high to run silently.
 - **Partial failures don't abort the batch.** Record the failure + reason and continue. Same assignee for the whole batch.
 - **Use bulk queries for "already handed off" detection** (single `gh issue list --search` in Step 0.5b). Never N+1 the API. Always pass `--state all` so closed QA issues count too — once QA closes a handoff after testing, the dedupe must still find it or the next sweep re-files a duplicate.
-- **Pick labels from the existing 25-label set** in `docs/LABELS.md` — never invent new labels.
+- **Pick labels from the existing label set** in `docs/LABELS.md` — never invent new labels. If `docs/LABELS.md` does not exist in the target repo, fall back to `type: test` only (already in Step 7c). Do NOT attempt to create new labels.
 - **EVERY test plan MUST list concrete URLs in "Where to test".** Never leave `[the affected page(s)]` unfilled. Derive from file paths using the Step 5 mapping table; add per-URL persona requirements when multiple URLs.
 - **EVERY test plan MUST have PR-specific "What changed" and (for bug fixes) "What was broken" content.** Step 4.6 is mandatory and not skippable. The banned phrases listed there must NEVER appear in a filed body. A weak handoff wastes QA's time more than a missing one — if you can't synthesize concrete content, file a clarification request on the PR and skip the handoff for that PR.
 - **Dev URL is `https://<dev-url>`** (NOT `dev.<your-domain>`). Production: `https://<prod-url>`.
 - **NEVER commit or push** anything to `dev`. The working `.md` file is for `gh issue create --body-file` only, then deleted.
+- **`.qa-assignee.local` must be gitignored.** On first use, verify `**/.qa-assignee.local` is in the project's `.gitignore`. If it is not, add it before saving the assignee — see [references/setup.md](references/setup.md) Step 5. A committed username is PII in the repo history.
+- **Draft PRs cannot receive handoffs.** A PR in draft state cannot be merged; `--state merged` already excludes them in Mode A. In Mode B, Step 1's `state != "MERGED"` check catches any draft passed by number.
+- **GitHub API rate limits and slowness.** If `gh` commands hang or fail with HTTP 403, check the rate limit (`gh api rate_limit --jq '.rate'`) and wait for reset if needed. Batch failures are partial — Step 8 lists which PRs failed; re-run targeting them: `/qa-handoff <failed-PR-numbers>`. See [references/setup.md](references/setup.md) for full recovery guidance.
 - **TestMySkills delete is conditional + MUST be the last action.** Auto-add re-fires on `issues.edited`, so any `gh issue edit` after the delete silently re-adds. Status updates via GraphQL don't trigger this — safe to run before the delete.
 - **Development panel auto-link is NOT supported** by GitHub's GraphQL API. The skill uses a `🔗 Tested via PR: #<N>` line in the body + a manual-link prompt in Step 8. See [references/project-board.md](references/project-board.md).
 
 **Deliberate non-goals for v1** (release-scoped issues, per-module assignee routing, auto-detecting checkbox outcomes, `/auto-merge` integration, programmatic Development-panel linking, etc.): see [references/edge-cases.md](references/edge-cases.md).
+
+---
+
+## Changelog
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.1.0 | 2026-05-28 | Added first-time setup guide (`references/setup.md`); added `report-templates.md` to supporting files index; expanded trigger phrases; added batch-limit warning (>30 PRs); added `--dry-run` cleanup instructions; added gitignore guardrail for `.qa-assignee.local`; added rate-limit recovery guidance; marked URL mapping table as project-specific; added test credentials reference; added multi-category variant selection examples; fixed `mergedAt` format to human-readable date; added draft-PR exclusion note; added fallback for missing `docs/LABELS.md` |
+| 1.0.0 | 2026-05-01 | Initial release |
