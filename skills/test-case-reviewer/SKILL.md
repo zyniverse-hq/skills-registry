@@ -1,19 +1,21 @@
 ---
 name: test-case-reviewer
 description: This skill should be used when the user asks to "review test cases", "review existing test cases against feature specs", "check test case quality", "validate test case coverage", "review test cases against requirements", "check for missing test scenarios", "review test case format", "verify test case completeness", "check automation readiness", or needs quality review, coverage analysis, spec traceability, or format validation of any test case suite. Supports reviewing against one or more feature specification or requirement files.
-version: 1.0.0
-author: Rachayya Choukimath
-email: rachayya.choukimath@zysk.tech
-category: qa-testing
-tags:
-  - test-case-review
-  - coverage-analysis
-  - qa-automation
-  - spec-traceability
-  - excel-report
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+license: MIT
+compatibility: >
+  Requires Windows environment with Python accessible via the py command.
+  openpyxl 3.1.5 must be pre-installed (pip install openpyxl==3.1.5). Requires
+  Write and Bash tools. Reference files bundled in references/ inside the skill
+  folder. Tested with claude-sonnet-4-6.
+metadata:
+  version: "1.0.0"
+  author: Rachayya Choukimath
+  email: rachayya.choukimath@zysk.tech
+  category: qa-testing
+  tags: "test-case-review, coverage-analysis, qa-automation, spec-traceability, excel-report"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Test Case Review Skill
@@ -294,15 +296,14 @@ Excel file saved: ReviewAndFixed_<ModuleCode>_<YYYYMMDD_HHMMSS>.xlsx
 - Hardcode a save path or ask the user for one.
 - Use `python`, `python3`, or a full path — always use `py`.
 - Run an openpyxl install check — it is already installed (v3.1.5).
-- Leave any tuple positions as placeholders or empty strings.
-- Generate Sheet 3 when no spec file was provided — set `SPEC_PROVIDED = False`.
-- Leave `SPEC_PROVIDED = True` when no spec file was provided in this session.
+- Leave tuple positions as placeholders or empty strings.
+- Generate Sheet 3 when no spec file was provided.
 - Write pass rows in the evaluation table — fails only.
-- Add a "Status" or "Pass/Fail" column in the evaluation table — the table is fails-only.
-- Omit Sheet 4 — it is always required regardless of whether a spec file is provided.
-- Leave Reviewer Comments, Required Corrections, or Defects cells blank — use "No issues found" or "None".
-- Hardcode `verdict_value` — the auto-computation block derives it from `blocker_count`, `_b_ratio`, `_miss_crit`, and `coverage_pct`.
+- Add a "Status" or "Pass/Fail" column in the evaluation table.
+- Omit Sheet 4 — always required.
+- Leave Reviewer Comments, Required Corrections, or Defects cells blank.
+- Hardcode `verdict_value` — the auto-computation block derives it dynamically.
 - Use a Test Case Category value outside the Controlled Categories list.
-- Mark a TC as `Automatable` when it fails 2 or more of the 6 automation candidacy conditions (Stable, Repeatable, High-value, Low-flaky, Clearly assertable, Maintainable).
+- Mark a TC as `Automatable` when it fails 2+ of the 6 automation candidacy conditions.
 - Force `Automatable` on every TC to maximize automation coverage — automation must be selective and value-driven, not coverage-driven.
 - Automate TCs that are frequently changing, highly flaky, visual-only, or have heavy manual dependencies without flagging them as `Not Automatable`.

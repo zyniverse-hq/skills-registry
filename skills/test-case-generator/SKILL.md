@@ -1,19 +1,26 @@
 ---
 name: test-case-generator
-description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps.
-version: 1.0.0
-author: Ajay R
-email: ajay.r@zysk.tech
-category: qa-testing
-tags:
-  - test-case-generation
-  - qa-coverage
-  - manual-testing
-  - api-testing
-  - security-testing
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+description: >
+  Generate test cases, write QA coverage, or create test cases for any feature.
+  Use when the user says "generate test cases for", "write QA coverage",
+  "create test cases", "test this feature", or provides a user story, BRD,
+  PRD, or acceptance criteria. Produces exhaustive, production-ready QA test
+  cases covering all test types with zero critical gaps, and exports to Excel.
+license: MIT
+compatibility: >
+  Requires Windows environment with Python accessible via the py command.
+  openpyxl 3.1.5 must be pre-installed (pip install openpyxl==3.1.5). Requires
+  Write and Bash tools. Uses scripts/gen_test_cases.py bundled in the skill
+  folder. Tested with claude-sonnet-4-6.
+metadata:
+  version: "1.0.0"
+  author: Ajay R
+  email: ajay.r@zysk.tech
+  category: qa-testing
+  tags: "test-case-generation, qa-coverage, manual-testing, api-testing, security-testing"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Enterprise QA Test Case Generator

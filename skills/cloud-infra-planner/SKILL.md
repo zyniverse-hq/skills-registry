@@ -8,19 +8,22 @@ description: >
   AWS sizing", "infra for Laravel / Next.js / Node / NestJS", "terraform for", "provision
   servers", or any variation — even if they never say "infrastructure" or "cloud" but are
   asking how to host, provision, or run a project in production.
-version: 1.0.0
-author: Nagendra K V
-email: nagendra.kv@zysk.tech
-category: infra-security
-tags:
-  - infrastructure
-  - terraform
-  - ansible
-  - cost-estimation
-  - deployment
-product: zysk
-sprint: 1
-tested_with: claude-opus-4-7
+license: MIT
+compatibility: >
+  Requires access to references/ files bundled in the skill folder. No external CLI
+  dependencies — all output is generated as text artifacts (Terraform HCL, Ansible YAML,
+  draw.io XML, markdown report). Designed for Claude Code. Cloud pricing estimates use
+  public list prices from references/digitalocean.md, references/aws.md, and
+  references/providers.md — update these files to refresh pricing data.
+metadata:
+  version: "1.0.0"
+  author: Nagendra K V
+  email: nagendra.kv@zysk.tech
+  category: infra-security
+  tags: "infrastructure, terraform, ansible, cost-estimation, deployment"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-opus-4-7
 ---
 
 # Cloud Infra Planner

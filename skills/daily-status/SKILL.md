@@ -1,19 +1,21 @@
 ---
 name: daily-status
 description: Generate the end-of-day client status report by scanning today's git commits, uncommitted changes, and GitHub PRs, then interviewing the user to classify each item. Use whenever the user asks for their daily status, EOD report, or client update — or types /daily-status.
-version: 1.2.0
-author: Shilpa VP
-email: shilpa@zysk.tech
-category: comms
-tags:
-  - daily-status
-  - eod-report
-  - git
-  - github
-  - reporting
-product: zysk
-sprint: 1
-tested_with: claude-opus-4-7
+license: MIT
+compatibility: >
+  Requires Python 3, git CLI, and GitHub CLI (gh) authenticated to the target repo.
+  Designed for Claude Code. Uses scripts/collect_activity.py (bundled in skill folder).
+  Config file at .claude/daily-status-config.json is optional; skill prompts for missing
+  values interactively.
+metadata:
+  version: "1.2.0"
+  author: Shilpa VP
+  email: shilpa@zysk.tech
+  category: comms
+  tags: "daily-status, eod-report, git, github, reporting"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-opus-4-7
 ---
 
 <!-- ci: sample edit to exercise regenerate-index workflow -->

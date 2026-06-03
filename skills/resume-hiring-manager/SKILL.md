@@ -1,20 +1,17 @@
 ---
 name: resume-hiring-manager
 description: Runs a realistic mock interview as the hiring manager for the user's target role, asking hard technical and behavioural questions, scoring answers, and giving a hireability score.
-version: 1.0.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: business-sales
-tags:
-  - resume
-  - interview
-  - mock-interview
-  - career
-  - hiring
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: business-sales
+  tags: "resume, interview, mock-interview, career, hiring"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: "false"
 allowed-tools: "*"
 ---
 

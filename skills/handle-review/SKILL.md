@@ -1,20 +1,21 @@
 ---
 name: handle-review
 description: "Triages PR review comments (human or bot), classifies each as valid/invalid/needs-human, fixes what's valid in one batch, replies with evidence for the rest, and pushes once."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - pr-review
-  - code-review
-  - github
-  - triage
-  - workflow
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh) and git. Designed for Claude Code. Targets the PR
+  specified by the user at invocation time — no hardcoded repo. gh must be
+  authenticated to the target GitHub org before running.
+metadata:
+  version: "1.0.0"
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags: "pr-review, code-review, github, triage, workflow"
+  product: tms
+  sprint: "4"
+  tested_with: claude-opus-4-7
+  user-invocable: "true"
 ---
 
 # Handle Review

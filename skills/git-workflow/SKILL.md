@@ -1,19 +1,20 @@
 ---
 name: git-workflow
-description: Applies this user's git conventions for branches, commits, merges, pull requests, force-pushes, and release tags whenever Claude runs any git command.
-version: 1.0.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: engineering-practice
-tags:
-  - git
-  - version-control
-  - commits
-  - branching
-  - pull-requests
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+description: >
+  Applies git conventions for branches, commits, merges, pull requests,
+  force-pushes, and release tags. Use when creating a branch, writing a commit
+  message, opening a PR, force-pushing, or tagging a release — activate
+  automatically whenever Claude runs any git command.
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: engineering-practice
+  tags: "git, version-control, commits, branching, pull-requests"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Git Workflow

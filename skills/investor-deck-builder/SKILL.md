@@ -1,19 +1,26 @@
 ---
 name: investor-deck-builder
-description: Generate a tailored, branded investor pitch deck PDF for a specific investor or program, with audience-selected slides and content driven entirely from a single facts file — no numbers hardcoded.
-version: 1.0.0
-author: Sarang T S
-email: sarang@testmyskills.ai
-category: business-sales
-tags:
-  - pitch-deck
-  - fundraising
-  - investor-relations
-  - pdf-generation
-  - reportlab
-product: zyniverse
-sprint: 1
-tested_with: claude-opus-4-7
+description: >
+  Generate an investor pitch deck PDF. Use when the user says "build a pitch
+  deck", "create an investor presentation", "make a deck for fundraising",
+  "generate a PDF for investors", or "prepare slides for a VC meeting".
+  Produces a tailored, branded PDF with audience-selected slides driven
+  entirely from a single facts file — no numbers hardcoded.
+license: MIT
+compatibility: >
+  Requires Python 3.9+ and reportlab library (pip install reportlab). A
+  system font supporting the ₹ symbol is preferred; the script degrades
+  gracefully to "Rs" if not found. Designed for Claude Code. Uses
+  scripts/generate_deck.py and references/ bundled in the skill folder.
+metadata:
+  version: "1.0.0"
+  author: Sarang T S
+  email: sarang@testmyskills.ai
+  category: business-sales
+  tags: "pitch-deck, fundraising, investor-relations, pdf-generation, reportlab"
+  product: zyniverse
+  sprint: "1"
+  tested_with: claude-opus-4-7
 ---
 
 # Investor Deck Builder

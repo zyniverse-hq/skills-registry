@@ -1,21 +1,23 @@
 ---
 name: razorpay-integration
 description: Integrate Razorpay payment gateway end-to-end. Activate when users mention Razorpay, payment gateway, checkout, order creation, payment verification, webhook handling, or switching to live keys.
-version: 1.0.0
-author: Tazeen Soudagar
-email: tazeen.soudagar@zysk.tech
-category: engineering-practice
-tags:
-  - razorpay
-  - payment-gateway
-  - payments
-  - checkout
-  - webhooks
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-user-invocable: true
-allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, EnterPlanMode, ExitPlanMode, TaskCreate, TaskUpdate, TaskList]
+license: MIT
+compatibility: >
+  Framework-agnostic — supports Laravel, Next.js, React SPA, and Express/Node.js.
+  Requires Razorpay API keys (key_id and key_secret from the Razorpay dashboard).
+  Local webhook testing requires ngrok or an equivalent tunnel. HTTPS required in
+  production. Designed for Claude Code.
+metadata:
+  version: "1.0.0"
+  author: Tazeen Soudagar
+  email: tazeen.soudagar@zysk.tech
+  category: engineering-practice
+  tags: "razorpay, payment-gateway, payments, checkout, webhooks"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
+  user-invocable: "true"
+allowed-tools: "Read Glob Grep Write Edit Bash AskUserQuestion EnterPlanMode ExitPlanMode TaskCreate TaskUpdate TaskList"
 ---
 
 # Razorpay Payment Gateway Integration

@@ -1,20 +1,33 @@
 ---
 name: auto-ship
-description: "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-issues
-  - autonomous
-  - pr-creation
-  - project-board
-  - workflow
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+description: >
+  Autonomous issue-to-PR pipeline. Use when the user says "drain Todo",
+  "ship these issues", "batch ship", "auto-ship", "ship all bugs", "run
+  overnight", or wants to autonomously convert pre-triaged Todo items into
+  PRs without checkpoints. Auto-picks eligible Todo issues in priority order
+  (or ships an explicit subset like /auto-ship 2780 2779), classifies each as
+  quick-fix / clear-scope / ambiguous, opens PRs for non-ambiguous items, and
+  appends each to the auto-merge queue. Stops at PR open — /auto-merge handles
+  the merge step.
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh) authenticated to the target GitHub org and Node.js
+  (any LTS version). Designed for Claude Code. Depends on
+  scripts/queue-io.js (bundled in skill folder) for atomic queue writes.
+  Board operations require GitHub Projects v2; defaults to project #18 under
+  organization zyni-ai (swap project number and org for your project). Invokes
+  /ship-issue as a required base skill. Queue file defaults to
+  .claude/auto-ship-queue.json in the project root.
+metadata:
+  version: "1.0.0"
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags: "github-issues, autonomous, pr-creation, project-board, workflow"
+  product: tms
+  sprint: "4"
+  tested_with: claude-opus-4-7
+  user-invocable: "true"
 ---
 
 # Auto-Ship
@@ -291,11 +304,11 @@ The entry schema:
 }
 ```
 
-`status: "queued"` is the initial state for every entry — it signals the PR is open and `/auto-merge` has not yet evaluated it. `/auto-merge` re-checks live PR state on every invocation and transitions entries through `merged` / `ci-failed` / `awaiting-review` / `changes-requested` / `needs-rebase-manual` / `rebased` / `abandoned` etc. based on what it finds at drain time. (`queued` is deliberately distinct from `awaiting-review`: the latter is `/auto-merge`'s verdict for `reviewDecision == REVIEW_REQUIRED`, the former just means "not yet evaluated".)
+`status: "queued"` signals the PR is open and not yet evaluated by `/auto-merge`. (`queued` is distinct from `awaiting-review` — the latter is `/auto-merge`'s verdict for `reviewDecision == REVIEW_REQUIRED`.)
 
 `repo` is included so `/auto-merge` can query each PR without hardcoding `--repo`. Defaults to `zyni-ai/tms-app` for this project.
 
-Use the shared `.claude/scripts/queue-io.js` helper — it handles `.tmp` + rename for the write step (so a concurrent reader can never observe a torn JSON file), file-missing initialization, and required-field validation in one call. Calling it instead of inlining a `node -e` block keeps both `/auto-ship` and `/auto-merge` consistent on the queue contract:
+Use `scripts/queue-io.js` (bundled) — it handles `.tmp` + rename atomically, file-missing initialization, and required-field validation:
 
 ```bash
 node .claude/scripts/queue-io.js append \
@@ -311,9 +324,7 @@ node .claude/scripts/queue-io.js append \
   }'
 ```
 
-The script auto-creates the queue file with `{ "created": "<ISO timestamp>", "entries": [] }` if it doesn't exist, then appends. Reads fresh on every invocation so concurrent `/auto-merge` runs that pruned terminal entries don't get clobbered. Exits non-zero on any unexpected failure (bad JSON, fs error) so the caller sees hard failures.
-
-**On Windows, use forward slashes** in the absolute path (e.g., `D:/Code/tms-app/.claude/auto-ship-queue.json`, not `D:\Code\tms-app\...`). Git Bash, node, and `gh` all accept forward-slash absolute paths; backslashes break shell quoting and the `.tmp` rename inside the script.
+The script auto-creates the queue file if missing, reads fresh on every invocation, and exits non-zero on failure. **On Windows, use forward slashes** in the absolute path — backslashes break shell quoting in the `.tmp` rename step.
 
 ### Step 7 — Report and stop
 
@@ -336,13 +347,7 @@ List each opened PR (number + URL) and the corresponding issue numbers, plus any
 
 Either skipped section is omitted when its count is zero. The race-lost section is rare in single-user single-session use — surface it anyway so an unexpected appearance flags accidental concurrent runs to investigate.
 
-Surfacing skipped items every run prevents the "stuck forever" failure mode where the user labels-and-forgets. To audit at any time outside an `/auto-ship` run:
-
-```bash
-gh issue list --repo zyni-ai/tms-app --label "status: needs investigation" --state open
-```
-
-Then exit.
+Surfacing skipped items every run prevents the "stuck forever" failure mode where the user labels-and-forgets.
 
 ## Output
 
@@ -371,37 +376,15 @@ This skill is not self-healing — a PR that exists on GitHub but is missing fro
 
 Grouped by phase so you can scan quickly when reading mid-flight. Each entry is a "stop and reconsider" signal — if you catch yourself doing the left-hand thing, stop.
 
-### Resolution & setup (Steps 1–2)
+**Setup:** Create tasks before starting. Don't add eligibility filters beyond the table. Step 2c is informational — don't wait for input. Don't pick issues assigned to teammates.
 
-- Starting implementation before creating tasks → stop, create tasks first
-- Adding eligibility filters in Step 2a that aren't grounded in the rules → the table is the spec. Don't invent "skip if title contains 'WIP'" or similar — if the user wants additional filters they pass explicit issue numbers
-- Treating Step 2c as a confirmation gate → it's an informational line. Don't wait for input; execution continues immediately. The user has Ctrl-C if needed
-- Auto-picking an issue assigned to a teammate → the eligibility filter excludes assignees that aren't `@me`. Don't override this — taking work from a teammate creates merge conflicts and human friction
+**Classification:** Always write back `status: needs investigation` when marking ambiguous — the label is the persistence mechanism. Don't re-classify a labelled issue without `/decision-brief` removing it first.
 
-### Classification (Step 3)
+**Execution:** No user approval checkpoints during shipping — checkpoint-free until PR open.
 
-- Classifying an issue as ambiguous and *not* writing back the `status: needs investigation` label → the verdict only lives in this run's output and disappears. Without the label, you (or future-you) won't know which issues need a `/decision-brief` until you grep the agent transcript. Always persist.
-- Re-classifying a `status: needs investigation` issue by re-reading the body → no. The label IS the verdict. Trust it until a human resolves it (the resolution signal is `/decision-brief` removing the label).
+**Queue:** Write queue entry only after `gh pr create` returns a URL. Always use `scripts/queue-io.js append` — never inline `node -e`. A failed Step 6 after a successful `gh pr create` leaves the PR invisible to `/auto-merge` forever.
 
-### Execution (Step 5)
-
-- Stopping to show the plan to the user for clear-scope issues → skip it, execute internally
-- Asking for user approval at any point during shipping → this skill is checkpoint-free by design until PR open
-
-### Queue & report (Steps 6–7)
-
-- Writing queue entry before PR number is confirmed → `gh pr create` output gives the URL; parse the number from it
-- Overwriting an existing queue file → always go through `.claude/scripts/queue-io.js append` (it reads fresh, appends, writes via `.tmp` + rename)
-- Inlining a `node -e` block instead of calling the script → a concurrent `/auto-merge` reader can observe a half-written JSON and crash; the script's atomic write is the contract
-- Treating Step 6 as fire-and-forget → if it fails after `gh pr create`, the PR is invisible to `/auto-merge` forever; see Recovery table above
-- Auto-invoking `/auto-merge` after Step 6 → no. The user explicitly invokes `/auto-merge` after reviewing PRs. Auto-ship's job ends at PR open.
-
-### Output presentation (every step)
-
-These apply across every phase whenever you produce user-facing output (plan walk-throughs, final reports, error explanations, etc.).
-
-- Citing memory fragment keys (`feedback_*`) by name in the output → no. Memory keys are internal references the user doesn't read. Embed the rule directly in your prose instead. **Bad:** "out of scope, file follow-up per `feedback_best_practice_file_issue` memory note." **Good:** "out of scope — file a follow-up issue rather than tucking the deferral into the PR body." The agent applies the rule; the user reads the application.
-- Compressing the post-implementation step chain into a one-line arrow summary when planning or dry-running → no. The user is verifying that each discipline step is part of your plan, not just listed. Describe each one distinctly: which reviewers run and what each looks for, what `/simplify` examines, the exact verify commands (`tsc`, `lint`, `format:check`, `test:run`), the rebase/push, and **both** board moves (`Todo → In Progress` at Step 3 of the track, `In Progress → In Review` at PR open). The arrow-chain summary (`self-review → simplify → verify → rebase → push → board`) is execution-mode shorthand for the agent's own reference — not user-facing planning output.
+**Output:** Do not cite `feedback_*` memory keys by name. Describe each post-implementation discipline step distinctly — not as a one-line arrow summary.
 
 ## Notes
 

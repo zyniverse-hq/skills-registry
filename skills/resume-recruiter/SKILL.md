@@ -1,20 +1,25 @@
 ---
 name: resume-recruiter
-description: Acts as a senior recruiter to surface the top keywords for a target role, flag which are missing from the resume, name trending skills, and list buzzwords to cut.
-version: 1.0.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: business-sales
-tags:
-  - resume
-  - recruiter
-  - keywords
-  - career
-  - ats
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
+description: >
+  Optimize a resume for recruiter screening and ATS systems. Use when the user
+  says "optimize my resume", "what ATS keywords am I missing", "review my
+  resume for recruiter", "improve resume keywords", or "what buzzwords should
+  I cut". Surfaces top keywords for the target role, flags missing ones, names
+  trending skills, and lists buzzwords to cut.
+license: MIT
+compatibility: >
+  Accepts resume as pasted text or file upload. Job role or JD provided by the
+  user. No external CLI dependencies. Designed for Claude Code.
+metadata:
+  version: "1.0.0"
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: business-sales
+  tags: "resume, recruiter, keywords, career, ats"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: "false"
 allowed-tools: "*"
 ---
 

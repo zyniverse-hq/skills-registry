@@ -1,32 +1,24 @@
 ---
 name: qa-handoff
 description: Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to "Ready for QA" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — "QA handoff", "notify QA about this PR", "send QA test plan", "tell QA to test PR #N".
-version: 1.0.0
-author: Rajashekhar V
-email: rajashekhar.v@zysk.tech
-category: qa-testing
-tags:
-  - qa
-  - testing
-  - github-issues
-  - handoff
-  - test-plan
-product: tms
-sprint: 3
-tested_with: claude-sonnet-4-6
-user-invocable: true
-model: claude-sonnet-4-6
-allowed-tools:
-  - Bash
-  - Read
-  - Write
-  - Grep
-  - Glob
-  - TaskCreate
-  - TaskUpdate
-  - TaskGet
-  - TaskList
-  - AskUserQuestion
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh) authenticated to the target GitHub org. Designed for
+  Claude Code. Defaults to zyni-ai/tms-app and the dev branch — swap repo, org,
+  and branch name before use in other projects. QA assignee config stored in
+  .claude/qa-handoff-config.json (gitignored).
+metadata:
+  version: "1.0.0"
+  author: Rajashekhar V
+  email: rajashekhar.v@zysk.tech
+  category: qa-testing
+  tags: "qa, testing, github-issues, handoff, test-plan"
+  product: tms
+  sprint: "3"
+  tested_with: claude-sonnet-4-6
+  user-invocable: "true"
+  model: claude-sonnet-4-6
+allowed-tools: "Bash Read Write Grep Glob TaskCreate TaskUpdate TaskGet TaskList AskUserQuestion"
 ---
 
 # QA Handoff
@@ -179,26 +171,7 @@ If no linked issue, proceed using PR body alone and note in the test plan that t
 
 ### Step 3 — Map files to modules
 
-Map each changed file path to a app module using this table:
-
-| Path prefix | Module |
-|---|---|
-| `src/features/exam/`, `src/app/(authenticated)/(app)/exams/` | Competitive Exams |
-| `src/app/(authenticated)/(app)/skills/` | Skills |
-| `src/app/(authenticated)/(app)/certifications/` | Certifications |
-| `src/features/interview/`, `src/features/voice-runner/`, `src/app/(authenticated)/(app)/interviews/` | Interviews |
-| `src/app/(authenticated)/(app)/academic/` | Academic |
-| `src/features/test/`, `src/features/adaptive-test/` | Skill Assessment |
-| `src/features/practice-zone/` | Practice Zone |
-| `src/features/proctoring/` | Internals (proctoring) |
-| `src/features/auth/`, `src/auth.ts`, `src/lib/auth.ts` | Core (auth) |
-| `src/features/subscription/` | Core (subscription) |
-| `src/app/api/` | Internals (API routes) |
-| `src/app/actions/` | Internals (Server Actions) |
-| `src/lib/`, `src/components/`, `src/hooks/`, `src/providers/` | Common |
-| Anything else | Common |
-
-Dedupe to a unique sorted list. **Bold the module with the most file changes** — that's the primary module.
+Load **[references/module-map.md](references/module-map.md)** and map each changed file path to its module. Dedupe to a unique sorted list. **Bold the module with the most file changes** — that's the primary module.
 
 ### Step 4 — Classify risk
 
@@ -267,27 +240,12 @@ The diff tells you EXACTLY what changed. Read the relevant file changes — for 
 
 ### Fill every placeholder with PR-specific content
 
-| Placeholder | ❌ Bad fill | ✅ Good fill |
-|---|---|---|
-| `[1-2 line description of the bug in plain English]` (Variant 3) | "Bug fix in Core. See PR description." | "Some pages were stuck on a blank white screen — the browser refused to load any JavaScript because of a security mismatch on chunk files." |
-| `[the new, fixed behavior]` (Variant 3) | "the new, fixed behavior — no error" | "the page loads with menus, buttons, and content visible — no blank screen" |
-| `[the old broken behavior]` (Variant 3) | "the old broken behavior" | "completely blank page; nothing renders; browser console shows 'Failed to fetch... integrity...' errors" |
-| `[Steps to reproduce]` (Variant 3) | "Reproduce the scenario described in the PR" | "Sign in and open any page that has interactive elements (e.g. Dashboard, Exams list)" |
-| `[the affected page(s)]` (Variant 1) | leave as placeholder, or "the affected pages" | the actual URLs derived from file paths via the Step 5 mapping table |
-| `[the changed element]` (Variant 4) | "the changed element" | "the exam cards on the dashboard" or whatever the diff actually changed |
+Replace every `[bracketed placeholder]` with concrete PR-specific content derived from the actual diff and PR body. See **[references/edge-cases.md](references/edge-cases.md)** for bad vs. good fill examples.
 
-### Banned phrases (NEVER appear in filed bodies)
+**Banned phrases** — stop and re-read if your draft contains any of these:
+`See the PR description`, `Reproduce the scenario described in the PR`, `the new, fixed behavior` (without a concrete symptom), `the old broken behavior` (without a concrete symptom), any `[bracketed]` placeholder left literally in the body.
 
-Stop and re-read the body + diff before continuing if your draft contains any of these:
-
-- ❌ `See the PR description` / `See the PR description for the exact bug + reproduction steps`
-- ❌ `Reproduce the scenario described in the PR`
-- ❌ `the new, fixed behavior` (without a concrete symptom following it)
-- ❌ `the old broken behavior` (without a concrete symptom following it)
-- ❌ `[the affected page(s)]` / `[unclear — confirm with author]` / any other `[bracketed]` placeholder left literally in the body
-- ❌ `Bug fix in <module>. See the PR description.` (the exact pattern this guardrail exists to prevent)
-
-A QA handoff that punts back to the PR description is **worse than no handoff** — it costs QA's time without adding value. If you cannot synthesize concrete content, file a clarification request on the PR instead and skip the handoff.
+A QA handoff that punts back to the PR description is worse than no handoff — file a clarification request on the PR instead.
 
 ### Self-check before Step 5
 
@@ -504,10 +462,7 @@ Report shape varies by mode (A/B/C) and batch size. **Full templates in [referen
 
 Each template includes the assignee-source annotation table and the conditional warnings (dropped assignee, project-board partial failure).
 
-**Key reporting rules:**
-- Always include the assignee + label + project status confirmations
-- Always print the manual Development-panel link reminder (the only way to populate it)
-- For failures, surface the per-PR reason so the user can re-run with `/qa-handoff <failed-PRs>`
+Always include assignee + label + project status confirmations, the manual Development-panel link reminder, and per-PR failure reasons so the user can re-run with `/qa-handoff <failed-PRs>`.
 
 ## Output
 
@@ -518,17 +473,14 @@ Each template includes the assignee-source annotation table and the conditional 
 ## Guardrails
 
 - **Refuse on unmerged PRs, non-dev base branches, and pure docs/chore PRs** — these don't get a handoff.
-- **Validate the QA username** (GitHub user + repo collaborator) before creating the issue. Stale saved defaults fall back to the prompt. `--qa` alone = one-time override; saving requires explicit `--qa <name> --set-default`.
+- **Validate the QA username** (GitHub user + repo collaborator) before creating the issue. `--qa` alone = one-time override; saving requires `--qa <name> --set-default`.
 - **Saved default file is gitignored** (`.claude/skills/*/*.local`) — per-user, never committed.
 - **Sweep mode requires explicit confirmation before filing** — blast radius (7+ issues) is too high to run silently.
-- **Partial failures don't abort the batch.** Record the failure + reason and continue. Same assignee for the whole batch.
-- **Use bulk queries for "already handed off" detection** (single `gh issue list --search` in Step 0.5b). Never N+1 the API. Always pass `--state all` so closed QA issues count too — once QA closes a handoff after testing, the dedupe must still find it or the next sweep re-files a duplicate.
+- **Partial failures don't abort the batch.** Record failure + reason and continue.
+- **Use bulk queries for "already handed off" detection** (single `gh issue list --search` in Step 0.5b). Always pass `--state all` so closed QA issues count.
 - **Pick labels from the existing 25-label set** in `docs/LABELS.md` — never invent new labels.
-- **EVERY test plan MUST list concrete URLs in "Where to test".** Never leave `[the affected page(s)]` unfilled. Derive from file paths using the Step 5 mapping table; add per-URL persona requirements when multiple URLs.
-- **EVERY test plan MUST have PR-specific "What changed" and (for bug fixes) "What was broken" content.** Step 4.6 is mandatory and not skippable. The banned phrases listed there must NEVER appear in a filed body. A weak handoff wastes QA's time more than a missing one — if you can't synthesize concrete content, file a clarification request on the PR and skip the handoff for that PR.
-- **Dev URL is `https://<dev-url>`** (NOT `dev.<your-domain>`). Production: `https://<prod-url>`.
+- **EVERY test plan MUST list concrete URLs in "Where to test".** Never leave `[the affected page(s)]` unfilled.
+- **EVERY test plan MUST have PR-specific "What changed" and "What was broken" content.** Step 4.6 banned phrases must NEVER appear in a filed body.
 - **NEVER commit or push** anything to `dev`. The working `.md` file is for `gh issue create --body-file` only, then deleted.
-- **TestMySkills delete is conditional + MUST be the last action.** Auto-add re-fires on `issues.edited`, so any `gh issue edit` after the delete silently re-adds. Status updates via GraphQL don't trigger this — safe to run before the delete.
-- **Development panel auto-link is NOT supported** by GitHub's GraphQL API. The skill uses a `🔗 Tested via PR: #<N>` line in the body + a manual-link prompt in Step 8. See [references/project-board.md](references/project-board.md).
-
-**Deliberate non-goals for v1** (release-scoped issues, per-module assignee routing, auto-detecting checkbox outcomes, `/auto-merge` integration, programmatic Development-panel linking, etc.): see [references/edge-cases.md](references/edge-cases.md).
+- **TestMySkills delete MUST be the last action.** Auto-add re-fires on `issues.edited` — any `gh issue edit` after the delete silently re-adds.
+- **Development panel auto-link is NOT supported** by GitHub's GraphQL API. See [references/project-board.md](references/project-board.md).

@@ -1,19 +1,21 @@
 ---
 name: ui-consistency
 description: Use when asked for any frontend UI change — modals, forms, buttons, tables, layouts, colors, or spacing. Runs pattern inspection before writing code; never skip for small changes.
-version: 1.0.0
-author: Ruthu Bahubali Jain
-email: ruthu.jain@zysk.tech
-category: "engineering-practice"
-tags:
-  - frontend
-  - ui
-  - css
-  - components
-  - consistency
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+license: MIT
+compatibility: >
+  Requires access to a frontend source directory (resources/js/, src/, assets/,
+  or equivalent). Depends on Glob tool and an Explore sub-agent for pattern
+  inspection. Compatible with Vue, React (JSX/TSX), Svelte, and Blade projects
+  using Tailwind or Bootstrap. Designed for Claude Code.
+metadata:
+  version: "1.0.0"
+  author: Ruthu Bahubali Jain
+  email: ruthu.jain@zysk.tech
+  category: engineering-practice
+  tags: "frontend, ui, css, components, consistency"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # UI Consistency

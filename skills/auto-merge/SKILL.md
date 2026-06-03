@@ -1,20 +1,30 @@
 ---
 name: auto-merge
-description: "One-shot drain of an auto-ship PR queue. Re-checks each PR's CI + merge state + review decision, squash-merges what's MERGEABLE + APPROVED + clean of unaddressed comments, and reports per-entry verdict. No scheduler."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-pr
-  - merge
-  - automation
-  - workflow
-  - queue
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+description: >
+  One-shot merge queue drain. Use when the user says "drain the queue",
+  "merge approved PRs", "run auto-merge", "what's ready to merge", or wants
+  to batch-merge currently-green PRs. Re-checks each PR's live CI status,
+  review decision, and merge state; squash-merges what is APPROVED and green;
+  skips the rest with a clear per-PR verdict. Reads from
+  .claude/auto-ship-queue.json written by /auto-ship. No scheduler —
+  user-invoked only.
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh), Node.js >= 16, and git. Designed for Claude Code.
+  Depends on scripts/queue-io.js (bundled in skill folder) for atomic queue
+  writes. Board Done-move uses GitHub Projects v2 single-select Status field;
+  swap field IDs for your project. Defaults to zyni-ai/tms-app — update repo
+  and org references before use in other projects.
+metadata:
+  version: "1.0.0"
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags: "github-pr, merge, automation, workflow, queue"
+  product: tms
+  sprint: "4"
+  tested_with: claude-opus-4-7
+  user-invocable: "true"
 ---
 
 # Auto-Merge

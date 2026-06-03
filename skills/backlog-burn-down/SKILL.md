@@ -1,20 +1,28 @@
 ---
 name: backlog-burn-down
-description: "Scans the Todo column of a GitHub Projects v2 board, stale-checks each issue, classifies into quick-fix / clear-scope / ambiguous tracks, bundles by mental model, and presents a batch plan for the user to pick from."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - project-board
-  - github
-  - planning
-  - triage
-  - workflow
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+description: >
+  Use when the user asks "what should I work on?", "plan my day", "burn down
+  the backlog", "show me Todo", or wants a prioritised batch plan from the
+  GitHub Projects v2 Todo column. Scans Todo issues, stale-checks each,
+  classifies into quick-fix / clear-scope / ambiguous tracks, bundles by
+  mental model, and presents a batch plan for the user to approve before any
+  execution.
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh) authenticated to the target org and git. Designed
+  for Claude Code. Requires GitHub Projects v2 board access. Defaults to
+  zyni-ai org and tms-app project board — swap org, repo, and project number
+  before use in other projects.
+metadata:
+  version: "1.0.0"
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags: "project-board, github, planning, triage, workflow"
+  product: tms
+  sprint: "4"
+  tested_with: claude-opus-4-7
+  user-invocable: "true"
 ---
 
 # Backlog Burn-Down

@@ -1,18 +1,16 @@
 ---
 name: integratekit
 description: Use this skill to find and wire up backend GraphQL APIs into frontend components. Scans for unwired actions, discovers matching APIs, and integrates after confirmation.
-version: 1.0.0
-author: Vishak Gowda
-email: vishak@zysk.tech
-category: frontend-integration
-tags:
-  - graphql
-  - apollo
-  - api-integration
-  - frontend
-product: zyniverse
-sprint: 1
-tested_with: claude-sonnet-4-6
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: Vishak Gowda
+  email: vishak@zysk.tech
+  category: frontend-integration
+  tags: "graphql, apollo, api-integration, frontend"
+  product: zyniverse
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # IntegrateKit

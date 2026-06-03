@@ -1,19 +1,25 @@
 ---
 name: hr-resume-screener
-description: Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict with requirement match, strengths, gaps, salary check, and an Excel-ready summary row.
-version: 1.0.0
-author: Deepak Padmanabha
-email: deepak@zysk.tech
-category: business-sales
-tags:
-  - hr
-  - resume
-  - screening
-  - jd-matching
-  - recruitment
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+description: >
+  Screen a resume against a Job Description and return a FIT / PARTIAL FIT /
+  NOT A FIT verdict. Use when asked to "screen this resume", "does this
+  candidate fit the JD", "shortlist candidates", "check resume against job
+  description", or "review this applicant". Returns requirement match,
+  strengths, gaps, salary check, and an Excel-ready summary row.
+license: MIT
+compatibility: >
+  Accepts resume as file upload (PDF or Word .docx) or pasted text. JD may be
+  pasted inline or uploaded. No external CLI dependencies. Designed for
+  Claude Code.
+metadata:
+  version: "1.0.0"
+  author: Deepak Padmanabha
+  email: deepak@zysk.tech
+  category: business-sales
+  tags: "hr, resume, screening, jd-matching, recruitment"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # HR Resume Screener

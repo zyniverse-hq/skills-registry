@@ -1,20 +1,21 @@
 ---
 name: review-queue
 description: "Read-only digest of open PRs where you're a requested reviewer. Classifies each by readiness (ready-to-approve / needs your attention / waiting / stale) with one-line factual summaries, and stops — never approves, never comments."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-pr
-  - code-review
-  - triage
-  - workflow
-  - digest
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh) authenticated to the target GitHub org. Designed for
+  Claude Code. Defaults to zyni-ai/tms-app repo and the @zyniverse-bot reviewer
+  username — swap repo and bot username before use in other projects.
+metadata:
+  version: "1.0.0"
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags: "github-pr, code-review, triage, workflow, digest"
+  product: tms
+  sprint: "4"
+  tested_with: claude-opus-4-7
+  user-invocable: "true"
 ---
 
 # Review Queue

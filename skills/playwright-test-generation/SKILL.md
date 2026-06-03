@@ -1,18 +1,24 @@
 ---
 name: playwright-test-generation
-description: Generate structured Playwright E2E tests by exploring the live UI first, then producing helpers, spec files, and a summary report.
-version: 1.0.1
-author: Deepikaa Naganathan
-email: deepikaa.n@zysk.tech
-category: qa-testing
-tags:
-  - playwright
-  - e2e-testing
-  - test-generation
-  - automation
-product: zysk | tms | zyni
-sprint: 1
-tested_with: claude-sonnet-4-6
+description: >
+  Generate Playwright E2E tests. Use when the user says "write Playwright
+  tests", "generate e2e tests", "automate tests for this page", "create
+  test specs", or "add Playwright coverage for". Explores the live UI first,
+  then produces helpers, spec files, and a summary report.
+license: MIT
+compatibility: >
+  Requires Playwright and TypeScript installed in the target project
+  (npm install -D @playwright/test). A live URL must be accessible for
+  Step 1 UI exploration. Designed for Claude Code.
+metadata:
+  version: "1.0.1"
+  author: Deepikaa Naganathan
+  email: deepikaa.n@zysk.tech
+  category: qa-testing
+  tags: "playwright, e2e-testing, test-generation, automation"
+  product: "zysk | tms | zyni"
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Playwright Test Generation

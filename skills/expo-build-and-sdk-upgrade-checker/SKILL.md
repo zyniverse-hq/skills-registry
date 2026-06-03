@@ -1,19 +1,20 @@
 ---
 name: expo-build-and-sdk-upgrade-checker
 description: Analyzes Expo Managed Workflow projects for build failures, dependency mismatches, EAS configuration problems, and SDK upgrade risks — generates a prioritized health report with exact fix commands.
-version: 1.0.0
-author: Om Chavan
-email: om.chavan@zysk.tech
-category: pre-deploy-safety
-tags:
-  - expo
-  - react-native
-  - eas-build
-  - sdk-upgrade
-  - dependency-health
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+license: MIT
+compatibility: >
+  Requires Node.js and Expo CLI (npx expo) available in PATH. EAS CLI (eas) required
+  for EAS build configuration checks. Designed for Claude Code. Uses scripts/ bundled
+  in the skill folder for check rulebooks. Tested with Expo SDK 49-52.
+metadata:
+  version: "1.0.0"
+  author: Om Chavan
+  email: om.chavan@zysk.tech
+  category: pre-deploy-safety
+  tags: "expo, react-native, eas-build, sdk-upgrade, dependency-health"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Expo Build & SDK Upgrade Checker

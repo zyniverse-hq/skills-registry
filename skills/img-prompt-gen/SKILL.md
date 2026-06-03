@@ -1,19 +1,25 @@
 ---
 name: img-prompt-gen
-description: Structures a raw image idea into a clean, field-based prompt optimized for GPT Image 2, adding only safe recommendations without changing the user's intent.
-version: 1.0.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: ai-agents
-tags:
-  - prompt-engineering
-  - image-generation
-  - gpt-image-2
-  - creative
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
+description: >
+  Structure a raw image idea into a GPT Image 2 prompt. Use when the user says
+  "generate an image", "create an image prompt", "write a prompt for",
+  "make an image of", or shares an image idea and wants a structured prompt
+  for GPT Image 2. Adds safe recommendations without changing the user's intent.
+license: MIT
+compatibility: >
+  Outputs a structured text prompt for use with GPT Image 2 (or compatible
+  image generation APIs). No local runtime dependencies. Designed for
+  Claude Code.
+metadata:
+  version: "1.0.0"
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: ai-agents
+  tags: "prompt-engineering, image-generation, gpt-image-2, creative"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: "false"
 allowed-tools: "*"
 ---
 

@@ -1,18 +1,19 @@
 ---
 name: tech-mentor
 description: Researches industry patterns for engineering decisions. Use when evaluating architecture choices, comparing approaches, or understanding what companies do before building something.
-version: 1.0.0
-author: Vishnu BV
-email: vishnu@testmyskills.ai
-category: engineering-practice
-tags:
-  - architecture
-  - research
-  - decision-support
-  - industry-patterns
-product: zyniverse
-sprint: 1
-tested_with: claude-sonnet-4-6
+license: MIT
+compatibility: >
+  Requires WebSearch and WebFetch tools for industry research (Steps 3-4).
+  Designed for Claude Code. No local CLI dependencies.
+metadata:
+  version: "1.0.0"
+  author: Vishnu BV
+  email: vishnu@testmyskills.ai
+  category: engineering-practice
+  tags: "architecture, research, decision-support, industry-patterns"
+  product: zyniverse
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Tech Mentor

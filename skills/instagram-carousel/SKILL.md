@@ -1,20 +1,27 @@
 ---
 name: instagram-carousel
-description: Generates a self-contained, swipeable HTML Instagram carousel with export-ready 1080x1350px slides, deriving brand colors, typography, and slide layout.
-version: 1.0.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: comms
-tags:
-  - instagram
-  - carousel
-  - social-media
-  - marketing
-  - design
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
+description: >
+  Generate an Instagram carousel. Use when the user says "make an Instagram
+  carousel", "create social media slides", "design a carousel post",
+  "build brand content slides", or wants swipeable marketing content.
+  Produces a self-contained HTML file with export-ready 1080x1350px slides,
+  deriving brand colors, typography, and layout from the user's input.
+license: MIT
+compatibility: >
+  Requires Python 3 and Playwright (playwright install chromium) for PNG export
+  in Step 7. Steps 1-6 (HTML/CSS generation) run without any external tools.
+  Designed for Claude Code. Install: pip install playwright &&
+  playwright install chromium.
+metadata:
+  version: "1.0.0"
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: comms
+  tags: "instagram, carousel, social-media, marketing, design"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: "false"
 allowed-tools: "*"
 ---
 

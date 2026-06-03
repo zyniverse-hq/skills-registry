@@ -1,18 +1,20 @@
 ---
 name: test-scenario-planning
-description: Plan high-level test scenarios that describe user behaviors and business rules before writing test code.
-version: 1.0.1
-author: Deepikaa Naganathan
-email: deepikaa.n@zysk.tech
-category: qa-testing
-tags:
-  - scenario-planning
-  - test-strategy
-  - qa
-  - requirements
-product: zysk | tms | zyni
-sprint: 1
-tested_with: claude-sonnet-4-6
+description: >
+  Plan high-level test scenarios. Use when the user says "write scenarios for",
+  "plan test scenarios", "QA planning", "test strategy for", "what should we
+  test", or wants to define test coverage before writing test code. Describes
+  user behaviors and business rules as scenarios (positive/negative/edge).
+license: MIT
+metadata:
+  version: "1.0.1"
+  author: Deepikaa Naganathan
+  email: deepikaa.n@zysk.tech
+  category: qa-testing
+  tags: "scenario-planning, test-strategy, qa, requirements"
+  product: "zysk | tms | zyni"
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Test Scenario Planning

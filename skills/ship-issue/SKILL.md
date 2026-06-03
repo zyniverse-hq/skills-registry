@@ -1,20 +1,28 @@
 ---
 name: ship-issue
-description: "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-issues
-  - workflow
-  - pr-creation
-  - code-review
-  - tdd
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+description: >
+  Execute a GitHub issue end-to-end. Use when the user says "ship issue #N",
+  "implement issue", "fix issue", "start work on #N", or "work on this ticket".
+  Runs on one of three tracks (quick-fix / clear-scope / ambiguous) with
+  mandatory first-principles, self-review, simplify, verify, and board-move
+  discipline.
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh), npm, npx tsc (TypeScript), git worktrees, and
+  GitHub Projects v2 access. Depends on companion skills pr-review-toolkit,
+  superpowers, decision-brief, and handle-review being installed. Designed
+  for Claude Code. Defaults to zyni-ai/tms-app — swap org, repo, and project
+  board IDs before use in other projects.
+metadata:
+  version: "1.0.0"
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags: "github-issues, workflow, pr-creation, code-review, tdd"
+  product: tms
+  sprint: "4"
+  tested_with: claude-opus-4-7
+  user-invocable: "true"
 ---
 
 # Ship Issue

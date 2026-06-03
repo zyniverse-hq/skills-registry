@@ -1,18 +1,24 @@
 ---
 name: safe-push-workflow
-description: Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes.
-version: 1.0.0
-author: Ananth Raj L
-email: ananth@zysk.tech
-category: pre-deploy-safety
-tags:
-  - git
-  - push-safety
-  - conflict-detection
-  - pull-request
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+description: >
+  Detect git conflicts before pushing. Use when the user says "push to qa",
+  "create a PR", "send a branch", "push this", "open a pull request", or
+  before any git push to a shared branch. Fetches remote state, diffs
+  divergent changes, and reports conflicts before they reach GitHub.
+license: MIT
+compatibility: >
+  Requires git CLI and GitHub CLI (gh) authenticated to the target remote.
+  Designed for Claude Code. Works with any git-hosted remote (GitHub,
+  GitLab, Bitbucket).
+metadata:
+  version: "1.0.0"
+  author: Ananth Raj L
+  email: ananth@zysk.tech
+  category: pre-deploy-safety
+  tags: "git, push-safety, conflict-detection, pull-request"
+  product: zysk
+  sprint: "1"
+  tested_with: claude-sonnet-4-6
 ---
 
 # Safe Push Workflow

@@ -1,20 +1,28 @@
 ---
 name: triage-issues
-description: "Promotes Backlog issues to Todo on a GitHub Projects v2 board — derives Priority/Area/Module from labels + title heuristics, flags missing labels and suspected duplicates, requires user approval before mutations."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - project-board
-  - github
-  - triage
-  - graphql
-  - workflow
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+description: >
+  Triage GitHub issues. Use when the user says "triage issues", "backlog
+  triage", "weekly triage", "promote backlog to Todo", "sort the backlog",
+  or "project board hygiene". Promotes Backlog issues to Todo on a GitHub
+  Projects v2 board — derives Priority/Area/Module from labels + title
+  heuristics, flags missing labels and suspected duplicates, requires user
+  approval before mutations.
+license: "Proprietary — internal use only (zysk.tech)"
+compatibility: >
+  Requires GitHub CLI (gh) with GraphQL API access and GitHub Projects v2
+  board access. Designed for Claude Code. Defaults to zyni-ai org, tms-app
+  repo, and project board #18 — swap org, repo, and project number before
+  use in other projects.
+metadata:
+  version: "1.0.0"
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags: "project-board, github, triage, graphql, workflow"
+  product: tms
+  sprint: "4"
+  tested_with: claude-opus-4-7
+  user-invocable: "true"
 ---
 
 # Triage Issues
