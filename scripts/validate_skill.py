@@ -72,6 +72,37 @@ def validate_semver(version):
     return bool(re.match(r"^\d+\.\d+\.\d+$", str(version)))
 
 
+def get_field(fm, key):
+    """Return a frontmatter field from the top level, falling back to a nested
+    `metadata:` map. The agentskills.io spec allows non-spec fields (author,
+    version, category, tags, …) to live under `metadata:`, so accept either
+    placement rather than emitting a spurious 'missing field' warning."""
+    val = fm.get(key)
+    if val not in (None, ""):
+        return val
+    meta = fm.get("metadata")
+    if isinstance(meta, dict):
+        return meta.get(key)
+    return None
+
+
+def validate_name(name):
+    """Validate `name` against the agentskills.io spec: 1-64 chars, lowercase
+    alphanumerics and single hyphens, no leading/trailing or consecutive
+    hyphens. Emits specific errors; returns True if valid."""
+    ok = True
+    if len(name) > 64:
+        error(f"'name' must be at most 64 characters — got {len(name)}")
+        ok = False
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
+        error(
+            "'name' must be lowercase alphanumerics separated by single hyphens, "
+            "with no leading/trailing or consecutive hyphens — got: " + name
+        )
+        ok = False
+    return ok
+
+
 def get_existing_names(skip_folder=None):
     """Collect all skill names already registered in the repo."""
     names = {}
@@ -171,43 +202,60 @@ def validate_file(path, existing_names):
     name = fm.get("name")
     if not name:
         error("Missing required field: name")
-    elif folder_name and name != folder_name:
-        error(f"'name' ({name}) must match folder name ({folder_name})")
-    elif not re.match(r"^[a-z][a-z0-9-]*$", str(name)):
-        error(f"'name' must be lowercase kebab-case — got: {name}")
-    elif name in existing_names:
-        error(
-            f"'name' ({name}) already exists in the registry at "
-            f"{existing_names[name]} — choose a unique name"
-        )
+    else:
+        name = str(name)
+        name_ok = validate_name(name)
+        if folder_name and name != folder_name:
+            error(f"'name' ({name}) must match folder name ({folder_name})")
+        if name_ok and name in existing_names:
+            error(
+                f"'name' ({name}) already exists in the registry at "
+                f"{existing_names[name]} — choose a unique name"
+            )
 
     description = fm.get("description")
     if not description:
         error("Missing required field: description")
-    elif len(str(description).strip()) < 10:
-        error("'description' is too short — write a meaningful one-sentence description")
-    elif len(str(description).strip()) > 200:
-        warn("'description' is very long — keep it under 200 characters for registry display")
     else:
-        validate_description_quality(description)
+        desc = str(description).strip()
+        if len(desc) < 10:
+            error("'description' is too short — write a meaningful one-sentence description")
+        elif len(desc) > 1024:
+            error(f"'description' exceeds the 1024-character spec limit — got {len(desc)}")
+        else:
+            if len(desc) > 200:
+                warn("'description' is very long — keep it under 200 characters for registry display")
+            validate_description_quality(description)
 
-    # ── Extended fields (warn only) ──────────────────────────────────────────
-    version = fm.get("version")
+    # ── Optional spec fields ─────────────────────────────────────────────────
+    compatibility = fm.get("compatibility")
+    if compatibility is not None and len(str(compatibility)) > 500:
+        error(f"'compatibility' must be at most 500 characters — got {len(str(compatibility))}")
+
+    allowed_tools = fm.get("allowed-tools")
+    if allowed_tools is not None and not isinstance(allowed_tools, str):
+        error(
+            "'allowed-tools' must be a space-separated string "
+            '(e.g. "Read Write Bash"), not a YAML list'
+        )
+
+    # ── Extended fields (warn only; accepted top-level or under metadata:) ────
+    version = get_field(fm, "version")
     if not version:
         warn("Missing 'version' — add version: 1.0.0")
     elif not validate_semver(version):
         error(f"'version' must be semver (e.g. 1.0.0) — got: {version}")
 
-    if not fm.get("author"):
+    if not get_field(fm, "author"):
         warn("Missing 'author' — add your name")
 
-    category = fm.get("category")
+    category = get_field(fm, "category")
     if not category:
         warn("Missing 'category' — add one of: " + ", ".join(sorted(VALID_CATEGORIES)))
     elif category not in VALID_CATEGORIES:
         error(f"Invalid 'category': {category}. Must be one of: {', '.join(sorted(VALID_CATEGORIES))}")
 
-    tags = fm.get("tags", [])
+    tags = get_field(fm, "tags") or []
     if not tags:
         warn("Missing 'tags' — add 2–5 lowercase kebab-case tags")
     elif len(tags) < 2:
@@ -219,7 +267,7 @@ def validate_file(path, existing_names):
             if not re.match(r"^[a-z][a-z0-9-]*$", str(t)):
                 error(f"Tag '{t}' must be lowercase kebab-case")
 
-    product = fm.get("product")
+    product = get_field(fm, "product")
     if product and product not in VALID_PRODUCTS:
         error(f"Invalid 'product': {product}. Must be one of: {', '.join(VALID_PRODUCTS)}")
 
