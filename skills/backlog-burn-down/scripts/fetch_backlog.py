@@ -96,8 +96,6 @@ def fetch_all_items(org, project_number):
     cursor = ""
 
     while True:
-        variables = json.dumps({"org": org, "num": project_number, "cursor": cursor})
-        cmd = f"gh api graphql -f query='{GRAPHQL_QUERY}' --input -"
         result = subprocess.run(
             ["gh", "api", "graphql",
              "-f", f"query={GRAPHQL_QUERY}",

@@ -1,6 +1,6 @@
 ---
 name: backlog-burn-down
-description: "Project manager skill — scans the Todo column of a GitHub Projects v2 board, stale-checks each issue, classifies by track, and assigns issues to developers in priority order with a comment on each. Use whenever the PM wants to plan the sprint, assign backlog items to the team, or ask what the dev team should work on next."
+description: "Scans a GitHub Projects v2 Todo column, stale-checks and classifies issues, then assigns each to a developer with a board move and comment. Use to plan a sprint or pick the team's next work."
 version: 1.2.0
 author: Varun U
 email: varun@zysk.tech
@@ -10,7 +10,6 @@ tags:
   - github
   - planning
   - triage
-  - workflow
   - team-management
 tested_with: claude-opus-4-7
 user-invocable: true
