@@ -1,7 +1,7 @@
 ---
 name: test-case-generator
 description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps.
-version: 1.0.0
+version: 1.1.0
 author: Ajay R
 email: ajay.r@zysk.tech
 category: qa-testing
