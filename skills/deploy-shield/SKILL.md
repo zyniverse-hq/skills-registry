@@ -133,12 +133,13 @@ Things already handled by global middleware, filters, or interceptors
 TypeScript/type strictness warnings that don't affect runtime
 Test file issues — unless they mask real production bugs
 
-Output
+## Output
 
 Format: Structured markdown report delivered inline in the conversation
 Location: Inline response — no files written unless the user requests one
 Example structure:
 
+```markdown
 ## DeployShield Report — [branch or description]
 
 **Stack detected:** [framework · DB · key integrations]
@@ -189,3 +190,4 @@ Example structure:
 1. [Most urgent fix]
 2. [Second priority]
 3. [Third priority]
+```
