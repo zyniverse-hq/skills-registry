@@ -1,7 +1,7 @@
 ---
 name: ui-consistency
 description: Use when asked for any frontend UI change — modals, forms, buttons, tables, layouts, colors, or spacing. Runs pattern inspection before writing code; never skip for small changes.
-version: 1.0.0
+version: 1.1.0
 author: Ruthu Bahubali Jain
 email: ruthu.jain@zysk.tech
 category: "engineering-practice"
