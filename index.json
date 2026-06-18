@@ -668,6 +668,25 @@
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
       "icon": "🛠️"
+    },
+    {
+      "slug": "x-twitter-scraper",
+      "name": "x-twitter-scraper",
+      "description": "Use Xquik to search, inspect, monitor, and export X/Twitter data through its REST API or remote MCP server.",
+      "version": "1.0.0",
+      "author": "Xquik",
+      "email": "",
+      "category": "data",
+      "group": "opus",
+      "tags": [
+        "x-twitter",
+        "mcp",
+        "data-extraction",
+        "social-monitoring"
+      ],
+      "product": "",
+      "tested_with": "codex",
+      "icon": "📊"
     }
   ]
 }
