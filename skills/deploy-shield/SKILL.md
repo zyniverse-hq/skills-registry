@@ -1,15 +1,18 @@
 ---
 name: deploy-shield
 description: Audits a codebase branch or diff for production risks, deployment safety, and engineering hygiene before a release. Use when a developer wants to know if code is safe to deploy, assess blast radius, check rollback safety, audit dependencies, or get a pre-release risk report — even if they don't use the word "deployment".
-Version: 1.0.0
-Author: Akash R
-Email: akash.r@zysk.tech
-Category: deployment-safety
-Tags: deployment, code-review, production-safety, risk-audit
-Product: zysk
-Sprint: 1
-Tested_with: claude-sonnet-4-6
-
+version: 1.0.0
+author: Akash R
+email: akash.r@zysk.tech
+category: pre-deploy-safety
+tags:
+  - deployment
+  - code-review
+  - production-safety
+  - risk-audit
+product: zysk
+sprint: 1
+tested_with: claude-sonnet-4-6
 ---
 
 # DeployShield
