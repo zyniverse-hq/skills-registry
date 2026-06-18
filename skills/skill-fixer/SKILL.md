@@ -1,20 +1,19 @@
 ---
 name: skill-fixer
 description: Fix the findings in a skill-reviewer report by editing the reviewed skill on a new git branch. Use this whenever someone wants to remediate, fix, address, or resolve the issues a skill review surfaced, or asks to "apply the fixes from the report" / "clean up this skill based on the review". Takes the JSON report from skill-reviewer's review_skill.py plus the skill folder. It applies safe deterministic fixes automatically, drafts fixes for judgement items, and flags anything unsafe to auto-fix (hardcoded secrets, confirmed-malicious code) for the user. Trigger after a skill has been reviewed and the findings need fixing.
-metadata:
-  version: 1.1.0
-  author: Vikas M
-  email: vikas.m@zysk.tech
-  category: engineering-practice
-  tags:
-    - fix
-    - remediation
-    - skill-improvement
-    - refactoring
-    - automation
-  product: zysk
-  sprint: 1
-  tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
+version: 1.1.0
+author: Vikas M
+email: vikas.m@zysk.tech
+category: engineering-practice
+tags:
+  - fix
+  - remediation
+  - skill-improvement
+  - refactoring
+  - automation
+product: zysk
+sprint: 1
+tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
 compatibility: "Python 3.8+ and git. No required third-party packages; PyYAML is used only if already installed. Operates on a git repository and creates a new branch."
 ---
 
@@ -24,6 +23,12 @@ Take a skill-reviewer JSON report and remediate the findings on an isolated git
 branch, so the user can review a clean diff before merging. The work is split:
 the script does the deterministic, always-safe fixes; you do the judgement fixes;
 neither you nor the script ever silently "fixes" something unsafe.
+
+## When to use
+
+- Activate when: the user wants to remediate, fix, address, or resolve the findings from a skill review (e.g. "apply the fixes from the report", "clean up this skill based on the review").
+- Activate when: a skill has just been reviewed by skill-reviewer and its findings need fixing.
+- Do NOT activate when: there is no review report yet — run skill-reviewer first to produce the findings.
 
 ## Inputs
 
@@ -66,7 +71,7 @@ mechanical ones. They route to the draft bucket like any other finding.
   working tree is dirty, and never commits to the existing branch, pushes, or
   deletes anything.
 
-## Workflow
+## Steps
 
 The commands below use `python3` for brevity. On Windows the interpreter is usually
 `python` (not `python3`), so substitute your platform's interpreter name; paths use
@@ -139,6 +144,15 @@ Tell the user, in plain prose: the branch name, what was auto-fixed, what you fi
 by hand, what they must handle themselves (each secret with a rotate-it
 instruction), and the before/after gate and score. Do not merge the branch or
 push - that is the user's call.
+
+## Output
+
+A new git branch `skill-fix/<name>-<timestamp>` containing:
+- an auto-fix commit (deterministic fixes such as an inserted TOC or a name/folder sync),
+- your hand-applied draft fixes, and
+- the artifacts under `.skill-review/<skill-name>/` (`fix-manifest.json`, `post-fix-findings.json`).
+
+Plus a plain-prose summary to the user: the branch name, what was auto-fixed, what you fixed by hand, what they must handle themselves (each secret with a rotate-it instruction), and the before/after gate and score. The branch is left for the user to review and merge — it is never merged or pushed automatically.
 
 ## Example
 
