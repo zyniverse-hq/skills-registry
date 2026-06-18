@@ -66,11 +66,11 @@
       "slug": "auto-merge",
       "name": "auto-merge",
       "description": "One-shot drain of an auto-ship PR queue. Re-checks each PR's CI + merge state + review decision, squash-merges what's MERGEABLE + APPROVED + clean of unaddressed comments, and reports per-entry verdict. No scheduler.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "Varun U",
       "email": "varun@zysk.tech",
       "category": "engineering-practice",
-      "group": "opus",
+      "group": "sonnet",
       "tags": [
         "github-pr",
         "merge",
@@ -78,8 +78,8 @@
         "workflow",
         "queue"
       ],
-      "product": "tms",
-      "tested_with": "claude-opus-4-7",
+      "product": "",
+      "tested_with": "claude-sonnet-4-6",
       "icon": "🛠️"
     },
     {
