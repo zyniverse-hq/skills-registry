@@ -1,20 +1,19 @@
 ---
 name: skill-reviewer
 description: Review, audit, or quality-check an Anthropic Agent Skill (a SKILL.md folder) and produce a detailed review report. Use this whenever someone asks to review, audit, evaluate, vet, grade, or QA a skill, check whether a SKILL.md is well-formed or upload-ready, assess a skill's triggering, description, or instruction quality (whether its prompts are clear, complete, and internally consistent), or security-review a skill before sharing or installing it. Use it even when the person just points at a skill folder and asks "is this good?" or "what's wrong with this skill?". Trigger when a path to a skill directory or a SKILL.md file is provided for review.
-metadata:
-  version: 1.1.0
-  author: Vikas M
-  email: vikas.m@zysk.tech
-  category: engineering-practice
-  tags:
-    - review
-    - quality-assurance
-    - skill-audit
-    - linting
-    - validation
-  product: zysk
-  sprint: 1
-  tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
+version: 1.1.0
+author: Vikas M
+email: vikas.m@zysk.tech
+category: engineering-practice
+tags:
+  - review
+  - quality-assurance
+  - skill-audit
+  - linting
+  - validation
+product: zysk
+sprint: 1
+tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
 compatibility: "Python 3.8+. No required third-party packages. PyYAML is used for exact frontmatter parsing only if it is already installed; otherwise a built-in parser is used."
 ---
 
@@ -29,12 +28,19 @@ actually steer the model right is the core of the review, not an afterthought. T
 goal is a report a maintainer can act on, with each finding rated by severity and
 paired with a concrete fix.
 
+## When to use
+
+- Activate when: someone asks to review, audit, evaluate, vet, grade, or QA a skill, or to check whether a SKILL.md is well-formed or upload-ready.
+- Activate when: someone wants a skill's triggering, description, instruction quality, or security assessed before sharing or installing it.
+- Activate when: a person points at a skill folder or SKILL.md and asks "is this good?" / "what's wrong with this skill?".
+- Do NOT activate when: no skill path is provided — ask for the skill folder first.
+
 ## Inputs
 
 You need a path to the skill folder (the directory containing `SKILL.md`). If the
 person hasn't given one, ask once for it and pause. Don't guess a path.
 
-## Workflow
+## Steps
 
 Run these steps in order. The script does the deterministic checks fast and
 consistently; you do the judgement the script can't.
@@ -194,6 +200,15 @@ production-grade until they are resolved. End with one overall verdict: **Pass**
 **Pass with fixes**, or **Fail**. Save the report to
 `.skill-review/<skill-name>/report.md`, tell the person where it is, and hand the
 unified `findings.json` to skill-fixer.
+
+## Output
+
+The review writes everything under `.skill-review/<skill-name>/`:
+- `report.md` — the human-readable review report, built from `references/report-template.md`: each finding with a severity (Blocker / Major / Review / Minor) and a concrete fix, a per-dimension verdict, and one overall verdict (**Pass**, **Pass with fixes**, or **Fail**).
+- `findings.json` — the unified machine-readable findings (consumed by skill-fixer).
+- `instruction-findings.json` — your authored instruction-review findings.
+
+Tell the person where the report is. Instruction-review findings are mandatory fixes: while any is open, the overall verdict is at best **Pass with fixes**, never a clean **Pass**.
 
 ## Severity guidance
 
