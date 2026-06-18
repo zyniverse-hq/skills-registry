@@ -1,7 +1,7 @@
 ---
 name: daily-status
 description: Generate the end-of-day client status report by scanning today's git commits, uncommitted changes, and GitHub PRs, then interviewing the user to classify each item. Use whenever the user asks for their daily status, EOD report, or client update — or types /daily-status.
-version: 1.2.0
+version: 1.3.0
 author: Shilpa VP
 email: shilpa@zysk.tech
 category: comms
