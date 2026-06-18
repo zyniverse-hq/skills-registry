@@ -1,7 +1,7 @@
 ---
 name: safe-push-workflow
 description: Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes. Use when the user asks to push code, push to qa/uat/main/staging, send a branch to remote, or create a PR.
-version: 1.0.0
+version: 1.1.0
 author: Ananth Raj L
 email: ananth@zysk.tech
 category: pre-deploy-safety
@@ -13,7 +13,7 @@ tags:
 product: zysk
 sprint: 1
 tested_with: claude-sonnet-4-6
-allowed-tools: [Bash]
+allowed-tools: Bash
 ---
 
 # Safe Push Workflow
