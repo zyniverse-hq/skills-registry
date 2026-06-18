@@ -1,0 +1,11 @@
+{
+  "_comment": "Copy to assets/config.json and fill in your project details. queue_path and base_branch have sensible defaults if omitted.",
+  "queue_path": ".claude/auto-ship-queue.json",
+  "base_branch": "main",
+  "project_board": {
+    "org": "your-org",
+    "number": 1,
+    "done_status_field": "Status",
+    "done_status_value": "Done"
+  }
+}
