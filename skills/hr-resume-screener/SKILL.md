@@ -4,7 +4,7 @@ description: Screen a candidate resume against a Job Description and return a FI
 version: 1.1.0
 author: Deepak Padmanabha
 email: deepak@zysk.tech
-category: business-sales
+category: hr-recruiting
 tags:
   - hr
   - resume
