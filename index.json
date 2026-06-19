@@ -110,8 +110,8 @@
     {
       "slug": "backlog-burn-down",
       "name": "backlog-burn-down",
-      "description": "Scans the Todo column of a GitHub Projects v2 board, stale-checks each issue, classifies into quick-fix / clear-scope / ambiguous tracks, bundles by mental model, and presents a batch plan for the user to pick from.",
-      "version": "1.0.0",
+      "description": "Scans a GitHub Projects v2 Todo column, stale-checks and classifies issues, then assigns each to a developer with a board move and comment. Use to plan a sprint or pick the team's next work.",
+      "version": "1.2.0",
       "author": "Varun U",
       "email": "varun@zysk.tech",
       "category": "engineering-practice",
@@ -121,9 +121,9 @@
         "github",
         "planning",
         "triage",
-        "workflow"
+        "team-management"
       ],
-      "product": "tms",
+      "product": "",
       "tested_with": "claude-opus-4-7",
       "icon": "🛠️"
     },
@@ -151,7 +151,7 @@
       "slug": "daily-status",
       "name": "daily-status",
       "description": "Generate the end-of-day client status report by scanning today's git commits, uncommitted changes, and GitHub PRs, then interviewing the user to classify each item. Use whenever the user asks for their daily status, EOD report, or client update — or types /daily-status.",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "author": "Shilpa VP",
       "email": "shilpa@zysk.tech",
       "category": "comms",
@@ -163,7 +163,7 @@
         "github",
         "reporting"
       ],
-      "product": "zysk",
+      "product": "",
       "tested_with": "claude-opus-4-7",
       "icon": "💬"
     },
@@ -249,7 +249,7 @@
       "slug": "git-workflow",
       "name": "git-workflow",
       "description": "Applies this user's git conventions for branches, commits, merges, pull requests, force-pushes, and release tags whenever Claude runs any git command.",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "author": "Arijit Saha",
       "email": "arijit.saha@zysk.tech",
       "category": "engineering-practice",
@@ -328,7 +328,7 @@
       "slug": "instagram-carousel",
       "name": "instagram-carousel",
       "description": "Generates a self-contained, swipeable HTML Instagram carousel with export-ready 1080x1350px slides, deriving brand colors, typography, and slide layout.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "Arijit Saha",
       "email": "arijit.saha@zysk.tech",
       "category": "comms",
@@ -348,7 +348,7 @@
       "slug": "integratekit",
       "name": "integratekit",
       "description": "Use this skill to find and wire up backend GraphQL APIs into frontend components. Scans for unwired actions, discovers matching APIs, and integrates after confirmation.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "Vishak Gowda",
       "email": "vishak@zysk.tech",
       "category": "frontend-integration",
@@ -446,7 +446,7 @@
       "slug": "razorpay-integration",
       "name": "razorpay-integration",
       "description": "Integrate Razorpay payment gateway end-to-end. Activate when users mention Razorpay, payment gateway, checkout, order creation, payment verification, webhook handling, or switching to live keys.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "Tazeen Soudagar",
       "email": "tazeen.soudagar@zysk.tech",
       "category": "engineering-practice",
@@ -525,8 +525,8 @@
     {
       "slug": "safe-push-workflow",
       "name": "safe-push-workflow",
-      "description": "Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes.",
-      "version": "1.0.0",
+      "description": "Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes. Use when the user asks to push code, push to qa/uat/main/staging, send a branch to remote, or create a PR.",
+      "version": "1.1.0",
       "author": "Ananth Raj L",
       "email": "ananth@zysk.tech",
       "category": "pre-deploy-safety",
@@ -562,6 +562,46 @@
       "icon": "🛠️"
     },
     {
+      "slug": "skill-fixer",
+      "name": "skill-fixer",
+      "description": "Fix the findings in a skill-reviewer report by editing the reviewed skill on a new git branch. Use this whenever someone wants to remediate, fix, address, or resolve the issues a skill review surfaced, or asks to \"apply the fixes from the report\" / \"clean up this skill based on the review\". Takes the JSON report from skill-reviewer's review_skill.py plus the skill folder. It applies safe deterministic fixes automatically, drafts fixes for judgement items, and flags anything unsafe to auto-fix (hardcoded secrets, confirmed-malicious code) for the user. Trigger after a skill has been reviewed and the findings need fixing.",
+      "version": "1.1.0",
+      "author": "Vikas M",
+      "email": "vikas.m@zysk.tech",
+      "category": "engineering-practice",
+      "group": "opus",
+      "tags": [
+        "fix",
+        "remediation",
+        "skill-improvement",
+        "refactoring",
+        "automation"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-opus-4-8, claude-sonnet-4-6, glm-5.1",
+      "icon": "🛠️"
+    },
+    {
+      "slug": "skill-reviewer",
+      "name": "skill-reviewer",
+      "description": "Review, audit, or quality-check an Anthropic Agent Skill (a SKILL.md folder) and produce a detailed review report. Use this whenever someone asks to review, audit, evaluate, vet, grade, or QA a skill, check whether a SKILL.md is well-formed or upload-ready, assess a skill's triggering, description, or instruction quality (whether its prompts are clear, complete, and internally consistent), or security-review a skill before sharing or installing it. Use it even when the person just points at a skill folder and asks \"is this good?\" or \"what's wrong with this skill?\". Trigger when a path to a skill directory or a SKILL.md file is provided for review.",
+      "version": "1.1.0",
+      "author": "Vikas M",
+      "email": "vikas.m@zysk.tech",
+      "category": "engineering-practice",
+      "group": "opus",
+      "tags": [
+        "review",
+        "quality-assurance",
+        "skill-audit",
+        "linting",
+        "validation"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-opus-4-8, claude-sonnet-4-6, glm-5.1",
+      "icon": "🛠️"
+    },
+    {
       "slug": "tech-mentor",
       "name": "tech-mentor",
       "description": "Researches industry patterns for engineering decisions. Use when evaluating architecture choices, comparing approaches, or understanding what companies do before building something.",
@@ -584,7 +624,7 @@
       "slug": "test-case-generator",
       "name": "test-case-generator",
       "description": "Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "Ajay R",
       "email": "ajay.r@zysk.tech",
       "category": "qa-testing",
@@ -663,7 +703,7 @@
       "slug": "ui-consistency",
       "name": "ui-consistency",
       "description": "Use when asked for any frontend UI change — modals, forms, buttons, tables, layouts, colors, or spacing. Runs pattern inspection before writing code; never skip for small changes.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "Ruthu Bahubali Jain",
       "email": "ruthu.jain@zysk.tech",
       "category": "engineering-practice",
@@ -678,6 +718,26 @@
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
       "icon": "🛠️"
+    },
+    {
+      "slug": "wp-maintenance-conductor",
+      "name": "wp-maintenance-conductor",
+      "description": "Run a full WordPress maintenance session — pre-flight, backup, tiered updates, security, performance, and final backup with safety gates at every phase. Use for WP maintenance or site health checks.",
+      "version": "1.0.0",
+      "author": "Stalin Marbhenn",
+      "email": "stalin.marbhenn@zysk.tech",
+      "category": "infra-security",
+      "group": "sonnet",
+      "tags": [
+        "wordpress",
+        "maintenance",
+        "updates",
+        "security",
+        "backup"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🔐"
     },
     {
       "slug": "x-twitter-scraper",
