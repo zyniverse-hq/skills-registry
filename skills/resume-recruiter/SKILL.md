@@ -1,21 +1,22 @@
 ---
 name: resume-recruiter
 description: For job-seekers. Acts as a senior recruiter to surface the top keywords for a target role, flag which are missing from the resume, name trending skills, and list buzzwords to cut.
-version: 1.0.1
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: hr-recruiting
-tags:
-  - resume
-  - recruiter
-  - keywords
-  - career
-  - ats
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
 allowed-tools: "*"
+metadata:
+  version: 1.0.1
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: hr-recruiting
+  tags:
+    - resume
+    - recruiter
+    - keywords
+    - career
+    - ats
+  product: zysk
+  sprint: 1
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: false
 ---
 
 # Resume Recruiter Keyword Review

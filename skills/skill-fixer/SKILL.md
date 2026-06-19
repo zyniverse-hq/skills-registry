@@ -1,20 +1,21 @@
 ---
 name: skill-fixer
 description: Fix the findings in a skill-reviewer report by editing the reviewed skill on a new git branch. Use this whenever someone wants to remediate, fix, address, or resolve the issues a skill review surfaced, or asks to "apply the fixes from the report" / "clean up this skill based on the review". Takes the JSON report from skill-reviewer's review_skill.py plus the skill folder. It applies safe deterministic fixes automatically, drafts fixes for judgement items, and flags anything unsafe to auto-fix (hardcoded secrets, confirmed-malicious code) for the user. Trigger after a skill has been reviewed and the findings need fixing.
-version: 1.1.0
-author: Vikas M
-email: vikas.m@zysk.tech
-category: engineering-practice
-tags:
-  - fix
-  - remediation
-  - skill-improvement
-  - refactoring
-  - automation
-product: zysk
-sprint: 1
-tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
 compatibility: "Python 3.8+ and git. No required third-party packages; PyYAML is used only if already installed. Operates on a git repository and creates a new branch."
+metadata:
+  version: 1.1.0
+  author: Vikas M
+  email: vikas.m@zysk.tech
+  category: engineering-practice
+  tags:
+    - fix
+    - remediation
+    - skill-improvement
+    - refactoring
+    - automation
+  product: zysk
+  sprint: 1
+  tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
 ---
 
 # Skill Fixer

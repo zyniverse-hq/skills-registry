@@ -1,21 +1,22 @@
 ---
 name: razorpay-integration
 description: Integrate Razorpay payment gateway end-to-end. Activate when users mention Razorpay, payment gateway, checkout, order creation, payment verification, webhook handling, or switching to live keys.
-version: 1.1.0
-author: Tazeen Soudagar
-email: tazeen.soudagar@zysk.tech
-category: engineering-practice
-tags:
-  - razorpay
-  - payment-gateway
-  - payments
-  - checkout
-  - webhooks
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-user-invocable: true
 allowed-tools: Read Glob Grep Write Edit Bash AskUserQuestion EnterPlanMode ExitPlanMode TaskCreate TaskUpdate TaskList
+metadata:
+  version: 1.1.0
+  author: Tazeen Soudagar
+  email: tazeen.soudagar@zysk.tech
+  category: engineering-practice
+  tags:
+    - razorpay
+    - payment-gateway
+    - payments
+    - checkout
+    - webhooks
+  product: zysk
+  sprint: 1
+  tested_with: claude-sonnet-4-6
+  user-invocable: true
 ---
 
 # Razorpay Payment Gateway Integration

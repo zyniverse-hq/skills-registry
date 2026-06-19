@@ -1,18 +1,19 @@
 ---
 name: triage-issues
 description: "Promotes Backlog issues to Todo on a GitHub Projects v2 board — derives Priority/Area/Module from labels + title heuristics, flags missing labels and suspected duplicates, requires user approval before mutations. To assign Todo issues to developers for a sprint, use backlog-burn-down."
-version: 2.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - project-board
-  - github
-  - triage
-  - graphql
-  - workflow
-tested_with: claude-opus-4-7
-user-invocable: true
+metadata:
+  version: 2.0.0
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags:
+    - project-board
+    - github
+    - triage
+    - graphql
+    - workflow
+  tested_with: claude-opus-4-7
+  user-invocable: true
 ---
 
 # Triage Issues

@@ -1,19 +1,20 @@
 ---
 name: hr-resume-screener
 description: For recruiters and HR. Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict (displayed with emoji indicators) with requirement match, strengths, gaps, salary check, and an Excel-ready summary row. Use when you have both a job description and a candidate resume to evaluate. Trigger on phrases like "screen this resume against the JD," "is this candidate a fit for this role," or "compare this profile to the job requirements."
-version: 1.1.1
-author: Deepak Padmanabha
-email: deepak@zysk.tech
-category: hr-recruiting
-tags:
-  - hr
-  - resume
-  - screening
-  - jd-matching
-  - recruitment
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+metadata:
+  version: 1.1.1
+  author: Deepak Padmanabha
+  email: deepak@zysk.tech
+  category: hr-recruiting
+  tags:
+    - hr
+    - resume
+    - screening
+    - jd-matching
+    - recruitment
+  product: zysk
+  sprint: 1
+  tested_with: claude-sonnet-4-6
 ---
 
 # HR Resume Screener

@@ -1,20 +1,21 @@
 ---
 name: auto-ship
 description: "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open. Includes project config block and preflight checks so it works for any team. Built on ship-issue, which it runs per issue; for a single issue with interactive checkpoints, use ship-issue instead."
-version: 2.0.1
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-issues
-  - autonomous
-  - pr-creation
-  - project-board
-  - workflow
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+metadata:
+  version: 2.0.1
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags:
+    - github-issues
+    - autonomous
+    - pr-creation
+    - project-board
+    - workflow
+  product: tms
+  sprint: 4
+  tested_with: claude-opus-4-7
+  user-invocable: true
 ---
 
 # Auto-Ship

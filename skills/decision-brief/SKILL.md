@@ -1,20 +1,21 @@
 ---
 name: decision-brief
 description: "Produces a lightweight decision record (lighter than an ADR) before implementing ambiguous work — scoping features, evaluating design options, or deciding an approach before writing code."
-version: 1.0.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - decision-record
-  - scoping
-  - planning
-  - adr
-  - github-issues
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+metadata:
+  version: 1.0.0
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags:
+    - decision-record
+    - scoping
+    - planning
+    - adr
+    - github-issues
+  product: tms
+  sprint: 4
+  tested_with: claude-opus-4-7
+  user-invocable: true
 ---
 
 # Decision Brief

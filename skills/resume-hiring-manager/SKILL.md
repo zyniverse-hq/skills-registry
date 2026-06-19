@@ -1,21 +1,22 @@
 ---
 name: resume-hiring-manager
 description: Runs a realistic, scored mock interview as the hiring manager for the user's target role. Trigger this skill whenever the user mentions interview prep, wants to practice answering questions, has an upcoming interview, wants to know if they are ready, asks for mock interview questions, or says anything like "prep me for my interview", "quiz me", "interview me", "I have an interview on Friday", "help me practice", "am I hireable", or "what questions should I expect". Asks hard technical and behavioural questions one at a time, tailored to the user's actual resume, scores every answer out of 10 with corrective feedback, and ends with a hireability score out of 100, a breakdown of the weakest answers, and a structured study plan.
-version: 2.0.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: hr-recruiting
-tags:
-  - resume
-  - interview
-  - mock-interview
-  - career
-  - hiring
-product: zysk
-sprint: 2
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
 allowed-tools: "*"
+metadata:
+  version: 2.0.0
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: hr-recruiting
+  tags:
+    - resume
+    - interview
+    - mock-interview
+    - career
+    - hiring
+  product: zysk
+  sprint: 2
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: false
 ---
 
 # Resume Hiring Manager Mock Interview

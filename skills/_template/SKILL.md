@@ -1,16 +1,17 @@
 ---
 name: your-skill-name
 description: Verb-first one sentence that tells Claude exactly what this skill does and when to use it.
-version: 1.0.0
-author: Your Full Name
-email: you@zysk.tech
-category: engineering
-tags:
-  - tag-one
-  - tag-two
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+metadata:
+  version: 1.0.0
+  author: Your Full Name
+  email: you@zysk.tech
+  category: engineering-practice
+  tags:
+    - tag-one
+    - tag-two
+  product: zysk
+  sprint: 1
+  tested_with: claude-sonnet-4-6
 ---
 
 # Your Skill Title

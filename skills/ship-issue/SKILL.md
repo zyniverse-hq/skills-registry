@@ -1,20 +1,21 @@
 ---
 name: ship-issue
 description: "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline. Includes preflight dependency validation and automatic stack detection for language-appropriate best practices. Use for one issue at a time with interactive checkpoints; for autonomous batch shipping across many issues, use auto-ship."
-version: 2.0.1
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-issues
-  - workflow
-  - pr-creation
-  - code-review
-  - tdd
-product: tms
-sprint: 4
-tested_with: claude-opus-4-7
-user-invocable: true
+metadata:
+  version: 2.0.1
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags:
+    - github-issues
+    - workflow
+    - pr-creation
+    - code-review
+    - tdd
+  product: tms
+  sprint: 4
+  tested_with: claude-opus-4-7
+  user-invocable: true
 ---
 
 # Ship Issue

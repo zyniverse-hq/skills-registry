@@ -8,19 +8,20 @@ description: >
   AWS sizing", "infra for Laravel / Next.js / Node / NestJS", "terraform for", "provision
   servers", or any variation — even if they never say "infrastructure" or "cloud" but are
   asking how to host, provision, or run a project in production.
-version: 1.0.0
-author: Nagendra K V
-email: nagendra.kv@zysk.tech
-category: infra-security
-tags:
-  - infrastructure
-  - terraform
-  - ansible
-  - cost-estimation
-  - deployment
-product: zysk
-sprint: 1
-tested_with: claude-opus-4-7
+metadata:
+  version: 1.0.0
+  author: Nagendra K V
+  email: nagendra.kv@zysk.tech
+  category: infra-security
+  tags:
+    - infrastructure
+    - terraform
+    - ansible
+    - cost-estimation
+    - deployment
+  product: zysk
+  sprint: 1
+  tested_with: claude-opus-4-7
 ---
 
 # Cloud Infra Planner

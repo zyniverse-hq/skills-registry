@@ -1,18 +1,19 @@
 ---
 name: tech-mentor
 description: Researches industry patterns for engineering decisions. Use when evaluating architecture choices, comparing approaches, or understanding what companies do before building something.
-version: 1.0.0
-author: Vishnu BV
-email: vishnu@testmyskills.ai
-category: engineering-practice
-tags:
-  - architecture
-  - research
-  - decision-support
-  - industry-patterns
-product: zyniverse
-sprint: 1
-tested_with: claude-sonnet-4-6
+metadata:
+  version: 1.0.0
+  author: Vishnu BV
+  email: vishnu@testmyskills.ai
+  category: engineering-practice
+  tags:
+    - architecture
+    - research
+    - decision-support
+    - industry-patterns
+  product: zyniverse
+  sprint: 1
+  tested_with: claude-sonnet-4-6
 ---
 
 # Tech Mentor
