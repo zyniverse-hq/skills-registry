@@ -1,7 +1,7 @@
 ---
 name: test-case-generator
 description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps. Works from written specs (no live UI); for high-level scenarios explored from a live URL, use test-scenario-planning. After generating, audit coverage with test-case-reviewer.
-version: 1.1.2
+version: 1.2.0
 author: Ajay R
 email: ajay.r@zysk.tech
 category: qa-testing
@@ -67,34 +67,34 @@ Read the provided feature description, user story, or acceptance criteria. Ident
 
 For EVERY applicable category below, generate dedicated test cases. Never combine multiple validations into one test case.
 
-**1. Positive Test Cases** `[Mandatory]` — happy path flows, valid inputs, successful transactions, standard user behaviour, expected business flow.
+**1. Positive Test Cases** `[Mandatory]` `[→ Functional]` — happy path flows, valid inputs, successful transactions, standard user behaviour, expected business flow.
 
-**2. Negative Test Cases** `[Mandatory]` — invalid inputs, empty mandatory fields, incorrect formats, unauthorized actions, invalid states, duplicate submissions, broken workflows, invalid transitions.
+**2. Negative Test Cases** `[Mandatory]` `[→ Validation / Error handling]` — invalid inputs, empty mandatory fields, incorrect formats, unauthorized actions, invalid states, duplicate submissions, broken workflows, invalid transitions.
 
-**3. Boundary Value Analysis** `[Mandatory when numeric/character/date limits exist]` — generate a dedicated test case for EACH: minimum value, minimum+1, maximum-1, maximum value, just outside limits, character limits, file size limits, numeric ranges, date ranges. Each boundary gets its own test case. Skip only if the feature has no input limits of any kind.
+**3. Boundary Value Analysis** `[Mandatory when numeric/character/date limits exist]` `[→ Validation]` — generate a dedicated test case for EACH: minimum value, minimum+1, maximum-1, maximum value, just outside limits, character limits, file size limits, numeric ranges, date ranges. Each boundary gets its own test case. Skip only if the feature has no input limits of any kind.
 
-**4. Edge Cases** `[Mandatory]` — double-click actions, browser refresh during save, back button behaviour, concurrent updates, session timeout, token expiry, multiple tabs, repeated API retries, partial failures, slow network/interruption, mid-transaction interruption, expired links, race conditions, simultaneous users.
+**4. Edge Cases** `[Mandatory]` `[→ Validation / State / workflow]` — double-click actions, browser refresh during save, back button behaviour, concurrent updates, session timeout, token expiry, multiple tabs, repeated API retries, partial failures, slow network/interruption, mid-transaction interruption, expired links, race conditions, simultaneous users.
 
-**5. Validation Testing** `[Mandatory when user input fields exist]` — field validations, mandatory checks, data formats, business rule enforcement, input sanitization, cross-field dependencies, dropdown validation, conditional fields, dynamic validations. Verify: correct validation message, trigger timing, and removal after correction. Skip only for features with no user-facing input.
+**5. Validation Testing** `[Mandatory when user input fields exist]` `[→ Validation]` — field validations, mandatory checks, data formats, business rule enforcement, input sanitization, cross-field dependencies, dropdown validation, conditional fields, dynamic validations. Verify: correct validation message, trigger timing, and removal after correction. Skip only for features with no user-facing input.
 
-**6. UI/UX Testing** `[Mandatory when a UI is involved; skip for API-only features]` — button enabled/disabled states, loader visibility, empty states, alignment, truncation, responsive layout, accessibility, tooltip behaviour, error message visibility, confirmation popups, keyboard navigation, tab order, focus handling.
+**6. UI/UX Testing** `[Mandatory when a UI is involved; skip for API-only features]` `[→ UI/UX]` — button enabled/disabled states, loader visibility, empty states, alignment, truncation, responsive layout, accessibility, tooltip behaviour, error message visibility, confirmation popups, keyboard navigation, tab order, focus handling.
 
-**7. API Testing** `[When applicable — only when APIs are involved]`:
+**7. API Testing** `[When applicable — only when APIs are involved]` `[→ Integration]`:
 - Request: headers, authorization, payload structure, mandatory fields, invalid payloads, null handling
 - Response: status codes, response schema, data correctness, error responses, field types, response time
 - Reliability: retry behaviour, idempotency, duplicate requests, timeout handling, rate limiting, token expiration
 - Integration: DB persistence, third-party sync, event generation, queue handling, webhook validation
 
-**8. Database Validation** `[When applicable — only when the feature reads from or writes to a database]` — correct DB insertion, update accuracy, duplicate prevention, data consistency, soft delete behaviour, audit logging, timestamp validation, rollback behaviour.
+**8. Database Validation** `[When applicable — only when the feature reads from or writes to a database]` `[→ Integration]` — correct DB insertion, update accuracy, duplicate prevention, data consistency, soft delete behaviour, audit logging, timestamp validation, rollback behaviour.
 
-**9. Security Testing** `[When applicable — ALWAYS include when the feature involves login, authentication, authorization, tokens, user data, file upload, payments, or sensitive information]`:
+**9. Security Testing** `[When applicable — ALWAYS include when the feature involves login, authentication, authorization, tokens, user data, file upload, payments, or sensitive information]` `[→ NFR]`:
 - SQL injection, XSS, token reuse, auth bypass, role bypass, forced browsing, session hijacking, privilege escalation, rate limiting, direct API access, sensitive data exposure.
 
-**10. Error Handling** `[Mandatory]` — API failures, server errors, timeout handling, retry mechanism, graceful failure, user-friendly messaging, logging behaviour, partial system failures.
+**10. Error Handling** `[Mandatory]` `[→ Error handling]` — API failures, server errors, timeout handling, retry mechanism, graceful failure, user-friendly messaging, logging behaviour, partial system failures.
 
-**11. Regression Impact Analysis** `[When applicable — only when related existing modules or shared components exist]` — identify related modules that may break. Generate regression test cases for existing flows, shared components, dependent services, common workflows, notifications, reporting, permissions, integrations.
+**11. Regression Impact Analysis** `[When applicable — only when related existing modules or shared components exist]` `[→ Regression / Smoke]` — identify related modules that may break. Generate regression test cases for existing flows, shared components, dependent services, common workflows, notifications, reporting, permissions, integrations.
 
-**12. Exploratory Testing Ideas** `[Mandatory]` — unexpected user actions, random navigation, rapid clicking, invalid sequence flows, cross-browser oddities, real production misuse patterns.
+**12. Exploratory Testing Ideas** `[Mandatory]` `[→ Validation / Error handling / State]` — unexpected user actions, random navigation, rapid clicking, invalid sequence flows, cross-browser oddities, real production misuse patterns.
 
 ### Step 3: Apply Risk-Based Prioritization
 
@@ -126,6 +126,8 @@ Generate ALL test cases in this exact column format:
 - **Test Data** — realistic values (email IDs, passwords, file sizes, dates, JSON payloads, API tokens, numeric values); never vague placeholders
 - **Test Steps** — numbered steps, one action per step, each beginning with a verb (Navigate, Enter, Click, Submit, Verify, Refresh, Reopen)
 - **Expected Result** — specific, verifiable, measurable; mention exact validation message, UI/API/DB behaviour, state changes; never use "works correctly" or "behaves as expected"
+
+This output maps onto **test-case-reviewer**'s controlled 11-column schema — see `references/category-mapping.md` for the type→category and column mappings. Run test-case-reviewer afterward to audit coverage against the controlled vocabulary and assign automation readiness.
 
 ### Step 5: Internal Quality Validation
 
@@ -193,3 +195,4 @@ python3 gen_test_cases.py
 - Generated test cases are immediately usable in Jira, Excel, TestRail, and Azure DevOps.
 - Use `python3` as the Python executable — works on macOS, Linux, and Windows.
 - openpyxl 3.1.5 is pre-installed — never add install checks or pip commands.
+- The `Type` and column mappings onto test-case-reviewer's controlled schema are documented in `references/category-mapping.md`; the controlled vocabulary itself lives in `test-case-reviewer/references/taxonomy.md`.
