@@ -8,13 +8,22 @@ Usage: python3 scripts/validate_skill.py skills/my-skill/SKILL.md
 import sys
 import re
 import os
+import json
 import yaml
 
-VALID_CATEGORIES = {
-    "qa-testing", "pre-deploy-safety", "business-sales", "engineering-practice",
-    "frontend-integration", "infra-security", "documents", "ai-agents", "data", "comms",
-    "hr-recruiting"
-}
+# Category taxonomy — single source of truth in scripts/categories.json
+# (shared with scripts/generate_index.py). Add a category there once. The
+# fallback keeps the validator working if the file is missing.
+_CATEGORIES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "categories.json")
+try:
+    with open(_CATEGORIES_PATH, encoding="utf-8") as _cf:
+        VALID_CATEGORIES = {c["slug"] for c in json.load(_cf)}
+except Exception:
+    VALID_CATEGORIES = {
+        "qa-testing", "pre-deploy-safety", "business-sales", "engineering-practice",
+        "frontend-integration", "infra-security", "documents", "ai-agents", "data",
+        "comms", "hr-recruiting",
+    }
 VALID_PRODUCTS = {"zysk", "tms", "zyniverse"}
 REQUIRED_SECTIONS = ["## When to use", "## Steps", "## Output"]
 

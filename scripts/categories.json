@@ -1,0 +1,13 @@
+[
+  { "slug": "qa-testing",           "label": "QA & Testing Automation",            "icon": "🧪" },
+  { "slug": "pre-deploy-safety",    "label": "Pre-Deployment & Release Safety",     "icon": "🛡️" },
+  { "slug": "business-sales",       "label": "Business & Sales Automation",         "icon": "💼" },
+  { "slug": "hr-recruiting",        "label": "HR & Recruiting",                     "icon": "🤝" },
+  { "slug": "engineering-practice", "label": "Engineering Practice & Decision Support", "icon": "🛠️" },
+  { "slug": "frontend-integration", "label": "Frontend & Backend Integration",      "icon": "🔌" },
+  { "slug": "infra-security",       "label": "Infrastructure, Ops & Security",       "icon": "🔐" },
+  { "slug": "documents",            "label": "Document Generation",                 "icon": "📄" },
+  { "slug": "data",                 "label": "Data, Analysis & Reporting",          "icon": "📊" },
+  { "slug": "ai-agents",            "label": "AI Agents & Prompts",                 "icon": "🤖" },
+  { "slug": "comms",                "label": "Communications & Content",            "icon": "💬" }
+]

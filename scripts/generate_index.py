@@ -2,8 +2,9 @@
 """
 Zyniverse Skills Registry — index.json generator.
 
-Scans skills/*/SKILL.md, parses YAML frontmatter, and rebuilds the
-`skills[]` array in index.json. Categories/groups metadata is preserved.
+Scans skills/*/SKILL.md, parses YAML frontmatter, and rebuilds the `skills[]`
+array plus the `categories[]` array (from scripts/categories.json, including only
+categories in use) in index.json. The `groups` metadata is preserved.
 
 Skips skills/_template/ and any SKILL.md with invalid/missing frontmatter
 (prints a warning rather than crashing — the PR-time validator is the gate).
@@ -28,19 +29,11 @@ GROUP_BY_MODEL_PREFIX = {
     "claude-sonnet": "sonnet",
     "claude-haiku":  "haiku",
 }
-CATEGORY_ICON = {
-    "qa-testing": "🧪",
-    "pre-deploy-safety": "🛡️",
-    "business-sales": "💼",
-    "engineering-practice": "🛠️",
-    "frontend-integration": "🔌",
-    "infra-security": "🔐",
-    "documents": "📄",
-    "ai-agents": "🤖",
-    "data": "📊",
-    "comms": "💬",
-    "hr-recruiting": "🤝",
-}
+# Single source of truth for the category taxonomy (slug -> label + icon),
+# shared with scripts/validate_skill.py. Add a category there once.
+CATEGORIES_PATH = ROOT / "scripts" / "categories.json"
+CANONICAL_CATEGORIES = json.loads(CATEGORIES_PATH.read_text(encoding="utf-8"))
+CATEGORY_ICON = {c["slug"]: c["icon"] for c in CANONICAL_CATEGORIES}
 
 
 def parse_frontmatter(path: Path):
@@ -119,23 +112,34 @@ def collect_skills():
     return entries
 
 
+def build_categories(skills):
+    """Derive index `categories[]` from the canonical list, including only
+    categories actually used by >= 1 skill — so a new category slug can never
+    silently orphan a skill, and unused categories don't render empty filters."""
+    used = {s["category"] for s in skills if s.get("category")}
+    return [c for c in CANONICAL_CATEGORIES if c["slug"] in used]
+
+
 def main():
     check_mode = "--check" in sys.argv
 
     index = json.loads(INDEX_PATH.read_text())
     new_skills = collect_skills()
+    new_categories = build_categories(new_skills)
     old_skills = index.get("skills", [])
+    old_categories = index.get("categories", [])
 
     if check_mode:
-        if old_skills != new_skills:
+        if old_skills != new_skills or old_categories != new_categories:
             print("❌ index.json is out of date. Run: python3 scripts/generate_index.py")
             sys.exit(1)
         print("✅ index.json is up to date.")
         return
 
     index["skills"] = new_skills
+    index["categories"] = new_categories
     INDEX_PATH.write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n")
-    print(f"✅ Wrote {len(new_skills)} skill(s) to index.json")
+    print(f"✅ Wrote {len(new_skills)} skill(s) and {len(new_categories)} categor(ies) to index.json")
 
 
 if __name__ == "__main__":
