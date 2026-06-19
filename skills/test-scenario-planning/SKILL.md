@@ -1,7 +1,7 @@
 ---
 name: test-scenario-planning
-description: Plan high-level test scenarios that describe user behaviors and business rules before writing test code.
-version: 1.0.1
+description: Plan high-level test scenarios that describe user behaviors and business rules before writing test code. Explores a live URL via Playwright for high-level scenarios (not detailed cases); for exhaustive cases from a written spec use test-case-generator; for automated test code use playwright-test-generation.
+version: 1.0.2
 author: Deepikaa Naganathan
 email: deepikaa.n@zysk.tech
 category: qa-testing
@@ -23,6 +23,7 @@ tested_with: claude-sonnet-4-6
 - Activate when: the user asks to plan, define, or write test scenarios for any feature or module
 - Activate when: the user says "write scenarios for X", "plan test scenarios for X", "what scenarios should I test for X", "create test plan for X"
 - Do NOT activate when: the user wants actual test code generated (use playwright-test-generation instead)
+- Do NOT activate when: the user wants exhaustive detailed test cases from a written spec (use test-case-generator instead)
 
 ## Prerequisites
 
