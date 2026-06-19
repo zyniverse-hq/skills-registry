@@ -1,7 +1,7 @@
 ---
 name: git-workflow
-description: Applies this user's git conventions for branches, commits, merges, pull requests, force-pushes, and release tags whenever Claude runs any git command.
-version: 2.0.0
+description: Applies this user's git conventions for branches, commits, merges, pull requests, force-pushes, and release tags whenever Claude runs any git command. For pre-push conflict detection before a push or PR, use safe-push-workflow.
+version: 2.0.1
 author: Arijit Saha
 email: arijit.saha@zysk.tech
 category: engineering-practice
