@@ -1,7 +1,7 @@
 ---
 name: razorpay-integration
 description: Integrate Razorpay payment gateway end-to-end. Activate when users mention Razorpay, payment gateway, checkout, order creation, payment verification, webhook handling, or switching to live keys.
-version: 1.0.0
+version: 1.1.0
 author: Tazeen Soudagar
 email: tazeen.soudagar@zysk.tech
 category: engineering-practice
@@ -15,7 +15,7 @@ product: zysk
 sprint: 1
 tested_with: claude-sonnet-4-6
 user-invocable: true
-allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, EnterPlanMode, ExitPlanMode, TaskCreate, TaskUpdate, TaskList]
+allowed-tools: Read Glob Grep Write Edit Bash AskUserQuestion EnterPlanMode ExitPlanMode TaskCreate TaskUpdate TaskList
 ---
 
 # Razorpay Payment Gateway Integration
@@ -237,31 +237,9 @@ After implementation is complete, provide:
 
 ## Context-Specific Adaptations
 
-### For Laravel Projects (like SRMS)
-- Use `razorpay/razorpay` composer package
-- Create FormRequest for validation
-- Use Jobs for async webhook processing
-- Create API Resources for responses
-- Follow existing auth patterns (Sanctum)
-- Add to existing routes in `routes/api.php`
-
-### For Next.js Projects
-- Use `razorpay` npm package (server-side in API routes)
-- Use React Hooks for checkout state management
-- API routes in `app/api/` or `pages/api/`
-- Use Server Actions (App Router) or API Routes (Pages Router)
-
-### For React SPA
-- Backend-agnostic frontend implementation
-- Use Axios/Fetch for API calls
-- Context API for order state management
-- React Router for navigation flow
-
-### For Express/Node.js
-- Use `razorpay` npm package
-- Middleware for signature validation
-- Express routes for endpoints
-- Use async/await for API calls
+Framework-specific integration notes (Laravel/Forge, Next.js, React SPA, Express/Node) live in
+`references/framework-adaptations.md`. Read it once the tech stack is detected in Phase 1 to
+tailor package choices, file locations, and patterns to the project.
 
 ## Important Conventions
 
