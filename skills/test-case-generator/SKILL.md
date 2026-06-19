@@ -1,7 +1,7 @@
 ---
 name: test-case-generator
-description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps.
-version: 1.1.0
+description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps. Works from written specs (no live UI); for high-level scenarios explored from a live URL, use test-scenario-planning.
+version: 1.1.1
 author: Ajay R
 email: ajay.r@zysk.tech
 category: qa-testing
@@ -27,6 +27,7 @@ tested_with: claude-sonnet-4-6
 - Activate when: the user says "create test cases for X", "give me QA scenarios for X", or "what should I test for X"
 - Activate when: the user needs test coverage for login, authentication, payments, integrations, or any enterprise feature
 - Do NOT activate when: the user only wants to *review* existing test cases (use test-case-reviewer instead)
+- Do NOT activate when: the user wants high-level scenarios explored from a live URL (use test-scenario-planning instead)
 - Do NOT activate when: the user is asking general QA methodology questions without a feature to test
 
 ## Prerequisites
