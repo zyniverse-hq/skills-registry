@@ -1,7 +1,7 @@
 ---
 name: test-case-generator
 description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps.
-version: 1.0.0
+version: 1.1.0
 author: Ajay R
 email: ajay.r@zysk.tech
 category: qa-testing
@@ -39,6 +39,19 @@ tested_with: claude-sonnet-4-6
 
 Execute all steps in order. Do not skip categories. Do not generate shallow or generic test cases.
 
+### Step 0: Input Completeness Check
+
+Before doing anything else, assess whether the input has enough detail to generate meaningful test cases.
+
+**If the input is vague** (e.g., "test the delete feature", "generate test cases for login" with no further detail), **stop and ask:**
+
+> "To generate complete test cases, I need a bit more detail:
+> 1. What are the acceptance criteria or expected behaviours?
+> 2. Are there any specific edge cases or constraints I should know about?
+> 3. Are there APIs, roles, or integrations involved?"
+
+Do not proceed to Step 1 until the user has provided sufficient detail. A feature description with at least 3 acceptance criteria points or a clear flow description is the minimum needed for meaningful coverage.
+
 ### Step 1: Analyse the Input
 
 Read the provided feature description, user story, or acceptance criteria. Identify:
@@ -53,34 +66,34 @@ Read the provided feature description, user story, or acceptance criteria. Ident
 
 For EVERY applicable category below, generate dedicated test cases. Never combine multiple validations into one test case.
 
-**1. Positive Test Cases** — happy path flows, valid inputs, successful transactions, standard user behaviour, expected business flow.
+**1. Positive Test Cases** `[Mandatory]` — happy path flows, valid inputs, successful transactions, standard user behaviour, expected business flow.
 
-**2. Negative Test Cases** — invalid inputs, empty mandatory fields, incorrect formats, unauthorized actions, invalid states, duplicate submissions, broken workflows, invalid transitions.
+**2. Negative Test Cases** `[Mandatory]` — invalid inputs, empty mandatory fields, incorrect formats, unauthorized actions, invalid states, duplicate submissions, broken workflows, invalid transitions.
 
-**3. Boundary Value Analysis** — generate a dedicated test case for EACH: minimum value, minimum+1, maximum-1, maximum value, just outside limits, character limits, file size limits, numeric ranges, date ranges. Each boundary gets its own test case.
+**3. Boundary Value Analysis** `[Mandatory when numeric/character/date limits exist]` — generate a dedicated test case for EACH: minimum value, minimum+1, maximum-1, maximum value, just outside limits, character limits, file size limits, numeric ranges, date ranges. Each boundary gets its own test case. Skip only if the feature has no input limits of any kind.
 
-**4. Edge Cases** — double-click actions, browser refresh during save, back button behaviour, concurrent updates, session timeout, token expiry, multiple tabs, repeated API retries, partial failures, slow network/interruption, mid-transaction interruption, expired links, race conditions, simultaneous users.
+**4. Edge Cases** `[Mandatory]` — double-click actions, browser refresh during save, back button behaviour, concurrent updates, session timeout, token expiry, multiple tabs, repeated API retries, partial failures, slow network/interruption, mid-transaction interruption, expired links, race conditions, simultaneous users.
 
-**5. Validation Testing** — field validations, mandatory checks, data formats, business rule enforcement, input sanitization, cross-field dependencies, dropdown validation, conditional fields, dynamic validations. Verify: correct validation message, trigger timing, and removal after correction.
+**5. Validation Testing** `[Mandatory when user input fields exist]` — field validations, mandatory checks, data formats, business rule enforcement, input sanitization, cross-field dependencies, dropdown validation, conditional fields, dynamic validations. Verify: correct validation message, trigger timing, and removal after correction. Skip only for features with no user-facing input.
 
-**6. UI/UX Testing** — button enabled/disabled states, loader visibility, empty states, alignment, truncation, responsive layout, accessibility, tooltip behaviour, error message visibility, confirmation popups, keyboard navigation, tab order, focus handling.
+**6. UI/UX Testing** `[Mandatory when a UI is involved; skip for API-only features]` — button enabled/disabled states, loader visibility, empty states, alignment, truncation, responsive layout, accessibility, tooltip behaviour, error message visibility, confirmation popups, keyboard navigation, tab order, focus handling.
 
-**7. API Testing** (when APIs are involved):
+**7. API Testing** `[When applicable — only when APIs are involved]`:
 - Request: headers, authorization, payload structure, mandatory fields, invalid payloads, null handling
 - Response: status codes, response schema, data correctness, error responses, field types, response time
 - Reliability: retry behaviour, idempotency, duplicate requests, timeout handling, rate limiting, token expiration
 - Integration: DB persistence, third-party sync, event generation, queue handling, webhook validation
 
-**8. Database Validation** — correct DB insertion, update accuracy, duplicate prevention, data consistency, soft delete behaviour, audit logging, timestamp validation, rollback behaviour.
+**8. Database Validation** `[When applicable — only when the feature reads from or writes to a database]` — correct DB insertion, update accuracy, duplicate prevention, data consistency, soft delete behaviour, audit logging, timestamp validation, rollback behaviour.
 
-**9. Security Testing** (ALWAYS include when the feature involves login, authentication, authorization, tokens, user data, file upload, payments, or sensitive information):
+**9. Security Testing** `[When applicable — ALWAYS include when the feature involves login, authentication, authorization, tokens, user data, file upload, payments, or sensitive information]`:
 - SQL injection, XSS, token reuse, auth bypass, role bypass, forced browsing, session hijacking, privilege escalation, rate limiting, direct API access, sensitive data exposure.
 
-**10. Error Handling** — API failures, server errors, timeout handling, retry mechanism, graceful failure, user-friendly messaging, logging behaviour, partial system failures.
+**10. Error Handling** `[Mandatory]` — API failures, server errors, timeout handling, retry mechanism, graceful failure, user-friendly messaging, logging behaviour, partial system failures.
 
-**11. Regression Impact Analysis** — identify related modules that may break. Generate regression test cases for existing flows, shared components, dependent services, common workflows, notifications, reporting, permissions, integrations.
+**11. Regression Impact Analysis** `[When applicable — only when related existing modules or shared components exist]` — identify related modules that may break. Generate regression test cases for existing flows, shared components, dependent services, common workflows, notifications, reporting, permissions, integrations.
 
-**12. Exploratory Testing Ideas** — unexpected user actions, random navigation, rapid clicking, invalid sequence flows, cross-browser oddities, real production misuse patterns.
+**12. Exploratory Testing Ideas** `[Mandatory]` — unexpected user actions, random navigation, rapid clicking, invalid sequence flows, cross-browser oddities, real production misuse patterns.
 
 ### Step 3: Apply Risk-Based Prioritization
 
@@ -143,7 +156,18 @@ Excel requirements:
 
 File naming format: `Test_Cases_<Sanitized_Feature_Name>.xlsx` (spaces → underscores, special characters removed).
 
-Execute: `py "<absolute_path>/gen_test_cases.py"`
+The script must create the output directory before saving. Include this at the top of the script:
+
+```python
+import os
+os.makedirs('Testcases', exist_ok=True)
+```
+
+Save the script as `gen_test_cases.py` in the current working directory and execute it from the same directory:
+
+```bash
+python3 gen_test_cases.py
+```
 
 ## Output
 
@@ -166,5 +190,5 @@ Execute: `py "<absolute_path>/gen_test_cases.py"`
 - Each boundary value gets its own test case — never bundle min/max into one row.
 - Security test cases are mandatory when the feature involves auth, tokens, payments, or user data.
 - Generated test cases are immediately usable in Jira, Excel, TestRail, and Azure DevOps.
-- Use `py` as the Python executable — never `python`, `python3`, or a full path.
+- Use `python3` as the Python executable — works on macOS, Linux, and Windows.
 - openpyxl 3.1.5 is pre-installed — never add install checks or pip commands.
