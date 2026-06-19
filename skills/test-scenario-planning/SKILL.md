@@ -10,7 +10,6 @@ tags:
   - test-strategy
   - qa
   - requirements
-product: zysk
 sprint: 1
 tested_with: claude-sonnet-4-6
 ---
