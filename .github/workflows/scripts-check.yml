@@ -1,0 +1,55 @@
+name: Scripts Check
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**/scripts/**'
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**/scripts/**'
+
+permissions:
+  contents: read
+
+# Compile-check every bundled skill script on Linux AND Windows, so syntax
+# errors and platform-specific breakage (e.g. encoding) fail in CI rather than
+# in a user's environment. (Functional smoke-testing of scripts is separate.)
+jobs:
+  compile:
+    name: Compile bundled scripts (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compile Python scripts
+        shell: bash
+        run: |
+          shopt -s nullglob
+          files=(skills/*/scripts/*.py)
+          if [ ${#files[@]} -eq 0 ]; then echo "No Python scripts to compile."; exit 0; fi
+          PYTHONUTF8=1 python -B -m py_compile "${files[@]}"
+          echo "Compiled ${#files[@]} Python script(s)."
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check JavaScript scripts
+        shell: bash
+        run: |
+          shopt -s nullglob
+          files=(skills/*/scripts/*.js)
+          if [ ${#files[@]} -eq 0 ]; then echo "No JS scripts to check."; exit 0; fi
+          for f in "${files[@]}"; do node --check "$f" && echo "ok: $f"; done

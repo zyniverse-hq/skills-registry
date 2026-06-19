@@ -37,7 +37,7 @@ def review(reviewer, skill, out, instr=None):
     cmd = [sys.executable, str(reviewer), str(skill), "--json", str(out)]
     if instr:
         cmd += ["--instruction-findings", str(instr)]
-    subprocess.run(cmd, capture_output=True, text=True)
+    subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
     if not Path(out).exists():
         raise SystemExit("Re-review failed to produce JSON.")
     return json.loads(Path(out).read_text())
@@ -52,6 +52,10 @@ def is_instruction(f):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     ap = argparse.ArgumentParser(description="Verify a fix pass did not regress a skill.")
     ap.add_argument("--before", required=True, help="pre-fix review JSON")
     ap.add_argument("--skill", required=True)
