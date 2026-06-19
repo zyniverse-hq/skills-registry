@@ -7,17 +7,729 @@
   "description": "Curated registry of production-grade agent skills by Zyni Innovations.",
   "plugins": [
     {
-      "name": "all-skills",
-      "source": "./",
-      "description": "Every skill in the Zyniverse registry, auto-discovered from skills/.",
+      "name": "auto-merge",
+      "source": "./skills/auto-merge",
+      "description": "One-shot drain of an auto-ship PR queue. Re-checks each PR's CI + merge state + review decision, squash-merges what's MERGEABLE + APPROVED + clean of unaddressed comments, and reports per-entry verdict. No scheduler.",
+      "version": "1.1.0",
       "author": {
-        "name": "Zyni Innovations Pvt. Ltd.",
+        "name": "Varun U",
         "email": "varun@zysk.tech"
       },
-      "homepage": "https://github.com/zyniverse-hq/skills-registry",
-      "repository": "https://github.com/zyniverse-hq/skills-registry",
       "license": "Apache-2.0",
-      "keywords": ["skills", "agent-skills", "claude", "automation"]
+      "category": "engineering-practice",
+      "keywords": [
+        "github-pr",
+        "merge",
+        "automation",
+        "workflow",
+        "queue"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/auto-merge",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "auto-ship",
+      "source": "./skills/auto-ship",
+      "description": "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open. Includes project config block and preflight checks so it works for any team. Built on ship-issue, which it runs per issue; for a single issue with interactive checkpoints, use ship-issue instead.",
+      "version": "2.0.1",
+      "author": {
+        "name": "Varun U",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "github-issues",
+        "autonomous",
+        "pr-creation",
+        "project-board",
+        "workflow"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/auto-ship",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "backlog-burn-down",
+      "source": "./skills/backlog-burn-down",
+      "description": "Scans a GitHub Projects v2 Todo column, stale-checks and classifies issues, then assigns each to a developer with a board move and comment. Use to plan a sprint or pick the team's next work. To first promote Backlog items into Todo, use triage-issues.",
+      "version": "1.2.1",
+      "author": {
+        "name": "Varun U",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "project-board",
+        "github",
+        "planning",
+        "triage",
+        "team-management"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/backlog-burn-down",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "cloud-infra-planner",
+      "source": "./skills/cloud-infra-planner",
+      "description": "Plan cloud infrastructure, size servers, recommend hosting, and estimate costs for any tech stack or cloud provider, then produce ready-to-use Terraform + Ansible, an architecture diagram, and a client report. Use whenever a user asks to \"plan infra for\", \"what servers do we need\", \"estimate cloud costs\", \"plan deployment for\", \"DigitalOcean / AWS sizing\", \"infra for Laravel / Next.js / Node / NestJS\", \"terraform for\", \"provision servers\", or any variation — even if they never say \"infrastructure\" or \"cloud\" but are asking how to host, provision, or run a project in production.\n",
+      "version": "1.0.0",
+      "author": {
+        "name": "Nagendra K V",
+        "email": "nagendra.kv@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "infra-security",
+      "keywords": [
+        "infrastructure",
+        "terraform",
+        "ansible",
+        "cost-estimation",
+        "deployment"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/cloud-infra-planner",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "daily-status",
+      "source": "./skills/daily-status",
+      "description": "Generate the end-of-day client status report by scanning today's git commits, uncommitted changes, and GitHub PRs, then interviewing the user to classify each item. Use whenever the user asks for their daily status, EOD report, or client update — or types /daily-status.",
+      "version": "1.3.0",
+      "author": {
+        "name": "Shilpa VP",
+        "email": "shilpa@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "comms",
+      "keywords": [
+        "daily-status",
+        "eod-report",
+        "git",
+        "github",
+        "reporting"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/daily-status",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "decision-brief",
+      "source": "./skills/decision-brief",
+      "description": "Produces a lightweight decision record (lighter than an ADR) before implementing ambiguous work — scoping features, evaluating design options, or deciding an approach before writing code.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Varun U",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "decision-record",
+        "scoping",
+        "planning",
+        "adr",
+        "github-issues"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/decision-brief",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "deploy-shield",
+      "source": "./skills/deploy-shield",
+      "description": "Audits a codebase branch or diff for production risks, deployment safety, and engineering hygiene before a release. Use when a developer wants to know if code is safe to deploy, assess blast radius, check rollback safety, audit dependencies, or get a pre-release risk report — even if they don't use the word \"deployment\".",
+      "version": "1.0.0",
+      "author": {
+        "name": "Akash R",
+        "email": "akash.r@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "pre-deploy-safety",
+      "keywords": [
+        "deployment",
+        "code-review",
+        "production-safety",
+        "risk-audit"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/deploy-shield",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "edd",
+      "source": "./skills/edd",
+      "description": "INVOKE THIS SKILL whenever the user is about to start a new feature, refactor existing code, change a prompt, modify an agent/node, or otherwise alter behavior whose quality is hard to assert with a binary unit test. EDD (Evaluation-Driven Development) is the eval-first counterpart to TDD: define success criteria and evaluators BEFORE writing code, baseline the current behavior, then iterate against measurable scores. Triggers on phrases like 'building X', 'refactoring Y', 'improving the prompt for Z', 'new node', 'new feature', 'how should I approach this', 'starting work on…', 'change the LLM behavior'. Use even when the user doesn't say 'eval' — their LLM-shaped work almost certainly needs this. The skill starts with a triage step to decide whether EDD actually applies (deterministic glue code often doesn't), then guides the user through plan → dataset → evaluators → baseline → implement → iterate.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Sharath S Rao",
+        "email": "sharath.rao@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "eval",
+        "tdd",
+        "llm-evaluation",
+        "development-practice"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/edd",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "expo-build-and-sdk-upgrade-checker",
+      "source": "./skills/expo-build-and-sdk-upgrade-checker",
+      "description": "Analyzes Expo Managed Workflow projects for build failures, dependency mismatches, EAS configuration problems, and SDK upgrade risks — generates a prioritized health report with exact fix commands.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Om Chavan",
+        "email": "om.chavan@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "pre-deploy-safety",
+      "keywords": [
+        "expo",
+        "react-native",
+        "eas-build",
+        "sdk-upgrade",
+        "dependency-health"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/expo-build-and-sdk-upgrade-checker",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "git-workflow",
+      "source": "./skills/git-workflow",
+      "description": "Applies this user's git conventions for branches, commits, merges, pull requests, force-pushes, and release tags whenever Claude runs any git command. For pre-push conflict detection before a push or PR, use safe-push-workflow.",
+      "version": "2.0.1",
+      "author": {
+        "name": "Arijit Saha",
+        "email": "arijit.saha@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "git",
+        "version-control",
+        "commits",
+        "branching",
+        "pull-requests"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/git-workflow",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "handle-review",
+      "source": "./skills/handle-review",
+      "description": "Triages PR review comments (human or bot), classifies each as valid/invalid/needs-human, fixes what's valid in one batch, replies with evidence for the rest, and pushes once.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Varun U",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "pr-review",
+        "code-review",
+        "github",
+        "triage",
+        "workflow"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/handle-review",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "hr-resume-screener",
+      "source": "./skills/hr-resume-screener",
+      "description": "For recruiters and HR. Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict (displayed with emoji indicators) with requirement match, strengths, gaps, salary check, and an Excel-ready summary row. Use when you have both a job description and a candidate resume to evaluate. Trigger on phrases like \"screen this resume against the JD,\" \"is this candidate a fit for this role,\" or \"compare this profile to the job requirements.\"",
+      "version": "1.1.1",
+      "author": {
+        "name": "Deepak Padmanabha",
+        "email": "deepak@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "hr-recruiting",
+      "keywords": [
+        "hr",
+        "resume",
+        "screening",
+        "jd-matching",
+        "recruitment"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/hr-resume-screener",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "img-prompt-gen",
+      "source": "./skills/img-prompt-gen",
+      "description": "Structures a raw image idea into a clean, field-based prompt optimized for GPT Image 2, adding only safe recommendations without changing the user's intent.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Arijit Saha",
+        "email": "arijit.saha@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "ai-agents",
+      "keywords": [
+        "prompt-engineering",
+        "image-generation",
+        "gpt-image-2",
+        "creative"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/img-prompt-gen",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "instagram-carousel",
+      "source": "./skills/instagram-carousel",
+      "description": "Generates a self-contained, swipeable HTML Instagram carousel with export-ready 1080x1350px slides, deriving brand colors, typography, and slide layout.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Arijit Saha",
+        "email": "arijit.saha@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "comms",
+      "keywords": [
+        "instagram",
+        "carousel",
+        "social-media",
+        "marketing",
+        "design"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/instagram-carousel",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "integratekit",
+      "source": "./skills/integratekit",
+      "description": "Use this skill to find and wire up backend GraphQL APIs into frontend components. Scans for unwired actions, discovers matching APIs, and integrates after confirmation.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Vishak Gowda",
+        "email": "vishak@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "frontend-integration",
+      "keywords": [
+        "graphql",
+        "apollo",
+        "api-integration",
+        "frontend"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/integratekit",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "investor-deck-builder",
+      "source": "./skills/investor-deck-builder",
+      "description": "Generate a tailored, branded investor pitch deck PDF for a specific investor or program, with audience-selected slides and content driven entirely from a single facts file — no numbers hardcoded.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Sarang T S",
+        "email": "sarang@testmyskills.ai"
+      },
+      "license": "Apache-2.0",
+      "category": "business-sales",
+      "keywords": [
+        "pitch-deck",
+        "fundraising",
+        "investor-relations",
+        "pdf-generation",
+        "reportlab"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/investor-deck-builder",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "investor-form-filler",
+      "source": "./skills/investor-form-filler",
+      "description": "Fill investor application forms (VC, accelerator, grant) from a single facts file, tuned per investor type, with sensitive financials kept behind an explicit gate.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Sarang T S",
+        "email": "sarang@testmyskills.ai"
+      },
+      "license": "Apache-2.0",
+      "category": "business-sales",
+      "keywords": [
+        "investor-forms",
+        "fundraising",
+        "applications",
+        "sales-automation",
+        "pre-seed"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/investor-form-filler",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "playwright-test-generation",
+      "source": "./skills/playwright-test-generation",
+      "description": "Generate structured Playwright E2E tests by exploring the live UI first, then producing helpers, spec files, and a summary report.",
+      "version": "1.0.1",
+      "author": {
+        "name": "Deepikaa Naganathan",
+        "email": "deepikaa.n@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "qa-testing",
+      "keywords": [
+        "playwright",
+        "e2e-testing",
+        "test-generation",
+        "automation"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/playwright-test-generation",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "qa-handoff",
+      "source": "./skills/qa-handoff",
+      "description": "Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to \"Ready for QA\" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — \"QA handoff\", \"notify QA about this PR\", \"send QA test plan\", \"tell QA to test PR",
+      "version": "1.1.0",
+      "author": {
+        "name": "Rajashekhar V",
+        "email": "rajashekhar.v@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "qa-testing",
+      "keywords": [
+        "qa",
+        "testing",
+        "github-issues",
+        "handoff",
+        "test-plan"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/qa-handoff",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "razorpay-integration",
+      "source": "./skills/razorpay-integration",
+      "description": "Integrate Razorpay payment gateway end-to-end. Activate when users mention Razorpay, payment gateway, checkout, order creation, payment verification, webhook handling, or switching to live keys.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Tazeen Soudagar",
+        "email": "tazeen.soudagar@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "razorpay",
+        "payment-gateway",
+        "payments",
+        "checkout",
+        "webhooks"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/razorpay-integration",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "resume-hiring-manager",
+      "source": "./skills/resume-hiring-manager",
+      "description": "Runs a realistic, scored mock interview as the hiring manager for the user's target role. Trigger this skill whenever the user mentions interview prep, wants to practice answering questions, has an upcoming interview, wants to know if they are ready, asks for mock interview questions, or says anything like \"prep me for my interview\", \"quiz me\", \"interview me\", \"I have an interview on Friday\", \"help me practice\", \"am I hireable\", or \"what questions should I expect\". Asks hard technical and behavioural questions one at a time, tailored to the user's actual resume, scores every answer out of 10 with corrective feedback, and ends with a hireability score out of 100, a breakdown of the weakest answers, and a structured study plan.",
+      "version": "2.0.0",
+      "author": {
+        "name": "Arijit Saha",
+        "email": "arijit.saha@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "hr-recruiting",
+      "keywords": [
+        "resume",
+        "interview",
+        "mock-interview",
+        "career",
+        "hiring"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/resume-hiring-manager",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "resume-recruiter",
+      "source": "./skills/resume-recruiter",
+      "description": "For job-seekers. Acts as a senior recruiter to surface the top keywords for a target role, flag which are missing from the resume, name trending skills, and list buzzwords to cut.",
+      "version": "1.0.1",
+      "author": {
+        "name": "Arijit Saha",
+        "email": "arijit.saha@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "hr-recruiting",
+      "keywords": [
+        "resume",
+        "recruiter",
+        "keywords",
+        "career",
+        "ats"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/resume-recruiter",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "review-queue",
+      "source": "./skills/review-queue",
+      "description": "Read-only digest of open PRs where you're a requested reviewer. Classifies each by readiness (ready-to-approve / needs your attention / waiting / stale) with one-line factual summaries, and stops — never approves, never comments. Use whenever the user asks what PRs are waiting on them, wants to triage their review queue, or says 'show me my reviews'.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Varun U",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "github-pr",
+        "code-review",
+        "triage",
+        "workflow",
+        "digest"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/review-queue",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "safe-push-workflow",
+      "source": "./skills/safe-push-workflow",
+      "description": "Detects git conflicts before pushing a feature branch to any target branch by fetching remote state and diffing divergent changes. Use when the user asks to push code, push to qa/uat/main/staging, send a branch to remote, or create a PR. For branch, commit, and PR conventions, use git-workflow.",
+      "version": "1.1.1",
+      "author": {
+        "name": "Ananth Raj L",
+        "email": "ananth@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "pre-deploy-safety",
+      "keywords": [
+        "git",
+        "push-safety",
+        "conflict-detection",
+        "pull-request"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/safe-push-workflow",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "ship-issue",
+      "source": "./skills/ship-issue",
+      "description": "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline. Includes preflight dependency validation and automatic stack detection for language-appropriate best practices. Use for one issue at a time with interactive checkpoints; for autonomous batch shipping across many issues, use auto-ship.",
+      "version": "2.0.1",
+      "author": {
+        "name": "Varun U",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "github-issues",
+        "workflow",
+        "pr-creation",
+        "code-review",
+        "tdd"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/ship-issue",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "skill-fixer",
+      "source": "./skills/skill-fixer",
+      "description": "Fix the findings in a skill-reviewer report by editing the reviewed skill on a new git branch. Use this whenever someone wants to remediate, fix, address, or resolve the issues a skill review surfaced, or asks to \"apply the fixes from the report\" / \"clean up this skill based on the review\". Takes the JSON report from skill-reviewer's review_skill.py plus the skill folder. It applies safe deterministic fixes automatically, drafts fixes for judgement items, and flags anything unsafe to auto-fix (hardcoded secrets, confirmed-malicious code) for the user. Trigger after a skill has been reviewed and the findings need fixing.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Vikas M",
+        "email": "vikas.m@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "fix",
+        "remediation",
+        "skill-improvement",
+        "refactoring",
+        "automation"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/skill-fixer",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "skill-reviewer",
+      "source": "./skills/skill-reviewer",
+      "description": "Review, audit, or quality-check an Anthropic Agent Skill (a SKILL.md folder) and produce a detailed review report. Use this whenever someone asks to review, audit, evaluate, vet, grade, or QA a skill, check whether a SKILL.md is well-formed or upload-ready, assess a skill's triggering, description, or instruction quality (whether its prompts are clear, complete, and internally consistent), or security-review a skill before sharing or installing it. Use it even when the person just points at a skill folder and asks \"is this good?\" or \"what's wrong with this skill?\". Trigger when a path to a skill directory or a SKILL.md file is provided for review.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Vikas M",
+        "email": "vikas.m@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "review",
+        "quality-assurance",
+        "skill-audit",
+        "linting",
+        "validation"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/skill-reviewer",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "tech-mentor",
+      "source": "./skills/tech-mentor",
+      "description": "Researches industry patterns for engineering decisions. Use when evaluating architecture choices, comparing approaches, or understanding what companies do before building something.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Vishnu BV",
+        "email": "vishnu@testmyskills.ai"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "architecture",
+        "research",
+        "decision-support",
+        "industry-patterns"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/tech-mentor",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "test-case-generator",
+      "source": "./skills/test-case-generator",
+      "description": "Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps. Works from written specs (no live UI); for high-level scenarios explored from a live URL, use test-scenario-planning. After generating, audit coverage with test-case-reviewer.",
+      "version": "1.2.0",
+      "author": {
+        "name": "Ajay R",
+        "email": "ajay.r@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "qa-testing",
+      "keywords": [
+        "test-case-generation",
+        "qa-coverage",
+        "manual-testing",
+        "api-testing",
+        "security-testing"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/test-case-generator",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "test-case-reviewer",
+      "source": "./skills/test-case-reviewer",
+      "description": "This skill should be used when the user asks to \"review test cases\", \"review existing test cases against feature specs\", \"check test case quality\", \"validate test case coverage\", \"review test cases against requirements\", \"check for missing test scenarios\", \"review test case format\", \"verify test case completeness\", \"check automation readiness\", or needs quality review, coverage analysis, spec traceability, or format validation of any test case suite. Supports reviewing against one or more feature specification or requirement files. To generate new test cases from a spec, use test-case-generator.",
+      "version": "1.0.1",
+      "author": {
+        "name": "Rachayya Choukimath",
+        "email": "rachayya.choukimath@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "qa-testing",
+      "keywords": [
+        "test-case-review",
+        "coverage-analysis",
+        "qa-automation",
+        "spec-traceability",
+        "excel-report"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/test-case-reviewer",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "test-scenario-planning",
+      "source": "./skills/test-scenario-planning",
+      "description": "Plan high-level test scenarios that describe user behaviors and business rules before writing test code. Explores a live URL via Playwright for high-level scenarios (not detailed cases); for exhaustive cases from a written spec use test-case-generator; for automated test code use playwright-test-generation.",
+      "version": "1.0.2",
+      "author": {
+        "name": "Deepikaa Naganathan",
+        "email": "deepikaa.n@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "qa-testing",
+      "keywords": [
+        "scenario-planning",
+        "test-strategy",
+        "qa",
+        "requirements"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/test-scenario-planning",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "triage-issues",
+      "source": "./skills/triage-issues",
+      "description": "Promotes Backlog issues to Todo on a GitHub Projects v2 board — derives Priority/Area/Module from labels + title heuristics, flags missing labels and suspected duplicates, requires user approval before mutations. To assign Todo issues to developers for a sprint, use backlog-burn-down.",
+      "version": "2.0.0",
+      "author": {
+        "name": "Varun U",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "project-board",
+        "github",
+        "triage",
+        "graphql",
+        "workflow"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/triage-issues",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "ui-consistency",
+      "source": "./skills/ui-consistency",
+      "description": "Use when asked for any frontend UI change — modals, forms, buttons, tables, layouts, colors, or spacing. Runs pattern inspection before writing code; never skip for small changes.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Ruthu Bahubali Jain",
+        "email": "ruthu.jain@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "engineering-practice",
+      "keywords": [
+        "frontend",
+        "ui",
+        "css",
+        "components",
+        "consistency"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/ui-consistency",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "wp-maintenance-conductor",
+      "source": "./skills/wp-maintenance-conductor",
+      "description": "Run a full WordPress maintenance session — pre-flight, backup, tiered updates, security, performance, and final backup with safety gates at every phase. Use for WP maintenance or site health checks.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Stalin Marbhenn",
+        "email": "stalin.marbhenn@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "category": "infra-security",
+      "keywords": [
+        "wordpress",
+        "maintenance",
+        "updates",
+        "security",
+        "backup"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/wp-maintenance-conductor",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "x-twitter-scraper",
+      "source": "./skills/x-twitter-scraper",
+      "description": "Use Xquik to search, inspect, monitor, and export X/Twitter data through its REST API or remote MCP server.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Xquik"
+      },
+      "license": "Apache-2.0",
+      "category": "data",
+      "keywords": [
+        "x-twitter",
+        "mcp",
+        "data-extraction",
+        "social-monitoring"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/x-twitter-scraper",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
     }
   ]
 }

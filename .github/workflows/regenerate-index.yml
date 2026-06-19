@@ -48,11 +48,11 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             python3 scripts/generate_index.py
-            if git diff --quiet index.json; then
-              echo "index.json already up to date — nothing to commit."; exit 0
+            if git diff --quiet index.json .claude-plugin/marketplace.json; then
+              echo "index.json and marketplace.json already up to date — nothing to commit."; exit 0
             fi
-            git add index.json
-            git commit -m "chore: regenerate index.json from skills/"
+            git add index.json .claude-plugin/marketplace.json
+            git commit -m "chore: regenerate index.json and marketplace.json from skills/"
             if git push origin HEAD:main; then echo "pushed (attempt $attempt)"; exit 0; fi
             echo "main moved; retrying ($attempt)"; sleep $((RANDOM % 5 + 2))
           done
