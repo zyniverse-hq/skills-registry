@@ -47,10 +47,10 @@ git merge upstream/main
 
 ### 5. Create a branch
 
-Branch names must follow `skill/<skill-name>`:
+Any descriptive branch name works — there's no naming rule:
 
 ```bash
-git checkout -b skill/your-skill-name
+git checkout -b add-your-skill-name
 ```
 
 ### 6. Add your skill
@@ -66,14 +66,14 @@ cp -r skills/_template skills/your-skill-name
 python3 scripts/validate_skill.py skills/your-skill-name/SKILL.md
 ```
 
-Fix any errors before pushing. Warnings are advisory.
+Fix any errors before pushing. Warnings are advisory. (On Windows, prefix with `PYTHONUTF8=1`.)
 
 ### 8. Commit and push to your fork
 
 ```bash
 git add skills/your-skill-name/
-git commit -m "feat(skill): add your-skill-name"
-git push origin skill/your-skill-name
+git commit -m "feat(skill): add your-skill-name"   # Conventional Commits
+git push origin add-your-skill-name
 ```
 
 ### 9. Open a Pull Request
@@ -82,7 +82,7 @@ Go to **[github.com/zyniverse-hq/skills-registry/pulls](https://github.com/zyniv
 
 Select:
 - **base repository:** `zyniverse-hq/skills-registry` / `main`
-- **head repository:** `<your-username>/skills-registry` / `skill/your-skill-name`
+- **head repository:** `<your-username>/skills-registry` / `add-your-skill-name`
 
 The PR template will appear. Fill it in and submit.
 
@@ -90,12 +90,13 @@ The PR template will appear. Fill it in and submit.
 
 ## SKILL.md Standard
 
-Every skill is a single folder containing one file:
+Every skill is a folder with a `SKILL.md`, plus optional bundled resources:
 
 ```
 skills/
 └── your-skill-name/
-    └── SKILL.md
+    ├── SKILL.md
+    └── scripts/ · references/ · assets/   # optional
 ```
 
 ### Required frontmatter fields
@@ -199,11 +200,11 @@ metadata:
 
 ## PR rules
 
-- **One skill per PR.** Don't bundle multiple skills — open separate PRs.
-- **Branch must be `skill/<skill-name>`.** CI rejects other patterns.
-- **CI must pass** before requesting review.
-- **Folder name, `name` frontmatter, and branch suffix must all match.**
-- **Don't modify other people's skills** in your PR — open a separate PR for fixes to existing skills.
+- **CI must pass** before requesting review — `validate_skill.py` on each changed skill plus a cross-platform compile of any bundled scripts.
+- **The folder name and the `name` frontmatter must match exactly.**
+- **Use [Conventional Commits](https://www.conventionalcommits.org/)** (`feat:`, `fix:`, `docs:`, `chore:`, …).
+- Multi-skill and cross-cutting PRs are fine — just keep each PR cohesive and reviewable.
+- **Don't hand-edit `index.json` or `.claude-plugin/marketplace.json`** — they're generated from the skills.
 
 ---
 
@@ -219,16 +220,14 @@ metadata:
 
 ## Installing skills from this registry
 
-```bash
-# Install all skills
-npx skills add zyniverse-hq/skills-registry
+The registry is a Claude Code plugin marketplace — add it once, then install skills individually:
 
-# Install a specific skill
-npx skills add zyniverse-hq/skills-registry --skill your-skill-name
-
-# Install to Claude Code globally
-npx skills add zyniverse-hq/skills-registry -g -a claude-code -y
 ```
+/plugin marketplace add zyniverse-hq/skills-registry
+/plugin install <skill-name>@zyniverse-skills
+```
+
+See the [README](README.md#install) for details.
 
 ---
 
