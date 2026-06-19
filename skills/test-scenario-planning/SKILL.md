@@ -10,7 +10,6 @@ tags:
   - test-strategy
   - qa
   - requirements
-product: zysk | tms | zyni
 sprint: 1
 tested_with: claude-sonnet-4-6
 ---
