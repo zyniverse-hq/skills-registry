@@ -1,10 +1,10 @@
 ---
 name: hr-resume-screener
-description: Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict with requirement match, strengths, gaps, salary check, and an Excel-ready summary row.
-version: 1.0.0
+description: Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict (displayed with emoji indicators) with requirement match, strengths, gaps, salary check, and an Excel-ready summary row. Use when you have both a job description and a candidate resume to evaluate. Trigger on phrases like "screen this resume against the JD," "is this candidate a fit for this role," or "compare this profile to the job requirements."
+version: 1.1.0
 author: Deepak Padmanabha
 email: deepak@zysk.tech
-category: business-sales
+category: hr-recruiting
 tags:
   - hr
   - resume
@@ -43,7 +43,9 @@ If the JD is missing, ask:
 If the resume is missing, ask:
 > "Please share the candidate's resume — you can upload the file or paste the text."
 
-If both are present, proceed immediately. Do not ask any further questions.
+If a file cannot be read (corrupted, unsupported format, or unreadable), inform the user immediately and ask them to provide the document as pasted text or in a supported format.
+
+If both are present and readable, proceed immediately. Do not ask any further questions.
 
 ### Step 1: Extract from the JD
 
@@ -91,9 +93,9 @@ For each Must-Have requirement from the JD, mark:
 
 | Situation | Verdict |
 |---|---|
-| All or nearly all Must-Haves are ✅ | **FIT** |
-| Most Must-Haves ✅ but 1–2 are ⚠️ | **PARTIAL FIT** |
-| 2 or more Must-Haves are ❌ | **NOT A FIT** |
+| At least 80% of Must-Haves are ✅ (e.g., 4 out of 5, or 8 out of 10) | **FIT** |
+| Most Must-Haves ✅ but 1–2 are ⚠️ (60-79% are ✅) | **PARTIAL FIT** |
+| 2 or more Must-Haves are ❌ (less than 60% are ✅) | **NOT A FIT** |
 | Any single critical Must-Have is ❌ (e.g. mandatory cert, minimum years) | **NOT A FIT** regardless of other scores |
 
 ### Step 4: Salary Band Check
@@ -101,9 +103,9 @@ For each Must-Have requirement from the JD, mark:
 | Situation | Salary Fit Label |
 |---|---|
 | Expected CTC within JD budget | 💰 FIT |
-| Expected CTC up to 15% above budget | ⚠️ STRETCH |
-| Expected CTC 15–30% above budget | ⚠️ BUDGET RISK |
-| Expected CTC 30%+ above budget | ❌ MISMATCH |
+| Expected CTC up to 15% above the JD budget amount | ⚠️ STRETCH |
+| Expected CTC 15–30% above the JD budget amount | ⚠️ BUDGET RISK |
+| Expected CTC 30%+ above the JD budget amount | ❌ MISMATCH |
 | CTC not mentioned in either | UNKNOWN — verify in screening call |
 
 ### Step 5: Produce the Structured Report
@@ -149,7 +151,7 @@ Use this exact structure. Keep it verdict-first and readable in under 90 seconds
 | [Requirement 2] | ⚠️ PARTIAL | [What is there vs. what is missing] |
 | [Requirement 3] | ❌ NOT MET | [Completely absent or below bar] |
 
-*(Extract 4–6 key requirements from the JD)*
+*(Extract 4–6 key requirements from the JD using these criteria: prioritize requirements that are explicitly marked as required or "must have," include any with specific experience thresholds (e.g., "5+ years"), mention mandatory certifications or qualifications, and reference specific tools/technologies essential to the role. Include all Must-Have requirements up to 6, starting with those containing year counts or critical qualifications.)*
 
 ---
 
@@ -186,7 +188,7 @@ Use this exact structure. Keep it verdict-first and readable in under 90 seconds
 - **Location:** the conversation
 - **Example:** verdict header (🟢 FIT), profile snapshot table, JD requirements match table with ✅/⚠️/❌ statuses, strengths and gaps bullets, one-line recommendation, and a copy-paste Excel row
 
-## Notes
+## Decision Framework & Edge Cases
 
 - Works for any role — tech, non-tech, ERP, sales, operations, finance, HR, and more
 - **Verdict first** — HR sees the decision before anything else
