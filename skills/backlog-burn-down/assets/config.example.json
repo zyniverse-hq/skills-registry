@@ -1,0 +1,9 @@
+{
+  "_comment": "Copy this file to ~/.claude/skills/backlog-burn-down/config.local.json and fill in your team details. Sprint is the only field updated regularly — all others are set once.",
+  "sprint": 1,
+  "team": [
+    { "name": "Alice",   "github": "alice-gh" },
+    { "name": "Bob",     "github": "bob-gh" },
+    { "name": "Charlie", "github": "charlie-gh" }
+  ]
+}
