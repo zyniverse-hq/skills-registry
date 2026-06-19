@@ -1,7 +1,7 @@
 ---
 name: resume-recruiter
-description: Acts as a senior recruiter to surface the top keywords for a target role, flag which are missing from the resume, name trending skills, and list buzzwords to cut.
-version: 1.0.0
+description: For job-seekers. Acts as a senior recruiter to surface the top keywords for a target role, flag which are missing from the resume, name trending skills, and list buzzwords to cut.
+version: 1.0.1
 author: Arijit Saha
 email: arijit.saha@zysk.tech
 category: hr-recruiting
@@ -27,6 +27,7 @@ allowed-tools: "*"
 - Activate when: the user wants keyword research for a target role.
 - Activate when: the user wants a missing-skills analysis or a recruiter's-eye review of their resume.
 - Do NOT activate when: the user wants a mock interview (use the hiring-manager skill) or a full bullet rewrite.
+- Do NOT activate when: an employer is screening someone else's resume against a JD — use hr-resume-screener instead.
 
 ## Steps
 
