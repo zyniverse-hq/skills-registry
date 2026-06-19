@@ -1,7 +1,7 @@
 ---
 name: ui-consistency
 description: Use when asked for any frontend UI change — modals, forms, buttons, tables, layouts, colors, or spacing. Runs pattern inspection before writing code; never skip for small changes.
-version: 1.0.0
+version: 1.1.0
 author: Ruthu Bahubali Jain
 email: ruthu.jain@zysk.tech
 category: "engineering-practice"
@@ -129,11 +129,11 @@ If the user referenced a specific component ("make it like the modal on the bill
 
 Write the code. Rules:
 
-1. **Framework classes over inline styles.** Use utility classes from the Pattern Inventory — never add `style=""` for things the CSS framework already handles.
+1. **Framework classes over inline styles.** Use utility classes from the Pattern Inventory. Only use `style=""` when no utility class equivalent exists — if you must, always add the comment: `<!-- intentional inline: no framework equivalent -->`.
 2. **Match, don't improve.** If existing modals use a specific cancel button class, use that class exactly. Consistency is the goal, not design improvement — unless the user explicitly asks.
 3. **Copy the button pattern exactly.** The most common failure is adding button colors that don't exist elsewhere. Use only the button classes observed in the Pattern Inventory.
 4. **Cover every state.** If the component has multiple steps or views, style all of them using the same patterns. Do not style only the first visible state.
-5. **No new inline styles unless unavoidable.** If you must add one, comment it: `<!-- intentional inline: no framework equivalent -->`.
+5. **Resolve conflicts before writing code.** If the user's request contradicts the Pattern Inventory (e.g., they ask for a color or style that does not exist in the codebase), stop and surface the conflict: _"The Pattern Inventory has no [X] — do you want me to match existing patterns or override?"_ Do not silently pick one.
 6. **Respect framework mixing rules.** Never mix frameworks within a single file if the Pattern Inventory found file-type boundaries.
 7. **No new color values.** Do not introduce any hex color (`#xxxxxx`) or RGB value that does not already exist in the codebase.
 
