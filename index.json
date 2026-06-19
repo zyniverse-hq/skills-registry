@@ -90,8 +90,8 @@
     {
       "slug": "auto-ship",
       "name": "auto-ship",
-      "description": "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open.",
-      "version": "1.0.0",
+      "description": "Autonomous issue-to-PR pipeline. Auto-picks eligible Todo items (or a passed subset), classifies into quick-fix / clear-scope / ambiguous, ships everything non-ambiguous into reviewable PRs, records each in a merge queue, and stops at PR open. Includes project config block and preflight checks so it works for any team.",
+      "version": "2.0.0",
       "author": "Varun U",
       "email": "varun@zysk.tech",
       "category": "engineering-practice",
@@ -191,15 +191,20 @@
       "slug": "deploy-shield",
       "name": "deploy-shield",
       "description": "Audits a codebase branch or diff for production risks, deployment safety, and engineering hygiene before a release. Use when a developer wants to know if code is safe to deploy, assess blast radius, check rollback safety, audit dependencies, or get a pre-release risk report — even if they don't use the word \"deployment\".",
-      "version": "0.1.0",
-      "author": "",
-      "email": "",
-      "category": "",
-      "group": "opus",
-      "tags": [],
-      "product": "",
-      "tested_with": "",
-      "icon": "🧩"
+      "version": "1.0.0",
+      "author": "Akash R",
+      "email": "akash.r@zysk.tech",
+      "category": "pre-deploy-safety",
+      "group": "sonnet",
+      "tags": [
+        "deployment",
+        "code-review",
+        "production-safety",
+        "risk-audit"
+      ],
+      "product": "zysk",
+      "tested_with": "claude-sonnet-4-6",
+      "icon": "🛡️"
     },
     {
       "slug": "edd",
@@ -413,7 +418,7 @@
         "test-generation",
         "automation"
       ],
-      "product": "zysk | tms | zyni",
+      "product": "",
       "tested_with": "claude-sonnet-4-6",
       "icon": "🧪"
     },
@@ -421,7 +426,7 @@
       "slug": "qa-handoff",
       "name": "qa-handoff",
       "description": "Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to \"Ready for QA\" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — \"QA handoff\", \"notify QA about this PR\", \"send QA test plan\", \"tell QA to test PR",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "Rajashekhar V",
       "email": "rajashekhar.v@zysk.tech",
       "category": "qa-testing",
@@ -539,8 +544,8 @@
     {
       "slug": "ship-issue",
       "name": "ship-issue",
-      "description": "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline.",
-      "version": "1.0.0",
+      "description": "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline. Includes preflight dependency validation and automatic stack detection for language-appropriate best practices.",
+      "version": "2.0.0",
       "author": "Varun U",
       "email": "varun@zysk.tech",
       "category": "engineering-practice",
@@ -630,7 +635,7 @@
         "qa",
         "requirements"
       ],
-      "product": "zysk | tms | zyni",
+      "product": "",
       "tested_with": "claude-sonnet-4-6",
       "icon": "🧪"
     },
