@@ -1,7 +1,7 @@
 ---
 name: hr-resume-screener
-description: Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict (displayed with emoji indicators) with requirement match, strengths, gaps, salary check, and an Excel-ready summary row. Use when you have both a job description and a candidate resume to evaluate. Trigger on phrases like "screen this resume against the JD," "is this candidate a fit for this role," or "compare this profile to the job requirements."
-version: 1.1.0
+description: For recruiters and HR. Screen a candidate resume against a Job Description and return a FIT / PARTIAL FIT / NOT A FIT verdict (displayed with emoji indicators) with requirement match, strengths, gaps, salary check, and an Excel-ready summary row. Use when you have both a job description and a candidate resume to evaluate. Trigger on phrases like "screen this resume against the JD," "is this candidate a fit for this role," or "compare this profile to the job requirements."
+version: 1.1.1
 author: Deepak Padmanabha
 email: deepak@zysk.tech
 category: hr-recruiting
@@ -25,6 +25,7 @@ tested_with: claude-sonnet-4-6
 - Activate when: the user uploads or shares both a Job Description and a candidate resume together.
 - Activate when: the user asks "is this candidate fit for this role?", "check this resume against the JD", "screen this profile", or any variation of matching one resume to one job description.
 - Do NOT activate when: only a resume or only a JD is provided — ask for the missing document first before proceeding.
+- Do NOT activate when: the user is improving their own resume, or no JD is involved — use resume-recruiter instead.
 
 ## Prerequisites
 
