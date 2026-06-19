@@ -1,7 +1,7 @@
 ---
 name: ship-issue
-description: "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline. Includes preflight dependency validation and automatic stack detection for language-appropriate best practices."
-version: 2.0.0
+description: "Executes a single GitHub issue end-to-end on one of three tracks (quick-fix / clear-scope / ambiguous) with mandatory first-principles, self-review, simplify, verify, and board-move discipline. Includes preflight dependency validation and automatic stack detection for language-appropriate best practices. Use for one issue at a time with interactive checkpoints; for autonomous batch shipping across many issues, use auto-ship."
+version: 2.0.1
 author: Varun U
 email: varun@zysk.tech
 category: engineering-practice
