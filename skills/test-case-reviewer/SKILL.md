@@ -1,7 +1,7 @@
 ---
 name: test-case-reviewer
-description: This skill should be used when the user asks to "review test cases", "review existing test cases against feature specs", "check test case quality", "validate test case coverage", "review test cases against requirements", "check for missing test scenarios", "review test case format", "verify test case completeness", "check automation readiness", or needs quality review, coverage analysis, spec traceability, or format validation of any test case suite. Supports reviewing against one or more feature specification or requirement files.
-version: 1.0.0
+description: This skill should be used when the user asks to "review test cases", "review existing test cases against feature specs", "check test case quality", "validate test case coverage", "review test cases against requirements", "check for missing test scenarios", "review test case format", "verify test case completeness", "check automation readiness", or needs quality review, coverage analysis, spec traceability, or format validation of any test case suite. Supports reviewing against one or more feature specification or requirement files. To generate new test cases from a spec, use test-case-generator.
+version: 1.0.1
 author: Rachayya Choukimath
 email: rachayya.choukimath@zysk.tech
 category: qa-testing
@@ -73,7 +73,7 @@ Execute all steps in order without pausing or prompting the user.
 5. **Build evaluations** — assign B1/B2… (blocker fail), M1/M2… (minor fail) only. No pass rows.
 6. **Apply all fixes** — produce corrected 11-column test case tuples. Compute per-TC quality gate results, Review Status, Readiness, Reviewer Comments, Required Corrections, and Defects for Sheet 4.
 7. **Write `gen_tc_review.py`** using the Write tool — fully populated, no placeholders. All four sheets included. See `references/python-template.md` for the complete script template.
-8. **Execute** using the Bash tool: `py "C:/Users/Rachayya/CPN_Path/gen_tc_review.py"`
+8. **Execute** using the Bash tool: `python3 gen_tc_review.py`
 9. **Output** the filename only. Nothing else.
 
 See **Review Sequence** below for the detailed step-by-step review instructions.
@@ -186,7 +186,7 @@ Execute all steps in sequence. Do NOT pause, prompt, or ask the user anything be
 5. **Build evaluations** — assign B1/B2… (blocker fail), M1/M2… (minor fail) only. No pass rows.
 6. **Apply all fixes** — produce corrected 11-column test case tuples. Compute per-TC quality gate results, Review Status, Readiness, Reviewer Comments, Required Corrections, and Defects for Sheet 4.
 7. **Write `gen_tc_review.py`** using the Write tool — fully populated, no placeholders. All four sheets included. See `references/python-template.md` for the complete script template.
-8. **Execute** using the Bash tool: `py "C:/Users/Rachayya/CPN_Path/gen_tc_review.py"`
+8. **Execute** using the Bash tool: `python3 gen_tc_review.py`
 9. **Output** the filename only. Nothing else.
 
 ---
