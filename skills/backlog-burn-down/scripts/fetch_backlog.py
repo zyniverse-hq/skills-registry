@@ -60,7 +60,7 @@ query($org: String!, $num: Int!, $cursor: String) {
 
 
 def run(cmd, capture=True):
-    result = subprocess.run(cmd, shell=True, capture_output=capture, text=True)
+    result = subprocess.run(cmd, shell=True, capture_output=capture, text=True, encoding="utf-8", errors="replace")
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or f"Command failed: {cmd}")
     return result.stdout.strip() if capture else None
@@ -102,7 +102,7 @@ def fetch_all_items(org, project_number):
              "-F", f"org={org}",
              "-F", f"num={project_number}",
              "-f", f"cursor={cursor}"],
-            capture_output=True, text=True
+            capture_output=True, text=True, encoding="utf-8", errors="replace"
         )
         if result.returncode != 0:
             raise RuntimeError(result.stderr.strip())
@@ -147,6 +147,10 @@ def priority_rank(issue):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description="Fetch unassigned Todo issues from GitHub Projects v2")
     parser.add_argument("--org",     help="GitHub org (auto-detected from git remote if omitted)")
     parser.add_argument("--repo",    help="GitHub repo name (auto-detected if omitted)")

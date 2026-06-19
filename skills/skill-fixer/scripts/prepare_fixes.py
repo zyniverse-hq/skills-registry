@@ -82,7 +82,7 @@ def classify(findings):
 
 # ---- git helpers ------------------------------------------------------------
 def git(args, cwd):
-    return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+    return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace")
 
 
 def repo_root(path):
@@ -303,6 +303,10 @@ def apply_auto(skill_path, auto_findings):
 
 # ---- orchestration ----------------------------------------------------------
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     ap = argparse.ArgumentParser(description="Prepare a fix branch from a review report.")
     ap.add_argument("--report", required=True, help="skill-reviewer JSON report")
     ap.add_argument("--skill", required=True, help="Path to the skill folder to fix")

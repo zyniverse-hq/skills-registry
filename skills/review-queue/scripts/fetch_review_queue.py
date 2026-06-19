@@ -25,7 +25,7 @@ PR_VIEW_FIELDS = (
 
 
 def run(cmd, capture=True):
-    result = subprocess.run(cmd, shell=True, capture_output=capture, text=True)
+    result = subprocess.run(cmd, shell=True, capture_output=capture, text=True, encoding="utf-8", errors="replace")
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or f"Command failed: {cmd}")
     return result.stdout.strip() if capture else None
@@ -141,6 +141,10 @@ def fetch_pr_detail(repo, number, me):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description="Fetch PRs awaiting your review")
     parser.add_argument("--repo",   help="GitHub org/repo (auto-detected from git remote if omitted)")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output")

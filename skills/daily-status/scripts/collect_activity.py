@@ -89,7 +89,7 @@ def run(cmd: list[str], cwd: Path, timeout: int = 15) -> tuple[int, str, str]:
             cmd,
             cwd=str(cwd),
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8", errors="replace",
             timeout=timeout,
             check=False,
         )
@@ -208,6 +208,10 @@ def load_config() -> dict:
 
 
 def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON")
     args = parser.parse_args()
