@@ -1,7 +1,7 @@
 ---
 name: instagram-carousel
 description: Generates a self-contained, swipeable HTML Instagram carousel with export-ready 1080x1350px slides, deriving brand colors, typography, and slide layout.
-version: 1.0.0
+version: 1.1.0
 author: Arijit Saha
 email: arijit.saha@zysk.tech
 category: comms
@@ -15,7 +15,7 @@ product: zysk
 sprint: 1
 tested_with: claude-sonnet-4-6
 disable-model-invocation: false
-allowed-tools: "*"
+allowed-tools: Read Write Edit Glob Bash AskUserQuestion
 ---
 
 # Instagram Carousel Generator
@@ -242,63 +242,15 @@ After the user approves the carousel preview, export each slide as an individual
 2. **Embed images as base64** - all user-uploaded images must be base64-encoded and embedded as `data:image/jpeg;base64,...` URIs so the HTML is fully self-contained.
 3. **Keep the 420px layout width** - use Playwright's `device_scale_factor` to scale up to 1080px output WITHOUT changing the layout. Never set the viewport to 1080px wide.
 
-```python
-import asyncio
-from pathlib import Path
-from playwright.async_api import async_playwright
+Run the export script (do not read it):
 
-INPUT_HTML = Path("/path/to/carousel.html")
-OUTPUT_DIR = Path("/path/to/output/slides")
-OUTPUT_DIR.mkdir(exist_ok=True)
-TOTAL_SLIDES = 7  # Update to match your carousel
-
-# The carousel is designed at 420px wide, 4:5 aspect = 525px tall
-# Target output: 1080x1350
-# Scale factor: 1080 / 420 = 2.5714...
-VIEW_W = 420
-VIEW_H = 525
-SCALE = 1080 / 420
-
-async def export_slides():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        page = await browser.new_page(
-            viewport={"width": VIEW_W, "height": VIEW_H},
-            device_scale_factor=SCALE,
-        )
-        html_content = INPUT_HTML.read_text(encoding="utf-8")
-        await page.set_content(html_content, wait_until="networkidle")
-        await page.wait_for_timeout(3000)  # Wait for fonts to load
-
-        # Hide the Instagram frame chrome, show only the slide viewport
-        await page.evaluate("""() => {
-          document.querySelectorAll('.ig-header,.ig-dots,.ig-actions,.ig-caption')
-            .forEach(el => el.style.display='none');
-          const frame = document.querySelector('.ig-frame');
-          frame.style.cssText = 'width:420px;height:525px;max-width:none;border-radius:0;box-shadow:none;overflow:hidden;margin:0;';
-          const viewport = document.querySelector('.carousel-viewport');
-          viewport.style.cssText = 'width:420px;height:525px;aspect-ratio:unset;overflow:hidden;cursor:default;';
-          document.body.style.cssText = 'padding:0;margin:0;display:block;overflow:hidden;';
-        }""")
-        await page.wait_for_timeout(500)
-
-        for i in range(TOTAL_SLIDES):
-            await page.evaluate("""(idx) => {
-              const track = document.querySelector('.carousel-track');
-              track.style.transition = 'none';
-              track.style.transform = 'translateX(' + (-idx * 420) + 'px)';
-            }""", i)
-            await page.wait_for_timeout(400)
-            await page.screenshot(
-                path=str(OUTPUT_DIR / f"slide_{i+1}.png"),
-                clip={"x": 0, "y": 0, "width": VIEW_W, "height": VIEW_H}
-            )
-            print(f"Exported slide {i+1}/{TOTAL_SLIDES}")
-
-        await browser.close()
-
-asyncio.run(export_slides())
+```bash
+python scripts/export_slides.py --input carousel.html --output slides --slides 7
 ```
+
+Pass `--input` (the carousel HTML), `--output` (PNG output dir), and `--slides` (total slide
+count). The script reads the HTML, hides the Instagram frame chrome, scales to 1080×1350 via
+`device_scale_factor`, and writes one PNG per slide to the output dir.
 
 **Why this works:** `device_scale_factor=2.5714` renders at high DPI so a 420px element becomes 1080px while the layout stays at 420px. `clip` captures only the viewport. `wait_for_timeout(3000)` lets Google Fonts load. `track.style.transition = 'none'` snaps slides instantly.
 
