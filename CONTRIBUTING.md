@@ -90,6 +90,8 @@ The PR template will appear. Fill it in and submit.
 
 ## SKILL.md Standard
 
+> Writing a *good* skill — progressive disclosure, when to bundle scripts vs. references, security — is covered in the **[Authoring Guide](docs/authoring-guide.md)**. This section is the mechanical standard.
+
 Every skill is a folder with a `SKILL.md`, plus optional bundled resources:
 
 ```
