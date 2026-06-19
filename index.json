@@ -19,6 +19,11 @@
       "icon": "💼"
     },
     {
+      "slug": "hr-recruiting",
+      "label": "HR & Recruiting",
+      "icon": "🤝"
+    },
+    {
       "slug": "engineering-practice",
       "label": "Engineering Practice & Decision Support",
       "icon": "🛠️"

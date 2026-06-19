@@ -10,7 +10,7 @@
 | Field | Value |
 |-------|-------|
 | **Skill name (slug)** | `skill-name` |
-| **Category** | qa-testing / pre-deploy-safety / business-sales / engineering-practice / frontend-integration / infra-security / documents / ai-agents / data / comms |
+| **Category** | qa-testing / pre-deploy-safety / business-sales / engineering-practice / frontend-integration / infra-security / documents / ai-agents / data / comms / hr-recruiting |
 | **Sprint** | Sprint 1 |
 | **Product** | zysk / tms / zyniverse |
 
