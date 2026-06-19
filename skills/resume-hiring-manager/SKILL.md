@@ -4,7 +4,7 @@ description: Runs a realistic, scored mock interview as the hiring manager for t
 version: 2.0.0
 author: Arijit Saha
 email: arijit.saha@zysk.tech
-category: business-sales
+category: hr-recruiting
 tags:
   - resume
   - interview
