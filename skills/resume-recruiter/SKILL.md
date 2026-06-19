@@ -4,7 +4,7 @@ description: Acts as a senior recruiter to surface the top keywords for a target
 version: 1.0.0
 author: Arijit Saha
 email: arijit.saha@zysk.tech
-category: business-sales
+category: hr-recruiting
 tags:
   - resume
   - recruiter
