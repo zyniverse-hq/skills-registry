@@ -1,7 +1,7 @@
 ---
 name: triage-issues
-description: "Promotes Backlog issues to Todo on a GitHub Projects v2 board — derives Priority/Area/Module from labels + title heuristics, flags missing labels and suspected duplicates, requires user approval before mutations."
-version: 1.0.0
+description: "Promotes Backlog issues to Todo on a GitHub Projects v2 board — derives Priority/Area/Module from labels + title heuristics, flags missing labels and suspected duplicates, requires user approval before mutations. To assign Todo issues to developers for a sprint, use backlog-burn-down."
+version: 1.0.1
 author: Varun U
 email: varun@zysk.tech
 category: engineering-practice
