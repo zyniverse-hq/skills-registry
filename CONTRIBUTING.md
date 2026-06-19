@@ -132,6 +132,7 @@ skills/
 | `ai-agents` | LangGraph, MCP, multi-agent systems |
 | `data` | Data analysis, extraction, reporting |
 | `comms` | Internal comms, emails, announcements |
+| `hr-recruiting` | Resume screening, candidate interviews, and recruiting workflows |
 
 ### Full SKILL.md template
 

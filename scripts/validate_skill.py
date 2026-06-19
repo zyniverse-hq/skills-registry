@@ -12,7 +12,8 @@ import yaml
 
 VALID_CATEGORIES = {
     "qa-testing", "pre-deploy-safety", "business-sales", "engineering-practice",
-    "frontend-integration", "infra-security", "documents", "ai-agents", "data", "comms"
+    "frontend-integration", "infra-security", "documents", "ai-agents", "data", "comms",
+    "hr-recruiting"
 }
 VALID_PRODUCTS = {"zysk", "tms", "zyniverse"}
 REQUIRED_SECTIONS = ["## When to use", "## Steps", "## Output"]

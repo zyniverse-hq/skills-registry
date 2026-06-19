@@ -39,6 +39,7 @@ CATEGORY_ICON = {
     "ai-agents": "🤖",
     "data": "📊",
     "comms": "💬",
+    "hr-recruiting": "🤝",
 }
 
 
