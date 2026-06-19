@@ -32,9 +32,10 @@ skills/
   _template/SKILL.md    # starting point for new skills
 scripts/
   validate_skill.py     # CI quality gate for SKILL.md
-  generate_index.py     # rebuilds index.json from skills/
+  generate_index.py     # rebuilds index.json + marketplace.json from skills/
   categories.json       # single source of truth for the category taxonomy
 index.json              # GENERATED — do not hand-edit
+.claude-plugin/         # GENERATED — plugin marketplace (one entry per skill)
 website/                # static site that reads index.json
 .github/workflows/      # validate-skill, scripts-check, regenerate-index, …
 ```
@@ -61,8 +62,9 @@ PYTHONUTF8=1 python scripts/generate_index.py --check
 - **Categories:** defined once in `scripts/categories.json`. Add a new category
   there (slug + label + icon); never invent a slug inline.
 - **Required SKILL.md sections:** `## When to use`, `## Steps`, `## Output`.
-- **`index.json` is generated** — never edit it by hand. The
-  `regenerate-index` workflow rebuilds and commits it on push to `main`.
+- **`index.json` and `.claude-plugin/marketplace.json` are generated** by
+  `scripts/generate_index.py` — never edit them by hand. The `regenerate-index`
+  workflow rebuilds and commits them on push to `main`.
 - **PRs:** there is no one-skill-per-PR or branch-name rule — cohesive
   multi-skill and cross-cutting PRs are fine. Use [Conventional Commits](https://www.conventionalcommits.org/)
   (`feat:`, `fix:`, `chore:`, `ci:`, `docs:`, `refactor:`).

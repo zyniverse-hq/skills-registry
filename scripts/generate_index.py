@@ -4,7 +4,8 @@ Zyniverse Skills Registry — index.json generator.
 
 Scans skills/*/SKILL.md, parses YAML frontmatter, and rebuilds the `skills[]`
 array plus the `categories[]` array (from scripts/categories.json, including only
-categories in use) in index.json. The `groups` metadata is preserved.
+categories in use) in index.json. The `groups` metadata is preserved. Also
+regenerates .claude-plugin/marketplace.json (one plugin per skill).
 
 Skips skills/_template/ and any SKILL.md with invalid/missing frontmatter
 (prints a warning rather than crashing — the PR-time validator is the gate).
@@ -23,6 +24,8 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 INDEX_PATH = ROOT / "index.json"
+MARKETPLACE_PATH = ROOT / ".claude-plugin" / "marketplace.json"
+REPO_URL = "https://github.com/zyniverse-hq/skills-registry"
 
 GROUP_BY_MODEL_PREFIX = {
     "claude-opus":   "opus",
@@ -120,26 +123,68 @@ def build_categories(skills):
     return [c for c in CANONICAL_CATEGORIES if c["slug"] in used]
 
 
+def build_marketplace(skills):
+    """Generate the Claude Code plugin marketplace from skills/, one plugin per
+    skill (source ./skills/<slug> — the single SKILL.md makes it a single-skill
+    plugin). Generated so each skill is individually installable and new skills
+    appear automatically. Metadata comes from the skill's frontmatter."""
+    plugins = []
+    for s in skills:
+        slug = s["slug"]
+        entry = {"name": slug, "source": f"./skills/{slug}", "description": s["description"]}
+        if s.get("version"):
+            entry["version"] = s["version"]
+        author = {}
+        if s.get("author"):
+            author["name"] = s["author"]
+        if s.get("email"):
+            author["email"] = s["email"]
+        if author:
+            entry["author"] = author
+        entry["license"] = "Apache-2.0"
+        if s.get("category"):
+            entry["category"] = s["category"]
+        if s.get("tags"):
+            entry["keywords"] = s["tags"]
+        entry["homepage"] = f"{REPO_URL}/tree/main/skills/{slug}"
+        entry["repository"] = REPO_URL
+        plugins.append(entry)
+    return {
+        "name": "zyniverse-skills",
+        "owner": {"name": "Zyni Innovations Pvt. Ltd.", "email": "varun@zysk.tech"},
+        "description": "Curated registry of production-grade agent skills by Zyni Innovations.",
+        "plugins": plugins,
+    }
+
+
 def main():
     check_mode = "--check" in sys.argv
 
-    index = json.loads(INDEX_PATH.read_text())
+    index = json.loads(INDEX_PATH.read_text(encoding="utf-8"))
     new_skills = collect_skills()
     new_categories = build_categories(new_skills)
+    new_marketplace = build_marketplace(new_skills)
     old_skills = index.get("skills", [])
     old_categories = index.get("categories", [])
+    old_marketplace = (
+        json.loads(MARKETPLACE_PATH.read_text(encoding="utf-8"))
+        if MARKETPLACE_PATH.exists() else None
+    )
 
     if check_mode:
-        if old_skills != new_skills or old_categories != new_categories:
-            print("❌ index.json is out of date. Run: python3 scripts/generate_index.py")
+        if (old_skills != new_skills or old_categories != new_categories
+                or old_marketplace != new_marketplace):
+            print("❌ index.json/marketplace.json is out of date. Run: python3 scripts/generate_index.py")
             sys.exit(1)
-        print("✅ index.json is up to date.")
+        print("✅ index.json and marketplace.json are up to date.")
         return
 
     index["skills"] = new_skills
     index["categories"] = new_categories
-    INDEX_PATH.write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n")
-    print(f"✅ Wrote {len(new_skills)} skill(s) and {len(new_categories)} categor(ies) to index.json")
+    INDEX_PATH.write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    MARKETPLACE_PATH.write_text(json.dumps(new_marketplace, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"✅ Wrote {len(new_skills)} skill(s), {len(new_categories)} categor(ies), "
+          f"and {len(new_marketplace['plugins'])} marketplace plugin(s)")
 
 
 if __name__ == "__main__":
