@@ -1,7 +1,7 @@
 ---
 name: backlog-burn-down
-description: "Scans a GitHub Projects v2 Todo column, stale-checks and classifies issues, then assigns each to a developer with a board move and comment. Use to plan a sprint or pick the team's next work."
-version: 1.2.0
+description: "Scans a GitHub Projects v2 Todo column, stale-checks and classifies issues, then assigns each to a developer with a board move and comment. Use to plan a sprint or pick the team's next work. To first promote Backlog items into Todo, use triage-issues."
+version: 1.2.1
 author: Varun U
 email: varun@zysk.tech
 category: engineering-practice
