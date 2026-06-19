@@ -1,7 +1,7 @@
 ---
 name: test-case-generator
-description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps. Works from written specs (no live UI); for high-level scenarios explored from a live URL, use test-scenario-planning.
-version: 1.1.1
+description: Generate exhaustive, production-ready QA test cases from user stories, acceptance criteria, BRDs, PRDs, or feature descriptions — covering all test types with zero critical gaps. Works from written specs (no live UI); for high-level scenarios explored from a live URL, use test-scenario-planning. After generating, audit coverage with test-case-reviewer.
+version: 1.1.2
 author: Ajay R
 email: ajay.r@zysk.tech
 category: qa-testing
