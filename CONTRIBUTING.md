@@ -143,7 +143,7 @@ description: Verb-first one sentence that tells Claude what this skill does and 
 version: 1.0.0
 author: Your Full Name
 email: you@zysk.tech
-category: engineering
+category: engineering-practice
 tags:
   - tag-one
   - tag-two

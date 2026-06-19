@@ -4,7 +4,7 @@ description: Verb-first one sentence that tells Claude exactly what this skill d
 version: 1.0.0
 author: Your Full Name
 email: you@zysk.tech
-category: engineering
+category: engineering-practice
 tags:
   - tag-one
   - tag-two
