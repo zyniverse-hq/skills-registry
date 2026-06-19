@@ -1,6 +1,6 @@
 # Zyniverse Skills Registry
 
-> Production-grade [agent skills](https://agentskills.io) by Zyni Innovations — curated, versioned, and installable as a Claude Code plugin.
+> Production-grade [agent skills](https://agentskills.io) by the Zysk & Zyni teams — curated, versioned, and installable as a Claude Code plugin.
 
 [![Browse the registry](https://img.shields.io/badge/browse-registry-2D1B69?style=flat)](https://zyniverse-hq.github.io/skills-registry/website/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
