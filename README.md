@@ -69,8 +69,9 @@ python scripts/validate_skill.py skills/my-skill/SKILL.md   # must pass
 ```
 
 There's no one-skill-per-PR or branch-name rule — cohesive multi-skill PRs are
-fine. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full standard, the
-frontmatter reference, and authoring guidance.
+fine. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full standard and
+frontmatter reference, and the **[Authoring Guide](docs/authoring-guide.md)** for
+writing a skill that triggers reliably and stays maintainable.
 
 ## Repository structure
 
