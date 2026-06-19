@@ -1,0 +1,23 @@
+{
+  "name": "zyniverse-skills",
+  "owner": {
+    "name": "Zyni Innovations Pvt. Ltd.",
+    "email": "varun@zysk.tech"
+  },
+  "description": "Curated registry of production-grade agent skills by Zyni Innovations.",
+  "plugins": [
+    {
+      "name": "all-skills",
+      "source": "./",
+      "description": "Every skill in the Zyniverse registry, auto-discovered from skills/.",
+      "author": {
+        "name": "Zyni Innovations Pvt. Ltd.",
+        "email": "varun@zysk.tech"
+      },
+      "homepage": "https://github.com/zyniverse-hq/skills-registry",
+      "repository": "https://github.com/zyniverse-hq/skills-registry",
+      "license": "Apache-2.0",
+      "keywords": ["skills", "agent-skills", "claude", "automation"]
+    }
+  ]
+}
