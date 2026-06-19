@@ -61,7 +61,7 @@ def warn(msg):
 
 
 def parse_frontmatter(path):
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         content = f.read()
     if not content.startswith("---"):
         error("File does not start with YAML frontmatter (---)")
@@ -127,7 +127,7 @@ def get_existing_names(skip_folder=None):
         if not os.path.exists(skill_path):
             continue
         try:
-            with open(skill_path) as f:
+            with open(skill_path, encoding="utf-8") as f:
                 content = f.read()
             if content.startswith("---"):
                 parts = content.split("---", 2)
@@ -291,6 +291,10 @@ def validate_file(path, existing_names):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     paths = sys.argv[1:]
     if not paths:
         # Discover all SKILL.md files in skills/ (skip _template)

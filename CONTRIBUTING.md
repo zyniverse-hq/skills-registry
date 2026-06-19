@@ -66,7 +66,7 @@ cp -r skills/_template skills/your-skill-name
 python3 scripts/validate_skill.py skills/your-skill-name/SKILL.md
 ```
 
-Fix any errors before pushing. Warnings are advisory. (On Windows, prefix with `PYTHONUTF8=1`.)
+Fix any errors before pushing. Warnings are advisory.
 
 ### 8. Commit and push to your fork
 

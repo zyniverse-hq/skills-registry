@@ -1,0 +1,22 @@
+# Normalize line endings: store as LF in the repo, convert per-platform on checkout.
+* text=auto
+
+# Always LF for files executed in bash / CI.
+*.py  text eol=lf
+*.sh  text eol=lf
+
+# Common text formats (LF in repo).
+*.md   text
+*.json text
+*.yml  text
+*.yaml text
+
+# Binaries — no EOL or diff munging.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
