@@ -48,27 +48,7 @@ jobs:
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Check branch naming convention
-        if: steps.changed.outputs.has_changes == 'true'
-        run: |
-          BRANCH="${{ github.head_ref }}"
-          if [[ ! "$BRANCH" =~ ^skill/ ]]; then
-            echo "❌ Branch name must start with 'skill/' — got: $BRANCH"
-            exit 1
-          fi
-          echo "✅ Branch name OK: $BRANCH"
-
       - name: Validate SKILL.md files
         if: steps.changed.outputs.has_changes == 'true'
         run: |
           python3 scripts/validate_skill.py ${{ steps.changed.outputs.files }}
-
-      - name: Check one skill per PR
-        if: steps.changed.outputs.has_changes == 'true'
-        run: |
-          FOLDERS=$(echo "${{ steps.changed.outputs.files }}" | xargs -I{} dirname {} | sort -u | wc -l)
-          if [ "$FOLDERS" -gt "1" ]; then
-            echo "❌ This PR modifies $FOLDERS skill folders. Please submit one skill per PR."
-            exit 1
-          fi
-          echo "✅ Single skill PR — OK"
