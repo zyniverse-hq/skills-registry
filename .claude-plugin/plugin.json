@@ -1,0 +1,24 @@
+{
+  "name": "all-skills",
+  "displayName": "Zyniverse Skills",
+  "version": "1.0.0",
+  "description": "Curated registry of production-grade agent skills by Zyni Innovations — QA & testing, release safety, integrations, docs, AI agents, HR, and more. Skills are auto-discovered from skills/.",
+  "author": {
+    "name": "Zyni Innovations Pvt. Ltd.",
+    "email": "varun@zysk.tech",
+    "url": "https://zyniverse.in"
+  },
+  "homepage": "https://github.com/zyniverse-hq/skills-registry",
+  "repository": "https://github.com/zyniverse-hq/skills-registry",
+  "license": "Apache-2.0",
+  "keywords": [
+    "skills",
+    "agent-skills",
+    "claude",
+    "automation",
+    "qa",
+    "testing",
+    "devops",
+    "integrations"
+  ]
+}
