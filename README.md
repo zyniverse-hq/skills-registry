@@ -89,6 +89,10 @@ Every PR that touches `skills/**` is validated automatically:
 - ✅ Required content sections are present
 - ✅ One skill per PR
 
+## License
+
+Licensed under the [Apache License 2.0](LICENSE). By contributing a skill, you agree your contribution is licensed under the same terms.
+
 ---
 
 Built by [Zyni Innovations Pvt. Ltd.](https://zyniverse.in) · Bengaluru
