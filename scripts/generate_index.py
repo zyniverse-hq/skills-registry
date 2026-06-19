@@ -40,7 +40,7 @@ CATEGORY_ICON = {c["slug"]: c["icon"] for c in CANONICAL_CATEGORIES}
 
 
 def parse_frontmatter(path: Path):
-    text = path.read_text()
+    text = path.read_text(encoding="utf-8")
     if not text.startswith("---"):
         return None
     parts = text.split("---", 2)
@@ -158,6 +158,10 @@ def build_marketplace(skills):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     check_mode = "--check" in sys.argv
 
     index = json.loads(INDEX_PATH.read_text(encoding="utf-8"))

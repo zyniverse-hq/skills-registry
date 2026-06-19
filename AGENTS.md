@@ -17,8 +17,9 @@ consumed by the website.
 - Python 3.11+ with `pyyaml` (`pip install pyyaml`)
 - [`gh`](https://cli.github.com/) authenticated (only needed for skills/scripts that call GitHub)
 
-On Windows, prefix Python commands with `PYTHONUTF8=1` — several files contain
-non-ASCII (emoji icons, em-dashes) and the default cp1252 codec will crash.
+The repo's Python tooling pins UTF-8, so it runs on Windows as-is. If you write
+ad-hoc Python that reads these files (emoji and em-dashes are common), pass
+`encoding="utf-8"` or set `PYTHONUTF8=1`.
 
 ## Repository structure
 
@@ -44,13 +45,13 @@ website/                # static site that reads index.json
 
 ```bash
 # Validate one or more changed skills (the CI quality gate)
-PYTHONUTF8=1 python scripts/validate_skill.py skills/<name>/SKILL.md
+python scripts/validate_skill.py skills/<name>/SKILL.md
 
 # Rebuild index.json from skills/
-PYTHONUTF8=1 python scripts/generate_index.py
+python scripts/generate_index.py
 
 # Check the index is in sync without writing (used by CI / before committing)
-PYTHONUTF8=1 python scripts/generate_index.py --check
+python scripts/generate_index.py --check
 ```
 
 ## Conventions
@@ -74,8 +75,8 @@ PYTHONUTF8=1 python scripts/generate_index.py --check
 Run the quality gate on whatever you touched and confirm it's green:
 
 ```bash
-PYTHONUTF8=1 python scripts/validate_skill.py skills/<changed>/SKILL.md
-PYTHONUTF8=1 python scripts/generate_index.py --check
+python scripts/validate_skill.py skills/<changed>/SKILL.md
+python scripts/generate_index.py --check
 ```
 
 If you changed a bundled `*.py` script, also compile it
