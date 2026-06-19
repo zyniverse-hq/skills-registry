@@ -52,6 +52,19 @@ def parse_frontmatter(path: Path):
     return yaml.safe_load(parts[1])
 
 
+def get_field(fm: dict, key: str):
+    """Read a field from the top level, falling back to a nested `metadata:` map.
+    Mirrors scripts/validate_skill.py so spec-style skills that nest non-spec
+    fields under `metadata:` still populate the registry index."""
+    val = fm.get(key)
+    if val not in (None, ""):
+        return val
+    meta = fm.get("metadata")
+    if isinstance(meta, dict):
+        return meta.get(key)
+    return None
+
+
 def derive_group(tested_with: str) -> str:
     if not tested_with:
         return "opus"
@@ -77,19 +90,19 @@ def build_entry(folder: Path):
         print(f"⚠️  Skipping {folder.name}: missing required name/description", file=sys.stderr)
         return None
 
-    category = fm.get("category", "")
+    category = get_field(fm, "category") or ""
     return {
         "slug":        folder.name,
         "name":        fm["name"],
         "description": fm["description"],
-        "version":     fm.get("version", "0.1.0"),
-        "author":      fm.get("author", ""),
-        "email":       fm.get("email", ""),
+        "version":     get_field(fm, "version") or "0.1.0",
+        "author":      get_field(fm, "author") or "",
+        "email":       get_field(fm, "email") or "",
         "category":    category,
-        "group":       derive_group(fm.get("tested_with", "")),
-        "tags":        fm.get("tags", []) or [],
-        "product":     fm.get("product", ""),
-        "tested_with": fm.get("tested_with", ""),
+        "group":       derive_group(get_field(fm, "tested_with") or ""),
+        "tags":        get_field(fm, "tags") or [],
+        "product":     get_field(fm, "product") or "",
+        "tested_with": get_field(fm, "tested_with") or "",
         "icon":        CATEGORY_ICON.get(category, "🧩"),
     }
 
