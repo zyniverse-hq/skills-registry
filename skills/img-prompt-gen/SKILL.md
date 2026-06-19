@@ -1,20 +1,21 @@
 ---
 name: img-prompt-gen
 description: Structures a raw image idea into a clean, field-based prompt optimized for GPT Image 2, adding only safe recommendations without changing the user's intent.
-version: 1.0.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: ai-agents
-tags:
-  - prompt-engineering
-  - image-generation
-  - gpt-image-2
-  - creative
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
 allowed-tools: "*"
+metadata:
+  version: 1.0.0
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: ai-agents
+  tags:
+    - prompt-engineering
+    - image-generation
+    - gpt-image-2
+    - creative
+  product: zysk
+  sprint: 1
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: false
 ---
 
 # Image Prompt Generator

@@ -1,18 +1,19 @@
 ---
 name: review-queue
 description: "Read-only digest of open PRs where you're a requested reviewer. Classifies each by readiness (ready-to-approve / needs your attention / waiting / stale) with one-line factual summaries, and stops — never approves, never comments. Use whenever the user asks what PRs are waiting on them, wants to triage their review queue, or says 'show me my reviews'."
-version: 1.1.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-pr
-  - code-review
-  - triage
-  - workflow
-  - digest
-tested_with: claude-opus-4-7
-user-invocable: true
+metadata:
+  version: 1.1.0
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags:
+    - github-pr
+    - code-review
+    - triage
+    - workflow
+    - digest
+  tested_with: claude-opus-4-7
+  user-invocable: true
 ---
 
 # Review Queue

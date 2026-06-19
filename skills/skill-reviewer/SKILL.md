@@ -1,20 +1,21 @@
 ---
 name: skill-reviewer
 description: Review, audit, or quality-check an Anthropic Agent Skill (a SKILL.md folder) and produce a detailed review report. Use this whenever someone asks to review, audit, evaluate, vet, grade, or QA a skill, check whether a SKILL.md is well-formed or upload-ready, assess a skill's triggering, description, or instruction quality (whether its prompts are clear, complete, and internally consistent), or security-review a skill before sharing or installing it. Use it even when the person just points at a skill folder and asks "is this good?" or "what's wrong with this skill?". Trigger when a path to a skill directory or a SKILL.md file is provided for review.
-version: 1.1.0
-author: Vikas M
-email: vikas.m@zysk.tech
-category: engineering-practice
-tags:
-  - review
-  - quality-assurance
-  - skill-audit
-  - linting
-  - validation
-product: zysk
-sprint: 1
-tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
 compatibility: "Python 3.8+. No required third-party packages. PyYAML is used for exact frontmatter parsing only if it is already installed; otherwise a built-in parser is used."
+metadata:
+  version: 1.1.0
+  author: Vikas M
+  email: vikas.m@zysk.tech
+  category: engineering-practice
+  tags:
+    - review
+    - quality-assurance
+    - skill-audit
+    - linting
+    - validation
+  product: zysk
+  sprint: 1
+  tested_with: claude-opus-4-8, claude-sonnet-4-6, glm-5.1
 ---
 
 # Skill Reviewer

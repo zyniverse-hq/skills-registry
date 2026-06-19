@@ -107,6 +107,8 @@ skills/
 
 ### Extended Zyniverse fields (strongly recommended)
 
+These live **under a top-level `metadata:` map** — per the agentskills.io spec, only `name`, `description`, and the spec fields (`license`, `compatibility`, `allowed-tools`) belong at the top level. The tooling reads these fields from either placement, but `metadata:` is the standard (see the template below).
+
 | Field | Type | Values |
 |-------|------|--------|
 | `version` | semver | Start at `1.0.0` |
@@ -140,16 +142,17 @@ skills/
 ---
 name: your-skill-name
 description: Verb-first one sentence that tells Claude what this skill does and when to use it.
-version: 1.0.0
-author: Your Full Name
-email: you@zysk.tech
-category: engineering-practice
-tags:
-  - tag-one
-  - tag-two
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
+metadata:
+  version: 1.0.0
+  author: Your Full Name
+  email: you@zysk.tech
+  category: engineering-practice
+  tags:
+    - tag-one
+    - tag-two
+  product: zysk
+  sprint: 1
+  tested_with: claude-sonnet-4-6
 ---
 
 # Skill Title

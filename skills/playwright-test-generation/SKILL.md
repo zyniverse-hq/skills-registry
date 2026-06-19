@@ -1,17 +1,18 @@
 ---
 name: playwright-test-generation
 description: Generate structured Playwright E2E tests by exploring the live UI first, then producing helpers, spec files, and a summary report.
-version: 1.0.1
-author: Deepikaa Naganathan
-email: deepikaa.n@zysk.tech
-category: qa-testing
-tags:
-  - playwright
-  - e2e-testing
-  - test-generation
-  - automation
-sprint: 1
-tested_with: claude-sonnet-4-6
+metadata:
+  version: 1.0.1
+  author: Deepikaa Naganathan
+  email: deepikaa.n@zysk.tech
+  category: qa-testing
+  tags:
+    - playwright
+    - e2e-testing
+    - test-generation
+    - automation
+  sprint: 1
+  tested_with: claude-sonnet-4-6
 ---
 
 # Playwright Test Generation

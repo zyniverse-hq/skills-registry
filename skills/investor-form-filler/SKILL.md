@@ -1,19 +1,20 @@
 ---
 name: investor-form-filler
 description: Fill investor application forms (VC, accelerator, grant) from a single facts file, tuned per investor type, with sensitive financials kept behind an explicit gate.
-version: 1.0.0
-author: Sarang T S
-email: sarang@testmyskills.ai
-category: business-sales
-tags:
-  - investor-forms
-  - fundraising
-  - applications
-  - sales-automation
-  - pre-seed
-product: zyniverse
-sprint: 1
-tested_with: claude-opus-4-7
+metadata:
+  version: 1.0.0
+  author: Sarang T S
+  email: sarang@testmyskills.ai
+  category: business-sales
+  tags:
+    - investor-forms
+    - fundraising
+    - applications
+    - sales-automation
+    - pre-seed
+  product: zyniverse
+  sprint: 1
+  tested_with: claude-opus-4-7
 ---
 
 # Investor Form Filler

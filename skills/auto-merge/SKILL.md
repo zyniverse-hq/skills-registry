@@ -1,19 +1,20 @@
 ---
 name: auto-merge
 description: "One-shot drain of an auto-ship PR queue. Re-checks each PR's CI + merge state + review decision, squash-merges what's MERGEABLE + APPROVED + clean of unaddressed comments, and reports per-entry verdict. No scheduler."
-version: 1.1.0
-author: Varun U
-email: varun@zysk.tech
-category: engineering-practice
-tags:
-  - github-pr
-  - merge
-  - automation
-  - workflow
-  - queue
 compatibility: Requires gh (GitHub CLI), git, node, and jq to be installed and available on PATH.
-tested_with: claude-sonnet-4-6
-user-invocable: true
+metadata:
+  version: 1.1.0
+  author: Varun U
+  email: varun@zysk.tech
+  category: engineering-practice
+  tags:
+    - github-pr
+    - merge
+    - automation
+    - workflow
+    - queue
+  tested_with: claude-sonnet-4-6
+  user-invocable: true
 ---
 
 # Auto-Merge

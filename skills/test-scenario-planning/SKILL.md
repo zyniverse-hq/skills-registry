@@ -1,17 +1,18 @@
 ---
 name: test-scenario-planning
 description: Plan high-level test scenarios that describe user behaviors and business rules before writing test code. Explores a live URL via Playwright for high-level scenarios (not detailed cases); for exhaustive cases from a written spec use test-case-generator; for automated test code use playwright-test-generation.
-version: 1.0.2
-author: Deepikaa Naganathan
-email: deepikaa.n@zysk.tech
-category: qa-testing
-tags:
-  - scenario-planning
-  - test-strategy
-  - qa
-  - requirements
-sprint: 1
-tested_with: claude-sonnet-4-6
+metadata:
+  version: 1.0.2
+  author: Deepikaa Naganathan
+  email: deepikaa.n@zysk.tech
+  category: qa-testing
+  tags:
+    - scenario-planning
+    - test-strategy
+    - qa
+    - requirements
+  sprint: 1
+  tested_with: claude-sonnet-4-6
 ---
 
 # Test Scenario Planning

@@ -1,21 +1,22 @@
 ---
 name: instagram-carousel
 description: Generates a self-contained, swipeable HTML Instagram carousel with export-ready 1080x1350px slides, deriving brand colors, typography, and slide layout.
-version: 1.1.0
-author: Arijit Saha
-email: arijit.saha@zysk.tech
-category: comms
-tags:
-  - instagram
-  - carousel
-  - social-media
-  - marketing
-  - design
-product: zysk
-sprint: 1
-tested_with: claude-sonnet-4-6
-disable-model-invocation: false
 allowed-tools: Read Write Edit Glob Bash AskUserQuestion
+metadata:
+  version: 1.1.0
+  author: Arijit Saha
+  email: arijit.saha@zysk.tech
+  category: comms
+  tags:
+    - instagram
+    - carousel
+    - social-media
+    - marketing
+    - design
+  product: zysk
+  sprint: 1
+  tested_with: claude-sonnet-4-6
+  disable-model-invocation: false
 ---
 
 # Instagram Carousel Generator

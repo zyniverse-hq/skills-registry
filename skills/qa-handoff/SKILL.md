@@ -1,22 +1,23 @@
 ---
 name: qa-handoff
 description: Use after a PR merges to dev to generate a QA test plan inlined into a new GitHub issue assigned to the named QA user. Sets the project status to "Ready for QA" and removes the issue from the auto-added project. QA reads the plan in the issue, ticks a Pass/Fail/Blocked checkbox, and closes the issue. Triggers — "QA handoff", "notify QA about this PR", "send QA test plan", "tell QA to test PR #N", "create a test plan for this PR", "prepare testing instructions", "hand off to QA", "write QA checklist", "QA this PR", "file a QA issue", "PR is ready for testing".
-version: 1.1.0
-author: Rajashekhar V
-email: rajashekhar.v@zysk.tech
-category: qa-testing
-tags:
-  - qa
-  - testing
-  - github-issues
-  - handoff
-  - test-plan
-product: tms
-sprint: 3
-tested_with: claude-sonnet-4-6
-user-invocable: true
-model: claude-sonnet-4-6
 allowed-tools: Bash Read Write Grep Glob TaskCreate TaskUpdate TaskGet TaskList AskUserQuestion
+metadata:
+  version: 1.1.0
+  author: Rajashekhar V
+  email: rajashekhar.v@zysk.tech
+  category: qa-testing
+  tags:
+    - qa
+    - testing
+    - github-issues
+    - handoff
+    - test-plan
+  product: tms
+  sprint: 3
+  tested_with: claude-sonnet-4-6
+  user-invocable: true
+  model: claude-sonnet-4-6
 ---
 
 # QA Handoff

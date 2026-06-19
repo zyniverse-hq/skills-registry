@@ -1,15 +1,16 @@
 ---
 name: x-twitter-scraper
 description: Use Xquik to search, inspect, monitor, and export X/Twitter data through its REST API or remote MCP server.
-version: 1.0.0
-author: Xquik
-category: data
-tags:
-  - x-twitter
-  - mcp
-  - data-extraction
-  - social-monitoring
-tested_with: codex
+metadata:
+  version: 1.0.0
+  author: Xquik
+  category: data
+  tags:
+    - x-twitter
+    - mcp
+    - data-extraction
+    - social-monitoring
+  tested_with: codex
 ---
 
 # X/Twitter Data With Xquik
