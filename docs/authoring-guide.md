@@ -72,6 +72,23 @@ Guidance:
 - Both layouts are valid: reference docs at the **skill root** (e.g. `reference.md`,
   `forms.md`) or under a **`references/` subdir**. Pick one and be consistent.
 
+### Bundling an MCP server (opt-in)
+
+If a skill pairs with an MCP server, you can ship a `.mcp.json` at the skill root.
+Because each skill installs as its own plugin, Claude Code auto-discovers it — so
+installing the skill registers its MCP server too. Only do this for skills that
+genuinely need it, and treat it as trust-sensitive:
+
+- **Never embed secrets** — reference them as env vars (e.g. `"x-api-key": "${MY_API_KEY}"`).
+- **Disclose it in `SKILL.md`** — say which server gets registered and what env var it needs,
+  so installing the skill is never a surprise (it adds a server that may make network calls).
+- Keep the config visible in the body too, so non-plugin/manual users can copy it.
+
+```json
+// skills/<name>/.mcp.json
+{ "mcpServers": { "<name>": { "type": "http", "url": "https://…", "headers": { "x-api-key": "${MY_API_KEY}" } } } }
+```
+
 ## A multi-file skill
 
 High-quality skills are often more than one file:
