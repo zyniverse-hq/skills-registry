@@ -1,0 +1,21 @@
+[
+  {
+    "name": "engineering-workflow",
+    "version": "1.0.0",
+    "description": "The full issue-to-merge engineering pipeline in one install: triage, ship, review, and merge.",
+    "keywords": ["workflow", "bundle", "pipeline", "engineering"],
+    "members": [
+      "triage-issues",
+      "decision-brief",
+      "ship-issue",
+      "auto-ship",
+      "review-queue",
+      "handle-review",
+      "auto-merge"
+    ],
+    "external": [
+      { "name": "superpowers", "marketplace": "claude-plugins-official" },
+      { "name": "pr-review-toolkit", "marketplace": "claude-plugins-official" }
+    ]
+  }
+]

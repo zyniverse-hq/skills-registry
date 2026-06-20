@@ -5,6 +5,9 @@
     "email": "varun@zysk.tech"
   },
   "description": "Curated registry of production-grade agent skills by Zyni Innovations.",
+  "allowCrossMarketplaceDependenciesOn": [
+    "claude-plugins-official"
+  ],
   "plugins": [
     {
       "name": "auto-merge",
@@ -729,6 +732,25 @@
         "social-monitoring"
       ],
       "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/skills/x-twitter-scraper",
+      "repository": "https://github.com/zyniverse-hq/skills-registry"
+    },
+    {
+      "name": "engineering-workflow",
+      "source": "./bundles/engineering-workflow",
+      "description": "The full issue-to-merge engineering pipeline in one install: triage, ship, review, and merge.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Zyni Innovations Pvt. Ltd.",
+        "email": "varun@zysk.tech"
+      },
+      "license": "Apache-2.0",
+      "keywords": [
+        "workflow",
+        "bundle",
+        "pipeline",
+        "engineering"
+      ],
+      "homepage": "https://github.com/zyniverse-hq/skills-registry/tree/main/bundles/engineering-workflow",
       "repository": "https://github.com/zyniverse-hq/skills-registry"
     }
   ]

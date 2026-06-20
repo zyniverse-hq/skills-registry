@@ -23,9 +23,12 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
+BUNDLES_DIR = ROOT / "bundles"
+BUNDLES_PATH = ROOT / "scripts" / "bundles.json"
 INDEX_PATH = ROOT / "index.json"
 MARKETPLACE_PATH = ROOT / ".claude-plugin" / "marketplace.json"
 REPO_URL = "https://github.com/zyniverse-hq/skills-registry"
+MARKETPLACE_OWNER = {"name": "Zyni Innovations Pvt. Ltd.", "email": "varun@zysk.tech"}
 
 GROUP_BY_MODEL_PREFIX = {
     "claude-opus":   "opus",
@@ -123,11 +126,63 @@ def build_categories(skills):
     return [c for c in CANONICAL_CATEGORIES if c["slug"] in used]
 
 
-def build_marketplace(skills):
-    """Generate the Claude Code plugin marketplace from skills/, one plugin per
-    skill (source ./skills/<slug> — the single SKILL.md makes it a single-skill
-    plugin). Generated so each skill is individually installable and new skills
-    appear automatically. Metadata comes from the skill's frontmatter."""
+def load_bundles():
+    """Read scripts/bundles.json — the single source of truth for meta-plugin
+    bundles (curated packs that depend on several skill-plugins). Returns [] when
+    the file is absent so the registry works with or without bundles."""
+    if not BUNDLES_PATH.exists():
+        return []
+    return json.loads(BUNDLES_PATH.read_text(encoding="utf-8"))
+
+
+def build_bundle_plugin_json(bundle, skill_slugs):
+    """Compute the generated .claude-plugin/plugin.json for one meta-plugin: a
+    `dependencies` array of same-marketplace skill names (bare strings) plus any
+    cross-marketplace externals ({name, marketplace} objects). Validates that
+    every declared member exists as a skill — a typo fails the build loudly
+    rather than shipping a bundle that can never resolve."""
+    missing = [m for m in bundle["members"] if m not in skill_slugs]
+    if missing:
+        raise SystemExit(
+            f"❌ bundle '{bundle['name']}' lists unknown member(s): {', '.join(missing)}. "
+            f"Each member must match a skills/<slug> folder."
+        )
+    dependencies = list(bundle["members"])
+    for ext in bundle.get("external", []):
+        dependencies.append({"name": ext["name"], "marketplace": ext["marketplace"]})
+    return {
+        "name": bundle["name"],
+        "version": bundle.get("version", "1.0.0"),
+        "description": bundle["description"],
+        "dependencies": dependencies,
+    }
+
+
+def bundle_marketplace_entry(bundle):
+    """Marketplace catalog entry for a meta-plugin (source ./bundles/<name>)."""
+    name = bundle["name"]
+    entry = {
+        "name": name,
+        "source": f"./bundles/{name}",
+        "description": bundle["description"],
+        "version": bundle.get("version", "1.0.0"),
+        "author": dict(MARKETPLACE_OWNER),
+        "license": "Apache-2.0",
+    }
+    if bundle.get("keywords"):
+        entry["keywords"] = bundle["keywords"]
+    entry["homepage"] = f"{REPO_URL}/tree/main/bundles/{name}"
+    entry["repository"] = REPO_URL
+    return entry
+
+
+def build_marketplace(skills, bundles):
+    """Generate the Claude Code plugin marketplace from skills/ (one plugin per
+    skill, source ./skills/<slug>) plus any meta-plugin bundles (source
+    ./bundles/<name>). Cross-marketplace dependencies declared by bundles are
+    allowlisted via `allowCrossMarketplaceDependenciesOn` — without it, Claude
+    Code blocks the dependency at install. Metadata comes from frontmatter and
+    scripts/bundles.json. Generated so the catalog never drifts."""
     plugins = []
     for s in skills:
         slug = s["slug"]
@@ -149,12 +204,25 @@ def build_marketplace(skills):
         entry["homepage"] = f"{REPO_URL}/tree/main/skills/{slug}"
         entry["repository"] = REPO_URL
         plugins.append(entry)
-    return {
+
+    for b in bundles:
+        plugins.append(bundle_marketplace_entry(b))
+
+    allow = sorted({
+        ext["marketplace"]
+        for b in bundles
+        for ext in b.get("external", [])
+    })
+
+    marketplace = {
         "name": "zyniverse-skills",
-        "owner": {"name": "Zyni Innovations Pvt. Ltd.", "email": "varun@zysk.tech"},
+        "owner": dict(MARKETPLACE_OWNER),
         "description": "Curated registry of production-grade agent skills by Zyni Innovations.",
-        "plugins": plugins,
     }
+    if allow:
+        marketplace["allowCrossMarketplaceDependenciesOn"] = allow
+    marketplace["plugins"] = plugins
+    return marketplace
 
 
 def main():
@@ -167,7 +235,15 @@ def main():
     index = json.loads(INDEX_PATH.read_text(encoding="utf-8"))
     new_skills = collect_skills()
     new_categories = build_categories(new_skills)
-    new_marketplace = build_marketplace(new_skills)
+    bundles = load_bundles()
+    skill_slugs = {s["slug"] for s in new_skills}
+    # (path, content) for each generated meta-plugin manifest
+    bundle_manifests = [
+        (BUNDLES_DIR / b["name"] / ".claude-plugin" / "plugin.json",
+         build_bundle_plugin_json(b, skill_slugs))
+        for b in bundles
+    ]
+    new_marketplace = build_marketplace(new_skills, bundles)
     old_skills = index.get("skills", [])
     old_categories = index.get("categories", [])
     old_marketplace = (
@@ -176,19 +252,31 @@ def main():
     )
 
     if check_mode:
-        if (old_skills != new_skills or old_categories != new_categories
-                or old_marketplace != new_marketplace):
-            print("❌ index.json/marketplace.json is out of date. Run: python3 scripts/generate_index.py")
+        drift = (old_skills != new_skills or old_categories != new_categories
+                 or old_marketplace != new_marketplace)
+        for path, content in bundle_manifests:
+            on_disk = (
+                json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+            )
+            if on_disk != content:
+                drift = True
+        if drift:
+            print("❌ index.json/marketplace.json/bundle manifests are out of date. "
+                  "Run: python3 scripts/generate_index.py")
             sys.exit(1)
-        print("✅ index.json and marketplace.json are up to date.")
+        print("✅ index.json, marketplace.json, and bundle manifests are up to date.")
         return
 
     index["skills"] = new_skills
     index["categories"] = new_categories
     INDEX_PATH.write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     MARKETPLACE_PATH.write_text(json.dumps(new_marketplace, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    for path, content in bundle_manifests:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(content, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"✅ Wrote {len(new_skills)} skill(s), {len(new_categories)} categor(ies), "
-          f"and {len(new_marketplace['plugins'])} marketplace plugin(s)")
+          f"{len(new_marketplace['plugins'])} marketplace plugin(s), "
+          f"and {len(bundle_manifests)} bundle manifest(s)")
 
 
 if __name__ == "__main__":
