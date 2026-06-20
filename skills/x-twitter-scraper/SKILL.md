@@ -51,6 +51,8 @@ Use the remote MCP server when the agent supports HTTP MCP tools:
 }
 ```
 
+> Installed as a plugin, this is auto-registered from the bundled [`.mcp.json`](.mcp.json): set `XQUIK_API_KEY` in your environment and the `xquik` MCP server is available. For manual setups, copy the block above.
+
 Use REST when the user needs a direct API call. Start from the docs at `https://docs.xquik.com/api-reference/overview`.
 
 ### Step 2: Confirm the task boundary
