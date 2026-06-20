@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'skills/**/SKILL.md'
+      - 'scripts/bundles.json'
 
 # Only one regen run at a time. Queue rather than cancel so we never
 # drop a merge — back-to-back skill PRs each get rebuilt in order.
@@ -48,11 +49,15 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             python3 scripts/generate_index.py
-            if git diff --quiet index.json .claude-plugin/marketplace.json; then
-              echo "index.json and marketplace.json already up to date — nothing to commit."; exit 0
+            # Generated outputs: index.json, the marketplace, and per-bundle
+            # manifests under bundles/**/.claude-plugin/plugin.json. The trigger
+            # filter (skills/**/SKILL.md, scripts/bundles.json) excludes all of
+            # these, so the bot's own commit never re-triggers this workflow.
+            if git diff --quiet index.json .claude-plugin/marketplace.json bundles/; then
+              echo "index.json, marketplace.json, and bundle manifests already up to date — nothing to commit."; exit 0
             fi
-            git add index.json .claude-plugin/marketplace.json
-            git commit -m "chore: regenerate index.json and marketplace.json from skills/"
+            git add index.json .claude-plugin/marketplace.json bundles/
+            git commit -m "chore: regenerate index.json, marketplace.json, and bundle manifests"
             if git push origin HEAD:main; then echo "pushed (attempt $attempt)"; exit 0; fi
             echo "main moved; retrying ($attempt)"; sleep $((RANDOM % 5 + 2))
           done
