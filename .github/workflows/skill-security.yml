@@ -1,0 +1,66 @@
+name: Skill Security Scan
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**'
+
+# Advisory only — this never blocks a merge. NVIDIA SkillSpector static checks
+# (--no-llm) run on the skills changed in the PR; findings surface as GitHub
+# code-scanning alerts (SARIF) and in the run summary. Static heuristics are
+# noisy for legitimate dev-automation/infra skills, so this is a signal for
+# reviewers (especially on new/untrusted contributions), not a gate.
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    name: SkillSpector (advisory)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install SkillSpector
+        # Pinned to a commit (no upstream tags/releases yet) for reproducibility.
+        run: pip install "git+https://github.com/nvidia/skillspector.git@a5092dd9b9521ff57a9b53612bb129ce78019002"
+
+      - name: Scan changed skills (advisory — never fails the build)
+        run: |
+          set +e
+          mkdir -p sarif
+          CHANGED=$(git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}...HEAD" \
+            | grep -E '^skills/[^_][^/]*/' | sed -E 's#(^skills/[^/]+/).*#\1#' | sort -u)
+          if [ -z "$CHANGED" ]; then
+            echo "No skill changes to scan." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "## SkillSpector — advisory static scan" >> "$GITHUB_STEP_SUMMARY"
+          echo "_Findings are advisory; static heuristics flag legitimate \`gh\`/infra/automation patterns too._" >> "$GITHUB_STEP_SUMMARY"
+          for dir in $CHANGED; do
+            slug=$(basename "$dir")
+            skillspector scan "$dir" --no-llm --format sarif --output "sarif/${slug}.sarif"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "<details><summary><code>${slug}</code></summary>" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            skillspector scan "$dir" --no-llm --format markdown >> "$GITHUB_STEP_SUMMARY" 2>&1
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "</details>" >> "$GITHUB_STEP_SUMMARY"
+          done
+          exit 0
+
+      - name: Upload SARIF to code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
+        with:
+          sarif_file: sarif
+          category: skillspector
