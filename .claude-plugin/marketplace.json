@@ -52,6 +52,7 @@
       "name": "backlog-burn-down",
       "source": "./skills/backlog-burn-down",
       "description": "Scans a GitHub Projects v2 Todo column, stale-checks and classifies issues, then assigns each to a developer with a board move and comment. Use to plan a sprint or pick the team's next work. To first promote Backlog items into Todo, use triage-issues.",
+      "displayName": "Assign Sprint Work",
       "version": "1.2.1",
       "author": {
         "name": "Varun U",
@@ -136,6 +137,7 @@
       "name": "deploy-shield",
       "source": "./skills/deploy-shield",
       "description": "Audits a codebase branch or diff for production risks, deployment safety, and engineering hygiene before a release. Use when a developer wants to know if code is safe to deploy, assess blast radius, check rollback safety, audit dependencies, or get a pre-release risk report — even if they don't use the word \"deployment\".",
+      "displayName": "Pre-Deploy Audit",
       "version": "1.0.0",
       "author": {
         "name": "Akash R",
@@ -156,6 +158,7 @@
       "name": "edd",
       "source": "./skills/edd",
       "description": "INVOKE THIS SKILL whenever the user is about to start a new feature, refactor existing code, change a prompt, modify an agent/node, or otherwise alter behavior whose quality is hard to assert with a binary unit test. EDD (Evaluation-Driven Development) is the eval-first counterpart to TDD: define success criteria and evaluators BEFORE writing code, baseline the current behavior, then iterate against measurable scores. Triggers on phrases like 'building X', 'refactoring Y', 'improving the prompt for Z', 'new node', 'new feature', 'how should I approach this', 'starting work on…', 'change the LLM behavior'. Use even when the user doesn't say 'eval' — their LLM-shaped work almost certainly needs this. The skill starts with a triage step to decide whether EDD actually applies (deterministic glue code often doesn't), then guides the user through plan → dataset → evaluators → baseline → implement → iterate.",
+      "displayName": "Evaluation-Driven Development",
       "version": "1.0.0",
       "author": {
         "name": "Sharath S Rao",
@@ -301,6 +304,7 @@
       "name": "integratekit",
       "source": "./skills/integratekit",
       "description": "Use this skill to find and wire up backend GraphQL APIs into frontend components. Scans for unwired actions, discovers matching APIs, and integrates after confirmation.",
+      "displayName": "Wire GraphQL APIs",
       "version": "1.1.0",
       "author": {
         "name": "Vishak Gowda",
@@ -695,6 +699,7 @@
       "name": "wp-maintenance-conductor",
       "source": "./skills/wp-maintenance-conductor",
       "description": "Run a full WordPress maintenance session — pre-flight, backup, tiered updates, security, performance, and final backup with safety gates at every phase. Use for WP maintenance or site health checks.",
+      "displayName": "WordPress Maintenance",
       "version": "1.0.0",
       "author": {
         "name": "Stalin Marbhenn",

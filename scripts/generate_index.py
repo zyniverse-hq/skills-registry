@@ -99,8 +99,10 @@ def build_entry(folder: Path):
         "group":       derive_group(get_field(fm, "tested_with") or ""),
         "tags":        get_field(fm, "tags") or [],
         "product":     get_field(fm, "product") or "",
-        "tested_with": get_field(fm, "tested_with") or "",
-        "icon":        CATEGORY_ICON.get(category, "🧩"),
+        "tested_with":   get_field(fm, "tested_with") or "",
+        "display_name":  get_field(fm, "display_name") or "",
+        "default_enabled": get_field(fm, "default_enabled"),
+        "icon":          CATEGORY_ICON.get(category, "🧩"),
     }
 
 
@@ -132,6 +134,8 @@ def build_marketplace(skills):
     for s in skills:
         slug = s["slug"]
         entry = {"name": slug, "source": f"./skills/{slug}", "description": s["description"]}
+        if s.get("display_name"):
+            entry["displayName"] = s["display_name"]
         if s.get("version"):
             entry["version"] = s["version"]
         author = {}
@@ -144,6 +148,8 @@ def build_marketplace(skills):
         entry["license"] = "Apache-2.0"
         if s.get("category"):
             entry["category"] = s["category"]
+        if s.get("default_enabled") is False:
+            entry["defaultEnabled"] = False
         if s.get("tags"):
             entry["keywords"] = s["tags"]
         entry["homepage"] = f"{REPO_URL}/tree/main/skills/{slug}"

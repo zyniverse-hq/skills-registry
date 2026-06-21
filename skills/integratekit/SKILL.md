@@ -3,6 +3,7 @@ name: integratekit
 description: Use this skill to find and wire up backend GraphQL APIs into frontend components. Scans for unwired actions, discovers matching APIs, and integrates after confirmation.
 metadata:
   version: 1.1.0
+  display_name: Wire GraphQL APIs
   author: Vishak Gowda
   email: vishak@zysk.tech
   category: frontend-integration
