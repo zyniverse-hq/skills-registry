@@ -3,6 +3,7 @@ name: edd
 description: "INVOKE THIS SKILL whenever the user is about to start a new feature, refactor existing code, change a prompt, modify an agent/node, or otherwise alter behavior whose quality is hard to assert with a binary unit test. EDD (Evaluation-Driven Development) is the eval-first counterpart to TDD: define success criteria and evaluators BEFORE writing code, baseline the current behavior, then iterate against measurable scores. Triggers on phrases like 'building X', 'refactoring Y', 'improving the prompt for Z', 'new node', 'new feature', 'how should I approach this', 'starting work on…', 'change the LLM behavior'. Use even when the user doesn't say 'eval' — their LLM-shaped work almost certainly needs this. The skill starts with a triage step to decide whether EDD actually applies (deterministic glue code often doesn't), then guides the user through plan → dataset → evaluators → baseline → implement → iterate."
 metadata:
   version: 1.0.0
+  display_name: Evaluation-Driven Development
   author: Sharath S Rao
   email: sharath.rao@zysk.tech
   category: engineering-practice

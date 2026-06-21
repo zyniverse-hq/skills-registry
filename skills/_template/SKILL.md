@@ -12,6 +12,10 @@ metadata:
   product: zysk
   sprint: 1
   tested_with: claude-sonnet-4-6
+  # Optional: human-readable label shown in the /plugin picker (leave out if name is self-explanatory)
+  # display_name: My Skill Title
+  # Optional: set to false to install disabled by default (useful for costly or scoped skills)
+  # default_enabled: false
 ---
 
 # Your Skill Title

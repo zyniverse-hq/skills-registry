@@ -90,6 +90,8 @@
       ],
       "product": "",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -110,6 +112,8 @@
       ],
       "product": "tms",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -130,6 +134,8 @@
       ],
       "product": "",
       "tested_with": "claude-opus-4-7",
+      "display_name": "Assign Sprint Work",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -150,6 +156,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🔐"
     },
     {
@@ -170,6 +178,8 @@
       ],
       "product": "",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "💬"
     },
     {
@@ -190,6 +200,8 @@
       ],
       "product": "tms",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -209,6 +221,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "Pre-Deploy Audit",
+      "default_enabled": null,
       "icon": "🛡️"
     },
     {
@@ -228,6 +242,8 @@
       ],
       "product": "tms",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "Evaluation-Driven Development",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -248,6 +264,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛡️"
     },
     {
@@ -268,6 +286,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -288,6 +308,8 @@
       ],
       "product": "tms",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -308,6 +330,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🤝"
     },
     {
@@ -327,6 +351,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🤖"
     },
     {
@@ -347,6 +373,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "💬"
     },
     {
@@ -366,6 +394,8 @@
       ],
       "product": "zyniverse",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "Wire GraphQL APIs",
+      "default_enabled": null,
       "icon": "🔌"
     },
     {
@@ -386,6 +416,8 @@
       ],
       "product": "zyniverse",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "💼"
     },
     {
@@ -406,6 +438,8 @@
       ],
       "product": "zyniverse",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "💼"
     },
     {
@@ -425,6 +459,8 @@
       ],
       "product": "",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🧪"
     },
     {
@@ -445,6 +481,8 @@
       ],
       "product": "tms",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🧪"
     },
     {
@@ -465,6 +503,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -485,6 +525,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🤝"
     },
     {
@@ -505,6 +547,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🤝"
     },
     {
@@ -525,6 +569,8 @@
       ],
       "product": "",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -544,6 +590,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛡️"
     },
     {
@@ -564,6 +612,8 @@
       ],
       "product": "tms",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -584,6 +634,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-opus-4-8, claude-sonnet-4-6, glm-5.1",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -604,6 +656,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-opus-4-8, claude-sonnet-4-6, glm-5.1",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -623,6 +677,8 @@
       ],
       "product": "zyniverse",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -643,6 +699,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🧪"
     },
     {
@@ -663,6 +721,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🧪"
     },
     {
@@ -682,6 +742,8 @@
       ],
       "product": "",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🧪"
     },
     {
@@ -702,6 +764,8 @@
       ],
       "product": "",
       "tested_with": "claude-opus-4-7",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -722,6 +786,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "🛠️"
     },
     {
@@ -742,6 +808,8 @@
       ],
       "product": "zysk",
       "tested_with": "claude-sonnet-4-6",
+      "display_name": "WordPress Maintenance",
+      "default_enabled": null,
       "icon": "🔐"
     },
     {
@@ -761,6 +829,8 @@
       ],
       "product": "",
       "tested_with": "codex",
+      "display_name": "",
+      "default_enabled": null,
       "icon": "📊"
     }
   ]

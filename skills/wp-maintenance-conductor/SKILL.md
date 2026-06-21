@@ -3,6 +3,7 @@ name: wp-maintenance-conductor
 description: Run a full WordPress maintenance session — pre-flight, backup, tiered updates, security, performance, and final backup with safety gates at every phase. Use for WP maintenance or site health checks.
 metadata:
   version: 1.0.0
+  display_name: WordPress Maintenance
   author: Stalin Marbhenn
   email: stalin.marbhenn@zysk.tech
   category: infra-security
